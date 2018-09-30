@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run build:modules && npm run build:standalone",
     "build:modules": "BABEL_ENV=modules babel lib -d dist/es-modules/",
     "build:standalone": "NODE_ENV=development webpack && NODE_ENV=production webpack",
-    "lint": "eslint lib test",
+    "lint": "eslint .",
     "test": "BABEL_ENV=test node ./test/runner | tap-spec",
     "test:ci": "BABEL_ENV=test node ./test/runner | tape-xunit",
     "test:browser-local": "BABEL_ENV=test karma start karma.conf.local.js",
