@@ -1,6 +1,7 @@
 import _last from 'lodash/last';
 import _isObject from 'lodash/isObject';
 
+import jwtDecode from 'jwt-decode';
 
 var OPTIONS_KEYS = ['stelaceVersion', 'stelaceUserId'];
 
@@ -14,6 +15,10 @@ export var isApiKey = function isApiKey(key) {
 
   var type = parts[0];
   return type.length === 2;
+};
+
+export var isSecretApiKey = function isSecretApiKey(key) {
+  return isApiKey(key) && key.startsWith('sk_');
 };
 
 export var asCallback = function asCallback(promise, cb) {
@@ -108,6 +113,10 @@ export var addReadOnlyProperty = function addReadOnlyProperty(obj, propertyName,
     writable: false,
     value: property
   });
+};
+
+export var decodeJwtToken = function decodeJwtToken(jwtToken) {
+  return jwtDecode(jwtToken);
 };
 
 function emitWarning(warning) {

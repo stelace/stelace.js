@@ -4,16 +4,20 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+import { createDefaultTokenStore } from './tokenStore';
+
 import ApiKeys from './resources/ApiKeys';
 import Assessments from './resources/Assessments';
 import Assets from './resources/Assets';
 import AssetTypes from './resources/AssetTypes';
+import Auth from './resources/Auth';
 import Availabilities from './resources/Availabilities';
 import Bookings from './resources/Bookings';
 import Categories from './resources/Categories';
 import Config from './resources/Config';
 import CustomAttributes from './resources/CustomAttributes';
 import Events from './resources/Events';
+import Password from './resources/Password';
 import Roles from './resources/Roles';
 import Search from './resources/Search';
 import Users from './resources/Users';
@@ -25,12 +29,14 @@ var resources = {
   Assessments: Assessments,
   Assets: Assets,
   AssetTypes: AssetTypes,
+  Auth: Auth,
   Availabilities: Availabilities,
   Bookings: Bookings,
   Categories: Categories,
   Config: Config,
   CustomAttributes: CustomAttributes,
   Events: Events,
+  Password: Password,
   Roles: Roles,
   Search: Search,
   Users: Users,
@@ -54,7 +60,8 @@ var resources = {
     }
 
     var apiKey = params.apiKey,
-        apiVersion = params.apiVersion;
+        apiVersion = params.apiVersion,
+        tokenStore = params.tokenStore;
 
 
     this._api = {
@@ -70,6 +77,8 @@ var resources = {
     this._initResources();
     this.setApiKey(apiKey);
     this.setApiVersion(apiVersion);
+
+    this.setTokenStore(tokenStore || createDefaultTokenStore());
   }
 
   _createClass(Stelace, [{
@@ -111,6 +120,20 @@ var resources = {
     key: 'setTimeout',
     value: function setTimeout(timeout) {
       this._setApiField('timeout', typeof timeout === 'number' ? timeout : Stelace.DEFAULT_TIMEOUT);
+    }
+  }, {
+    key: 'setTokenStore',
+    value: function setTokenStore(tokenStore) {
+      var validTokenStore = this.isValidTokenStore(tokenStore);
+
+      if (validTokenStore) {
+        this._setApiField('tokenStore', tokenStore);
+      }
+    }
+  }, {
+    key: 'isValidTokenStore',
+    value: function isValidTokenStore(tokenStore) {
+      return tokenStore && (typeof tokenStore === 'undefined' ? 'undefined' : _typeof(tokenStore)) === 'object' && typeof tokenStore.getTokens === 'function' && typeof tokenStore.setTokens === 'function' && typeof tokenStore.removeTokens === 'function';
     }
   }, {
     key: 'getApiField',

@@ -1,6 +1,6 @@
 import test from 'blue-tape'
 
-import { getSpyableStelace } from '../testUtils'
+import { getSpyableStelace, getStelaceStub } from '../testUtils'
 
 import { Stelace, createInstance } from '../lib/stelace'
 
@@ -105,5 +105,89 @@ test('Set the target user for a specific request', (t) => {
           'x-stelace-user-id': 'user_1'
         }
       })
+    })
+})
+
+test('Sets the token store', (t) => {
+  const stelace = getSpyableStelace()
+
+  const tokenStore = {
+    getTokens: function () {},
+    setTokens: function () {},
+    removeTokens: function () {}
+  }
+
+  stelace.setTokenStore(tokenStore)
+  t.is(stelace.getApiField('tokenStore'), tokenStore)
+  t.end()
+})
+
+test('Methods returns lastResponse', (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.assets.getBaseURL()
+  stelace.stubRequest(`${baseURL}/assets/asset_1`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: { id: 'asset_1', name: 'Asset 1' }
+  })
+
+  return stelace.assets.read('asset_1')
+    .then(asset => {
+      t.deepEqual(asset, { id: 'asset_1', name: 'Asset 1' })
+      t.deepEqual(asset.lastResponse, {
+        statusCode: 200,
+        requestId: 'f1f25173-32a5-48da-aa2f-0079568abea0'
+      })
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
+
+test('Methods returns paginationMeta for list endpoints', (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.assets.getBaseURL()
+  stelace.stubRequest(`${baseURL}/assets`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: {
+      nbResults: 2,
+      nbPages: 1,
+      page: 1,
+      nbResultsPerPage: 10,
+      results: [{ id: 'asset_1', name: 'Asset 1' }, { id: 'asset_2', name: 'Asset 2' }]
+    }
+  })
+
+  return stelace.assets.list()
+    .then(assets => {
+      t.deepEqual(assets, [{ id: 'asset_1', name: 'Asset 1' }, { id: 'asset_2', name: 'Asset 2' }])
+      t.deepEqual(assets.lastResponse, {
+        statusCode: 200,
+        requestId: 'f1f25173-32a5-48da-aa2f-0079568abea0'
+      })
+      t.deepEqual(assets.paginationMeta, {
+        nbResults: 2,
+        nbPages: 1,
+        page: 1,
+        nbResultsPerPage: 10
+      })
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
     })
 })

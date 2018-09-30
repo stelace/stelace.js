@@ -1,8 +1,8 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-import { interpolatePath, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty } from './utils';
+import { isSecretApiKey, interpolatePath, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken } from './utils';
 
-function getRequestOpts(requestArgs, spec) {
+function getRequestOpts(requestArgs, spec, tokens) {
   var path = spec.path,
       _spec$method = spec.method,
       method = _spec$method === undefined ? 'GET' : _spec$method,
@@ -50,6 +50,9 @@ function getRequestOpts(requestArgs, spec) {
   }
 
   var headers = Object.assign(options.headers, spec.headers);
+  if (tokens && tokens.accessToken) {
+    headers['authorization'] = 'Bearer ' + tokens.accessToken;
+  }
 
   return {
     requestMethod: requestMethod,
@@ -79,9 +82,65 @@ function createPaginationMeta(res) {
   return newResponse;
 }
 
+function getTokens(self) {
+  return Promise.resolve().then(function () {
+    var apiKey = self._stelace.getApiField('key');
+
+    var needsAuthToken = !isSecretApiKey(apiKey);
+    if (!needsAuthToken) return;
+
+    var tokenStore = self._stelace.getApiField('tokenStore');
+    var tokens = tokenStore.getTokens();
+    if (!tokens) return;
+
+    var canRefreshToken = !!tokens.refreshToken;
+    if (!canRefreshToken) return tokens;
+
+    var accessToken = tokens.accessToken;
+    var refreshToken = tokens.refreshToken;
+
+    var parsedAccessToken = decodeJwtToken(accessToken);
+    var isExpiredToken = new Date(parsedAccessToken.exp * 1000) < new Date();
+
+    if (!isExpiredToken) {
+      return tokens;
+    }
+
+    return getNewAccessToken(self, refreshToken).then(function (accessToken) {
+      var newTokens = {
+        accessToken: accessToken,
+        refreshToken: refreshToken
+      };
+
+      tokenStore.setTokens(newTokens);
+
+      return newTokens;
+    }).catch(function () {
+      return tokens;
+    });
+  });
+}
+
+function getNewAccessToken(self, refreshToken) {
+  var requestParams = {
+    path: '/auth/token',
+    method: 'POST',
+    data: {
+      refreshToken: refreshToken,
+      grantType: 'refreshToken'
+    }
+  };
+
+  return self._request(requestParams).then(function (res) {
+    return res.accessToken;
+  });
+}
+
 export default function makeRequest(self, requestArgs, spec) {
   return Promise.resolve().then(function () {
-    var opts = getRequestOpts(requestArgs, spec);
+    return getTokens(self);
+  }).then(function (tokens) {
+    var opts = getRequestOpts(requestArgs, spec, tokens);
 
     var requestParams = {
       path: opts.requestPath,
@@ -91,6 +150,10 @@ export default function makeRequest(self, requestArgs, spec) {
       options: { headers: opts.headers }
     };
 
+    if (spec.beforeRequest) {
+      requestParams = spec.beforeRequest(requestParams, self, tokens);
+    }
+
     return self._request(requestParams).then(function (res) {
       if (spec.paginationMeta) {
         res = createPaginationMeta(res);
@@ -98,6 +161,12 @@ export default function makeRequest(self, requestArgs, spec) {
 
       var response = spec.transformResponseData ? spec.transformResponseData(res) : res;
       return response;
+    }).then(function (res) {
+      if (spec.afterRequest) {
+        return spec.afterRequest(res, self);
+      }
+
+      return res;
     });
   });
 }

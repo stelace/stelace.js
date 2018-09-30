@@ -2,8 +2,10 @@ import test from 'blue-tape'
 
 import {
   isApiKey,
+  isSecretApiKey,
   asCallback,
-  interpolatePath
+  interpolatePath,
+  decodeJwtToken
 } from '../lib/utils'
 
 test('Checks if an API key has the right format', (t) => {
@@ -11,6 +13,12 @@ test('Checks if an API key has the right format', (t) => {
   t.false(isApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY5od')) // too long
   t.false(isApiKey('123456789'))
   t.false(isApiKey(123))
+  t.end()
+})
+
+test('Checks if an API key is a secret key', (t) => {
+  t.true(isSecretApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY5o'))
+  t.false(isSecretApiKey('pk_test_wakWA41rBTUXs1Y5oNRjeY5o'))
   t.end()
 })
 
@@ -41,5 +49,22 @@ test('Can be called with a callback', (t) => {
 test('Can replace tokens by their value', (t) => {
   t.is(interpolatePath('/categories/:id', { id: 'ctgy_123' }), '/categories/ctgy_123')
   t.is(interpolatePath('/url/:id/path/:id2', { id: '1', id2: '2' }), '/url/1/path/2')
+  t.end()
+})
+
+test('Decodes JWT token', (t) => {
+  const encodedToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c3JfV0hsZlFwczFJM2ExZ0pZejJJM2EiLCJyb2xlc' +
+    'yI6WyJhZG1pbiJdLCJsb2dnZWRBdCI6MTUzODIyOTU3MiwiaWF0IjoxNTM4MjI5NTcyLCJleHAiOjE1MzgyMzMxNzJ9.97by8xQwhhIFKVUPNkOhl' +
+    'nw22EpzXW6oiiKOoChW7Lk'
+
+  t.deepEqual(decodeJwtToken(encodedToken), {
+    userId: 'usr_WHlfQps1I3a1gJYz2I3a',
+    roles: [
+      'admin'
+    ],
+    loggedAt: 1538229572,
+    iat: 1538229572,
+    exp: 1538233172
+  })
   t.end()
 })

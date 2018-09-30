@@ -3048,6 +3048,228 @@ function isSlowBuffer (obj) {
 
 /***/ }),
 
+/***/ "../node_modules/jwt-decode/lib/atob.js":
+/*!**********************************************!*\
+  !*** ../node_modules/jwt-decode/lib/atob.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * The code was extracted from:
+ * https://github.com/davidchambers/Base64.js
+ */
+
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function InvalidCharacterError(message) {
+  this.message = message;
+}
+
+InvalidCharacterError.prototype = new Error();
+InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+function polyfill (input) {
+  var str = String(input).replace(/=+$/, '');
+  if (str.length % 4 == 1) {
+    throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+  }
+  for (
+    // initialize result and counters
+    var bc = 0, bs, buffer, idx = 0, output = '';
+    // get next character
+    buffer = str.charAt(idx++);
+    // character found in table? initialize bit storage and add its ascii value;
+    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+      // and if not first of each 4 characters,
+      // convert the first 8 bits to one ascii character
+      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+  ) {
+    // try to find character in table (0-63, not found => -1)
+    buffer = chars.indexOf(buffer);
+  }
+  return output;
+}
+
+
+module.exports = typeof window !== 'undefined' && window.atob && window.atob.bind(window) || polyfill;
+
+
+/***/ }),
+
+/***/ "../node_modules/jwt-decode/lib/base64_url_decode.js":
+/*!***********************************************************!*\
+  !*** ../node_modules/jwt-decode/lib/base64_url_decode.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var atob = __webpack_require__(/*! ./atob */ "../node_modules/jwt-decode/lib/atob.js");
+
+function b64DecodeUnicode(str) {
+  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+    var code = p.charCodeAt(0).toString(16).toUpperCase();
+    if (code.length < 2) {
+      code = '0' + code;
+    }
+    return '%' + code;
+  }));
+}
+
+module.exports = function(str) {
+  var output = str.replace(/-/g, "+").replace(/_/g, "/");
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += "==";
+      break;
+    case 3:
+      output += "=";
+      break;
+    default:
+      throw "Illegal base64url string!";
+  }
+
+  try{
+    return b64DecodeUnicode(output);
+  } catch (err) {
+    return atob(output);
+  }
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/jwt-decode/lib/index.js":
+/*!***********************************************!*\
+  !*** ../node_modules/jwt-decode/lib/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var base64_url_decode = __webpack_require__(/*! ./base64_url_decode */ "../node_modules/jwt-decode/lib/base64_url_decode.js");
+
+function InvalidTokenError(message) {
+  this.message = message;
+}
+
+InvalidTokenError.prototype = new Error();
+InvalidTokenError.prototype.name = 'InvalidTokenError';
+
+module.exports = function (token,options) {
+  if (typeof token !== 'string') {
+    throw new InvalidTokenError('Invalid token specified');
+  }
+
+  options = options || {};
+  var pos = options.header === true ? 0 : 1;
+  try {
+    return JSON.parse(base64_url_decode(token.split('.')[pos]));
+  } catch (e) {
+    throw new InvalidTokenError('Invalid token specified: ' + e.message);
+  }
+};
+
+module.exports.InvalidTokenError = InvalidTokenError;
+
+
+/***/ }),
+
+/***/ "../node_modules/localstorage-memory/lib/localstorage-memory.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/localstorage-memory/lib/localstorage-memory.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function(root) {
+  var localStorageMemory = {};
+  var cache = {};
+
+  /**
+   * number of stored items.
+   */
+  localStorageMemory.length = 0;
+
+  /**
+   * returns item for passed key, or null
+   *
+   * @para {String} key
+   *       name of item to be returned
+   * @returns {String|null}
+   */
+  localStorageMemory.getItem = function(key) {
+    return cache[key] || null;
+  };
+
+  /**
+   * sets item for key to passed value, as String
+   *
+   * @para {String} key
+   *       name of item to be set
+   * @para {String} value
+   *       value, will always be turned into a String
+   * @returns {undefined}
+   */
+  localStorageMemory.setItem = function(key, value) {
+    if (typeof value === 'undefined') {
+      localStorageMemory.removeItem(key);
+    } else {
+      if (!(cache.hasOwnProperty(key))) {
+        localStorageMemory.length++;
+      }
+
+      cache[key] = '' + value;
+    }
+  };
+
+  /**
+   * removes item for passed key
+   *
+   * @para {String} key
+   *       name of item to be removed
+   * @returns {undefined}
+   */
+  localStorageMemory.removeItem = function(key) {
+    if (cache.hasOwnProperty(key)) {
+      delete cache[key];
+      localStorageMemory.length--;
+    }
+  };
+
+  /**
+   * returns name of key at passed index
+   *
+   * @para {Number} index
+   *       Position for key to be returned (starts at 0)
+   * @returns {String|null}
+   */
+  localStorageMemory.key = function(index) {
+    return Object.keys(cache)[index] || null;
+  };
+
+  /**
+   * removes all stored items and sets length to 0
+   *
+   * @returns {undefined}
+   */
+  localStorageMemory.clear = function() {
+    cache = {};
+    localStorageMemory.length = 0;
+  };
+
+  if (true) {
+    module.exports = localStorageMemory;
+  } else {}
+})(this);
+
+
+/***/ }),
+
 /***/ "../node_modules/lodash/_Hash.js":
 /*!***************************************!*\
   !*** ../node_modules/lodash/_Hash.js ***!
@@ -5776,7 +5998,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-function getRequestOpts(requestArgs, spec) {
+function getRequestOpts(requestArgs, spec, tokens) {
   var path = spec.path,
       _spec$method = spec.method,
       method = _spec$method === undefined ? 'GET' : _spec$method,
@@ -5824,6 +6046,9 @@ function getRequestOpts(requestArgs, spec) {
   }
 
   var headers = Object.assign(options.headers, spec.headers);
+  if (tokens && tokens.accessToken) {
+    headers['authorization'] = 'Bearer ' + tokens.accessToken;
+  }
 
   return {
     requestMethod: requestMethod,
@@ -5853,9 +6078,65 @@ function createPaginationMeta(res) {
   return newResponse;
 }
 
+function getTokens(self) {
+  return Promise.resolve().then(function () {
+    var apiKey = self._stelace.getApiField('key');
+
+    var needsAuthToken = !Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isSecretApiKey"])(apiKey);
+    if (!needsAuthToken) return;
+
+    var tokenStore = self._stelace.getApiField('tokenStore');
+    var tokens = tokenStore.getTokens();
+    if (!tokens) return;
+
+    var canRefreshToken = !!tokens.refreshToken;
+    if (!canRefreshToken) return tokens;
+
+    var accessToken = tokens.accessToken;
+    var refreshToken = tokens.refreshToken;
+
+    var parsedAccessToken = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["decodeJwtToken"])(accessToken);
+    var isExpiredToken = new Date(parsedAccessToken.exp * 1000) < new Date();
+
+    if (!isExpiredToken) {
+      return tokens;
+    }
+
+    return getNewAccessToken(self, refreshToken).then(function (accessToken) {
+      var newTokens = {
+        accessToken: accessToken,
+        refreshToken: refreshToken
+      };
+
+      tokenStore.setTokens(newTokens);
+
+      return newTokens;
+    }).catch(function () {
+      return tokens;
+    });
+  });
+}
+
+function getNewAccessToken(self, refreshToken) {
+  var requestParams = {
+    path: '/auth/token',
+    method: 'POST',
+    data: {
+      refreshToken: refreshToken,
+      grantType: 'refreshToken'
+    }
+  };
+
+  return self._request(requestParams).then(function (res) {
+    return res.accessToken;
+  });
+}
+
 function makeRequest(self, requestArgs, spec) {
   return Promise.resolve().then(function () {
-    var opts = getRequestOpts(requestArgs, spec);
+    return getTokens(self);
+  }).then(function (tokens) {
+    var opts = getRequestOpts(requestArgs, spec, tokens);
 
     var requestParams = {
       path: opts.requestPath,
@@ -5865,6 +6146,10 @@ function makeRequest(self, requestArgs, spec) {
       options: { headers: opts.headers }
     };
 
+    if (spec.beforeRequest) {
+      requestParams = spec.beforeRequest(requestParams, self, tokens);
+    }
+
     return self._request(requestParams).then(function (res) {
       if (spec.paginationMeta) {
         res = createPaginationMeta(res);
@@ -5872,6 +6157,12 @@ function makeRequest(self, requestArgs, spec) {
 
       var response = spec.transformResponseData ? spec.transformResponseData(res) : res;
       return response;
+    }).then(function (res) {
+      if (spec.afterRequest) {
+        return spec.afterRequest(res, self);
+      }
+
+      return res;
     });
   });
 }
@@ -6136,6 +6427,102 @@ _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Assets, {
   path: '/assets',
   includeBasic: ['list', 'read', 'create', 'update', 'remove']
 });
+
+/***/ }),
+
+/***/ "./resources/Auth.js":
+/*!***************************!*\
+  !*** ./resources/Auth.js ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./utils.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Auth = function (_Resource) {
+  _inherits(Auth, _Resource);
+
+  function Auth() {
+    _classCallCheck(this, Auth);
+
+    return _possibleConstructorReturn(this, (Auth.__proto__ || Object.getPrototypeOf(Auth)).apply(this, arguments));
+  }
+
+  return Auth;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Auth);
+
+
+Auth.prototype.login = method({
+  path: '/auth/login',
+  method: 'POST',
+  afterRequest: function afterRequest(res, self) {
+    var tokenStore = self._stelace.getApiField('tokenStore');
+
+    tokenStore.setTokens({
+      accessToken: res.accessToken,
+      refreshToken: res.refreshToken
+    });
+
+    return res;
+  }
+});
+
+Auth.prototype.logout = method({
+  path: '/auth/logout',
+  method: 'POST',
+  beforeRequest: function beforeRequest(requestParams, self, tokens) {
+    if (tokens && tokens.refreshToken) {
+      requestParams.data.refreshToken = tokens.refreshToken;
+    }
+
+    return requestParams;
+  },
+  afterRequest: function afterRequest(res, self) {
+    var tokenStore = self._stelace.getApiField('tokenStore');
+    tokenStore.removeTokens();
+
+    return res;
+  }
+});
+
+Auth.prototype.info = function () {
+  var tokenStore = this._stelace.getApiField('tokenStore');
+
+  var infoResult = {
+    isAuthenticated: false,
+    userId: null
+  };
+
+  if (!tokenStore) return infoResult;
+
+  var tokens = tokenStore.getTokens();
+  if (!tokens || !tokens.accessToken) return infoResult;
+
+  try {
+    var parsedToken = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["decodeJwtToken"])(tokens.accessToken);
+    infoResult.isAuthenticated = true;
+    infoResult.userId = parsedToken.userId;
+
+    return infoResult;
+  } catch (err) {
+    return infoResult;
+  }
+};
 
 /***/ }),
 
@@ -6429,6 +6816,58 @@ _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Events, {
 
 /***/ }),
 
+/***/ "./resources/Password.js":
+/*!*******************************!*\
+  !*** ./resources/Password.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Password = function (_Resource) {
+  _inherits(Password, _Resource);
+
+  function Password() {
+    _classCallCheck(this, Password);
+
+    return _possibleConstructorReturn(this, (Password.__proto__ || Object.getPrototypeOf(Password)).apply(this, arguments));
+  }
+
+  return Password;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Password);
+
+
+Password.prototype.change = method({
+  path: '/password/change',
+  method: 'POST'
+});
+
+Password.prototype.resetRequest = method({
+  path: '/password/reset/request',
+  method: 'POST'
+});
+
+Password.prototype.resetConfirm = method({
+  path: '/password/reset/confirm',
+  method: 'POST'
+});
+
+/***/ }),
+
 /***/ "./resources/Roles.js":
 /*!****************************!*\
   !*** ./resources/Roles.js ***!
@@ -6690,21 +7129,24 @@ Workflows.prototype.list = method({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Stelace", function() { return Stelace; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createInstance", function() { return createInstance; });
-/* harmony import */ var _resources_ApiKeys__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./resources/ApiKeys */ "./resources/ApiKeys.js");
-/* harmony import */ var _resources_Assessments__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resources/Assessments */ "./resources/Assessments.js");
-/* harmony import */ var _resources_Assets__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./resources/Assets */ "./resources/Assets.js");
-/* harmony import */ var _resources_AssetTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resources/AssetTypes */ "./resources/AssetTypes.js");
-/* harmony import */ var _resources_Availabilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./resources/Availabilities */ "./resources/Availabilities.js");
-/* harmony import */ var _resources_Bookings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./resources/Bookings */ "./resources/Bookings.js");
-/* harmony import */ var _resources_Categories__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./resources/Categories */ "./resources/Categories.js");
-/* harmony import */ var _resources_Config__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./resources/Config */ "./resources/Config.js");
-/* harmony import */ var _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./resources/CustomAttributes */ "./resources/CustomAttributes.js");
-/* harmony import */ var _resources_Events__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./resources/Events */ "./resources/Events.js");
-/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
-/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _tokenStore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tokenStore */ "./tokenStore.js");
+/* harmony import */ var _resources_ApiKeys__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resources/ApiKeys */ "./resources/ApiKeys.js");
+/* harmony import */ var _resources_Assessments__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./resources/Assessments */ "./resources/Assessments.js");
+/* harmony import */ var _resources_Assets__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resources/Assets */ "./resources/Assets.js");
+/* harmony import */ var _resources_AssetTypes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./resources/AssetTypes */ "./resources/AssetTypes.js");
+/* harmony import */ var _resources_Auth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./resources/Auth */ "./resources/Auth.js");
+/* harmony import */ var _resources_Availabilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./resources/Availabilities */ "./resources/Availabilities.js");
+/* harmony import */ var _resources_Bookings__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./resources/Bookings */ "./resources/Bookings.js");
+/* harmony import */ var _resources_Categories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./resources/Categories */ "./resources/Categories.js");
+/* harmony import */ var _resources_Config__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./resources/Config */ "./resources/Config.js");
+/* harmony import */ var _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./resources/CustomAttributes */ "./resources/CustomAttributes.js");
+/* harmony import */ var _resources_Events__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./resources/Events */ "./resources/Events.js");
+/* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
+/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
+/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -6727,22 +7169,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+
+
+
+
 var resources = {
-  ApiKeys: _resources_ApiKeys__WEBPACK_IMPORTED_MODULE_0__["default"],
-  Assessments: _resources_Assessments__WEBPACK_IMPORTED_MODULE_1__["default"],
-  Assets: _resources_Assets__WEBPACK_IMPORTED_MODULE_2__["default"],
-  AssetTypes: _resources_AssetTypes__WEBPACK_IMPORTED_MODULE_3__["default"],
-  Availabilities: _resources_Availabilities__WEBPACK_IMPORTED_MODULE_4__["default"],
-  Bookings: _resources_Bookings__WEBPACK_IMPORTED_MODULE_5__["default"],
-  Categories: _resources_Categories__WEBPACK_IMPORTED_MODULE_6__["default"],
-  Config: _resources_Config__WEBPACK_IMPORTED_MODULE_7__["default"],
-  CustomAttributes: _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_8__["default"],
-  Events: _resources_Events__WEBPACK_IMPORTED_MODULE_9__["default"],
-  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_10__["default"],
-  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_11__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_12__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_13__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_14__["default"]
+  ApiKeys: _resources_ApiKeys__WEBPACK_IMPORTED_MODULE_1__["default"],
+  Assessments: _resources_Assessments__WEBPACK_IMPORTED_MODULE_2__["default"],
+  Assets: _resources_Assets__WEBPACK_IMPORTED_MODULE_3__["default"],
+  AssetTypes: _resources_AssetTypes__WEBPACK_IMPORTED_MODULE_4__["default"],
+  Auth: _resources_Auth__WEBPACK_IMPORTED_MODULE_5__["default"],
+  Availabilities: _resources_Availabilities__WEBPACK_IMPORTED_MODULE_6__["default"],
+  Bookings: _resources_Bookings__WEBPACK_IMPORTED_MODULE_7__["default"],
+  Categories: _resources_Categories__WEBPACK_IMPORTED_MODULE_8__["default"],
+  Config: _resources_Config__WEBPACK_IMPORTED_MODULE_9__["default"],
+  CustomAttributes: _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_10__["default"],
+  Events: _resources_Events__WEBPACK_IMPORTED_MODULE_11__["default"],
+  Password: _resources_Password__WEBPACK_IMPORTED_MODULE_12__["default"],
+  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_13__["default"],
+  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_14__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_15__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_16__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_17__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {
@@ -6761,7 +7209,8 @@ var resources = {
     }
 
     var apiKey = params.apiKey,
-        apiVersion = params.apiVersion;
+        apiVersion = params.apiVersion,
+        tokenStore = params.tokenStore;
 
 
     this._api = {
@@ -6777,6 +7226,8 @@ var resources = {
     this._initResources();
     this.setApiKey(apiKey);
     this.setApiVersion(apiVersion);
+
+    this.setTokenStore(tokenStore || Object(_tokenStore__WEBPACK_IMPORTED_MODULE_0__["createDefaultTokenStore"])());
   }
 
   _createClass(Stelace, [{
@@ -6818,6 +7269,20 @@ var resources = {
     key: 'setTimeout',
     value: function setTimeout(timeout) {
       this._setApiField('timeout', typeof timeout === 'number' ? timeout : Stelace.DEFAULT_TIMEOUT);
+    }
+  }, {
+    key: 'setTokenStore',
+    value: function setTokenStore(tokenStore) {
+      var validTokenStore = this.isValidTokenStore(tokenStore);
+
+      if (validTokenStore) {
+        this._setApiField('tokenStore', tokenStore);
+      }
+    }
+  }, {
+    key: 'isValidTokenStore',
+    value: function isValidTokenStore(tokenStore) {
+      return tokenStore && (typeof tokenStore === 'undefined' ? 'undefined' : _typeof(tokenStore)) === 'object' && typeof tokenStore.getTokens === 'function' && typeof tokenStore.setTokens === 'function' && typeof tokenStore.removeTokens === 'function';
     }
   }, {
     key: 'getApiField',
@@ -6875,26 +7340,80 @@ var createInstance = function createInstance() {
 
 /***/ }),
 
+/***/ "./tokenStore.js":
+/*!***********************!*\
+  !*** ./tokenStore.js ***!
+  \***********************/
+/*! exports provided: createDefaultTokenStore */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createDefaultTokenStore", function() { return createDefaultTokenStore; });
+/* harmony import */ var localstorage_memory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! localstorage-memory */ "../node_modules/localstorage-memory/lib/localstorage-memory.js");
+/* harmony import */ var localstorage_memory__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(localstorage_memory__WEBPACK_IMPORTED_MODULE_0__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+
+
+var generateKey = function generateKey(namespace) {
+  return namespace + '-authtoken';
+};
+
+var createDefaultTokenStore = function createDefaultTokenStore() {
+  var namespace = 'stl';
+
+  var localStorage = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && window.localStorage || localstorage_memory__WEBPACK_IMPORTED_MODULE_0___default.a;
+
+  return {
+    getTokens: function getTokens() {
+      var key = generateKey(namespace);
+
+      var rawValue = localStorage.getItem(key);
+      return JSON.parse(rawValue);
+    },
+    setTokens: function setTokens(tokens) {
+      if (!tokens || (typeof tokens === 'undefined' ? 'undefined' : _typeof(tokens)) !== 'object') {
+        throw new Error('Expected object as tokens value');
+      }
+
+      var key = generateKey(namespace);
+      localStorage.setItem(key, JSON.stringify(tokens));
+    },
+    removeTokens: function removeTokens() {
+      var key = generateKey(namespace);
+      localStorage.removeItem(key);
+    }
+  };
+};
+
+/***/ }),
+
 /***/ "./utils.js":
 /*!******************!*\
   !*** ./utils.js ***!
   \******************/
-/*! exports provided: isApiKey, asCallback, interpolatePath, isOptionsHash, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty */
+/*! exports provided: isApiKey, isSecretApiKey, asCallback, interpolatePath, isOptionsHash, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isApiKey", function() { return isApiKey; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSecretApiKey", function() { return isSecretApiKey; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asCallback", function() { return asCallback; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "interpolatePath", function() { return interpolatePath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOptionsHash", function() { return isOptionsHash; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataFromArgs", function() { return getDataFromArgs; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOptionsFromArgs", function() { return getOptionsFromArgs; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addReadOnlyProperty", function() { return addReadOnlyProperty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "decodeJwtToken", function() { return decodeJwtToken; });
 /* harmony import */ var lodash_last__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/last */ "../node_modules/lodash/last.js");
 /* harmony import */ var lodash_last__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_last__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/isObject */ "../node_modules/lodash/isObject.js");
 /* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_isObject__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jwt-decode */ "../node_modules/jwt-decode/lib/index.js");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
@@ -6911,6 +7430,10 @@ var isApiKey = function isApiKey(key) {
 
   var type = parts[0];
   return type.length === 2;
+};
+
+var isSecretApiKey = function isSecretApiKey(key) {
+  return isApiKey(key) && key.startsWith('sk_');
 };
 
 var asCallback = function asCallback(promise, cb) {
@@ -7005,6 +7528,10 @@ var addReadOnlyProperty = function addReadOnlyProperty(obj, propertyName, proper
     writable: false,
     value: property
   });
+};
+
+var decodeJwtToken = function decodeJwtToken(jwtToken) {
+  return jwt_decode__WEBPACK_IMPORTED_MODULE_2___default()(jwtToken);
 };
 
 function emitWarning(warning) {
