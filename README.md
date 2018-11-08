@@ -167,25 +167,39 @@ stelace.categories.create({
 ```
 
 
-### Refresh token
+### Custom refresh token
 
-As mentioned in the token store section, Stelace handles the authentication refres
+As mentioned in the token store section, Stelace automatically refreshes the access token when it expires.
+But in some case (e.g. external authentication), you may need a custom refresh workflow.
 
-By default, Stelace provides a default token store for the authentication tokens storage.
-The tokens are stored into localStorage in browser environment and into memory in Node.js.
-
-But if a custom storage is needed, a token store can be provided at initialization:
+The function `beforeRefreshToken` can be provided at initialization:
 
 ```js
-const myCustomTokenStore = {...}
-const stelace = createInstance({ apiKey: 'pk_test_...', tokenStore: myCustomTokenStore })
+const myBeforeRefreshToken = function (tokens, cb) {
+  getNewTokens(tokens, function (err, newTokens) {
+    cb(err, newTokens)
+  })
+}
+
+const stelace = createInstance({ apiKey: 'pk_test_...', beforeRefreshToken: myBeforeRefreshToken })
 ```
 
 or at run-time:
 
 ```js
-stelace.setTokenStore(myCustomTokenStore)
+stelace.setBeforeRefreshToken(myBeforeRefreshToken)
 ```
+
+The function `beforeRefreshToken` can also be a promise:
+
+```js
+const myBeforeRefreshToken = async function (tokens) {
+  const newTokens = await getNewTokens(tokens)
+  return newTokens
+}
+```
+
+Note: The new tokens will be stored via the token store as is.
 
 
 ## Development

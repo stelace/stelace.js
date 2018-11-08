@@ -30,10 +30,7 @@ Auth.prototype.login = method({
   afterRequest: function afterRequest(res, self) {
     var tokenStore = self._stelace.getApiField('tokenStore');
 
-    tokenStore.setTokens({
-      accessToken: res.accessToken,
-      refreshToken: res.refreshToken
-    });
+    tokenStore.setTokens(res);
 
     return res;
   }

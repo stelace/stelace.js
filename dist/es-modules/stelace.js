@@ -49,8 +49,8 @@ var resources = {
    * @param {Object} params
    * @param {String} [params.apiKey]
    * @param {String} [params.apiVersion]
-   * @param {String} [params.baseURL]
    * @param {Object} [params.tokenStore]
+   * @param {Function} [params.beforeRefreshToken]
    */
   function Stelace(params) {
     _classCallCheck(this, Stelace);
@@ -61,7 +61,8 @@ var resources = {
 
     var apiKey = params.apiKey,
         apiVersion = params.apiVersion,
-        tokenStore = params.tokenStore;
+        tokenStore = params.tokenStore,
+        beforeRefreshToken = params.beforeRefreshToken;
 
 
     this._api = {
@@ -71,7 +72,8 @@ var resources = {
       port: Stelace.DEFAULT_PORT,
       version: Stelace.DEFAULT_API_VERSION,
       timeout: Stelace.DEFAULT_TIMEOUT,
-      tokenStore: null
+      tokenStore: null,
+      beforeRefreshToken: null
     };
 
     this._initResources();
@@ -79,6 +81,8 @@ var resources = {
     this.setApiVersion(apiVersion);
 
     this.setTokenStore(tokenStore || createDefaultTokenStore());
+
+    this.setBeforeRefreshToken(beforeRefreshToken);
   }
 
   _createClass(Stelace, [{
@@ -136,6 +140,13 @@ var resources = {
       return tokenStore && (typeof tokenStore === 'undefined' ? 'undefined' : _typeof(tokenStore)) === 'object' && typeof tokenStore.getTokens === 'function' && typeof tokenStore.setTokens === 'function' && typeof tokenStore.removeTokens === 'function';
     }
   }, {
+    key: 'setBeforeRefreshToken',
+    value: function setBeforeRefreshToken(beforeRefreshToken) {
+      if (typeof beforeRefreshToken !== 'function') return;
+
+      this._setApiField('beforeRefreshToken', beforeRefreshToken);
+    }
+  }, {
     key: 'getApiField',
     value: function getApiField(key) {
       return this._api[key];
@@ -178,7 +189,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.1';
+Stelace.PACKAGE_VERSION = '0.0.2';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 export var createInstance = function createInstance() {

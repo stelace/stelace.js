@@ -267,3 +267,172 @@ test('Do not need to refresh authentication token if using secret API key', (t) 
       throw err
     })
 })
+
+test('Calls the callback function `beforeRefreshToken` before token expiration', (t) => {
+  const clock = sinon.useFakeTimers()
+
+  const stelace = getStelaceStub({ keyType: 'pk' })
+
+  let beforeRefreshTokenCalled = false
+
+  const beforeRefreshToken = (tokens, cb) => {
+    beforeRefreshTokenCalled = true
+
+    t.is(typeof tokens, 'object')
+    t.is(tokens.accessToken, loginResponse.accessToken)
+    t.is(tokens.refreshToken, loginResponse.refreshToken)
+    cb(null, tokens)
+  }
+
+  stelace.setBeforeRefreshToken(beforeRefreshToken)
+
+  const loginResponse = {
+    tokenType: 'Bearer',
+    userId: 'user_1',
+    accessToken: encodeJwtToken({ userId: 'user_1' }, { expiresIn: '1h' }),
+    refreshToken: '39ac0373-e457-4f7a-970f-20dc7d97e0d4'
+  }
+
+  stelace.startStub()
+
+  const baseURL = stelace.auth.getBaseURL()
+  stelace.stubRequest(`${baseURL}/auth/login`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: loginResponse
+  })
+  stelace.stubRequest(`${baseURL}/assets/asset_1`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
+    },
+    response: {
+      id: 'asset_id',
+      name: 'Asset example'
+    }
+  })
+
+  const tokenStore = stelace.getApiField('tokenStore')
+
+  const isBeforeRefreshTokenCalled = (called) => {
+    return stelace.assets.read('asset_1')
+      .then(() => {
+        t.is(called, beforeRefreshTokenCalled)
+      })
+  }
+
+  return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
+    .then(() => {
+      const tokens = tokenStore.getTokens()
+      t.is(tokens.accessToken, loginResponse.accessToken)
+      t.is(tokens.refreshToken, loginResponse.refreshToken)
+    })
+    .then(() => {
+      return isBeforeRefreshTokenCalled(false)
+    })
+    .then(() => {
+      clock.tick(3600 * 1000)
+      return isBeforeRefreshTokenCalled(false)
+    })
+    .then(() => {
+      clock.tick(1 * 1000)
+      return isBeforeRefreshTokenCalled(true)
+    })
+    .then(() => {
+      stelace.stopStub()
+      clock.restore()
+    })
+    .catch(err => {
+      stelace.stopStub()
+      clock.restore()
+      throw err
+    })
+})
+
+test('Calls the promise `beforeRefreshToken` before token expiration', (t) => {
+  const clock = sinon.useFakeTimers()
+
+  const stelace = getStelaceStub({ keyType: 'pk' })
+
+  let beforeRefreshTokenCalled = false
+
+  const beforeRefreshToken = (tokens) => {
+    return Promise.resolve()
+      .then(() => {
+        beforeRefreshTokenCalled = true
+
+        t.is(typeof tokens, 'object')
+        t.is(tokens.accessToken, loginResponse.accessToken)
+        t.is(tokens.refreshToken, loginResponse.refreshToken)
+        return tokens
+      })
+  }
+
+  stelace.setBeforeRefreshToken(beforeRefreshToken)
+
+  const loginResponse = {
+    tokenType: 'Bearer',
+    userId: 'user_1',
+    accessToken: encodeJwtToken({ userId: 'user_1' }, { expiresIn: '1h' }),
+    refreshToken: '39ac0373-e457-4f7a-970f-20dc7d97e0d4'
+  }
+
+  stelace.startStub()
+
+  const baseURL = stelace.auth.getBaseURL()
+  stelace.stubRequest(`${baseURL}/auth/login`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: loginResponse
+  })
+  stelace.stubRequest(`${baseURL}/assets/asset_1`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
+    },
+    response: {
+      id: 'asset_id',
+      name: 'Asset example'
+    }
+  })
+
+  const tokenStore = stelace.getApiField('tokenStore')
+
+  const isBeforeRefreshTokenCalled = (called) => {
+    return stelace.assets.read('asset_1')
+      .then(() => {
+        t.is(called, beforeRefreshTokenCalled)
+      })
+  }
+
+  return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
+    .then(() => {
+      const tokens = tokenStore.getTokens()
+      t.is(tokens.accessToken, loginResponse.accessToken)
+      t.is(tokens.refreshToken, loginResponse.refreshToken)
+    })
+    .then(() => {
+      return isBeforeRefreshTokenCalled(false)
+    })
+    .then(() => {
+      clock.tick(3600 * 1000)
+      return isBeforeRefreshTokenCalled(false)
+    })
+    .then(() => {
+      clock.tick(1 * 1000)
+      return isBeforeRefreshTokenCalled(true)
+    })
+    .then(() => {
+      stelace.stopStub()
+      clock.restore()
+    })
+    .catch(err => {
+      stelace.stopStub()
+      clock.restore()
+      throw err
+    })
+})

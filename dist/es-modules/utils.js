@@ -1,6 +1,8 @@
 import _last from 'lodash/last';
 import _isObject from 'lodash/isObject';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 import jwtDecode from 'jwt-decode';
 
 var OPTIONS_KEYS = ['stelaceVersion', 'stelaceUserId'];
@@ -33,6 +35,10 @@ export var asCallback = function asCallback(promise, cb) {
   }); // async throw
 
   return p;
+};
+
+export var isPromise = function isPromise(obj) {
+  return !!obj && ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' || typeof obj === 'function') && typeof obj.then === 'function' && typeof obj.catch === 'function';
 };
 
 export var interpolatePath = function interpolatePath(path, data) {

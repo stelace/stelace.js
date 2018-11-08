@@ -7761,7 +7761,9 @@ function getTokens(self) {
     var tokens = tokenStore.getTokens();
     if (!tokens) return;
 
-    var canRefreshToken = !!tokens.refreshToken;
+    var beforeRefreshToken = self._stelace.getApiField('beforeRefreshToken');
+
+    var canRefreshToken = !!tokens.refreshToken || beforeRefreshToken;
     if (!canRefreshToken) return tokens;
 
     var accessToken = tokens.accessToken;
@@ -7774,18 +7776,43 @@ function getTokens(self) {
       return tokens;
     }
 
-    return getNewAccessToken(self, refreshToken).then(function (accessToken) {
-      var newTokens = {
-        accessToken: accessToken,
-        refreshToken: refreshToken
+    if (beforeRefreshToken) {
+      // wrap `beforeRefreshToken` so it can be a callback or a promise
+      var beforeRefreshTokenPromise = function beforeRefreshTokenPromise(tokens) {
+        return new Promise(function (resolve, reject) {
+          var callback = function callback(err, newTokens) {
+            if (err) reject(err);else resolve(newTokens);
+          };
+
+          var returnedObject = beforeRefreshToken(tokens, callback);
+
+          if (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isPromise"])(returnedObject)) {
+            returnedObject.then(resolve).catch(reject);
+          }
+        });
       };
 
-      tokenStore.setTokens(newTokens);
+      return beforeRefreshTokenPromise(tokens).then(function (newTokens) {
+        if ((typeof newTokens === 'undefined' ? 'undefined' : _typeof(newTokens)) !== 'object') {
+          throw new Error('Wrong result');
+        }
 
-      return newTokens;
-    }).catch(function () {
-      return tokens;
-    });
+        tokenStore.setTokens(newTokens);
+
+        return newTokens;
+      }).catch(function () {
+        return tokens;
+      });
+    } else {
+      return getNewAccessToken(self, refreshToken).then(function (accessToken) {
+        var newTokens = Object.assign({}, tokens, { accessToken: accessToken });
+        tokenStore.setTokens(newTokens);
+
+        return newTokens;
+      }).catch(function () {
+        return tokens;
+      });
+    }
   });
 }
 
@@ -8145,10 +8172,7 @@ Auth.prototype.login = method({
   afterRequest: function afterRequest(res, self) {
     var tokenStore = self._stelace.getApiField('tokenStore');
 
-    tokenStore.setTokens({
-      accessToken: res.accessToken,
-      refreshToken: res.refreshToken
-    });
+    tokenStore.setTokens(res);
 
     return res;
   }
@@ -8870,8 +8894,8 @@ var resources = {
    * @param {Object} params
    * @param {String} [params.apiKey]
    * @param {String} [params.apiVersion]
-   * @param {String} [params.baseURL]
    * @param {Object} [params.tokenStore]
+   * @param {Function} [params.beforeRefreshToken]
    */
   function Stelace(params) {
     _classCallCheck(this, Stelace);
@@ -8882,7 +8906,8 @@ var resources = {
 
     var apiKey = params.apiKey,
         apiVersion = params.apiVersion,
-        tokenStore = params.tokenStore;
+        tokenStore = params.tokenStore,
+        beforeRefreshToken = params.beforeRefreshToken;
 
 
     this._api = {
@@ -8892,7 +8917,8 @@ var resources = {
       port: Stelace.DEFAULT_PORT,
       version: Stelace.DEFAULT_API_VERSION,
       timeout: Stelace.DEFAULT_TIMEOUT,
-      tokenStore: null
+      tokenStore: null,
+      beforeRefreshToken: null
     };
 
     this._initResources();
@@ -8900,6 +8926,8 @@ var resources = {
     this.setApiVersion(apiVersion);
 
     this.setTokenStore(tokenStore || Object(_tokenStore__WEBPACK_IMPORTED_MODULE_0__["createDefaultTokenStore"])());
+
+    this.setBeforeRefreshToken(beforeRefreshToken);
   }
 
   _createClass(Stelace, [{
@@ -8957,6 +8985,13 @@ var resources = {
       return tokenStore && (typeof tokenStore === 'undefined' ? 'undefined' : _typeof(tokenStore)) === 'object' && typeof tokenStore.getTokens === 'function' && typeof tokenStore.setTokens === 'function' && typeof tokenStore.removeTokens === 'function';
     }
   }, {
+    key: 'setBeforeRefreshToken',
+    value: function setBeforeRefreshToken(beforeRefreshToken) {
+      if (typeof beforeRefreshToken !== 'function') return;
+
+      this._setApiField('beforeRefreshToken', beforeRefreshToken);
+    }
+  }, {
     key: 'getApiField',
     value: function getApiField(key) {
       return this._api[key];
@@ -8999,7 +9034,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.1';
+Stelace.PACKAGE_VERSION = '0.0.2';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
@@ -9065,7 +9100,7 @@ var createDefaultTokenStore = function createDefaultTokenStore() {
 /*!******************!*\
   !*** ./utils.js ***!
   \******************/
-/*! exports provided: isApiKey, isSecretApiKey, asCallback, interpolatePath, isOptionsHash, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken */
+/*! exports provided: isApiKey, isSecretApiKey, asCallback, isPromise, interpolatePath, isOptionsHash, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9073,6 +9108,7 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isApiKey", function() { return isApiKey; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSecretApiKey", function() { return isSecretApiKey; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asCallback", function() { return asCallback; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPromise", function() { return isPromise; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "interpolatePath", function() { return interpolatePath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOptionsHash", function() { return isOptionsHash; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataFromArgs", function() { return getDataFromArgs; });
@@ -9087,6 +9123,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 
 
@@ -9120,6 +9158,10 @@ var asCallback = function asCallback(promise, cb) {
   }); // async throw
 
   return p;
+};
+
+var isPromise = function isPromise(obj) {
+  return !!obj && ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' || typeof obj === 'function') && typeof obj.then === 'function' && typeof obj.catch === 'function';
 };
 
 var interpolatePath = function interpolatePath(path, data) {

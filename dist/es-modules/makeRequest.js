@@ -1,6 +1,6 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-import { isSecretApiKey, interpolatePath, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken } from './utils';
+import { isSecretApiKey, interpolatePath, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken, isPromise } from './utils';
 
 function getRequestOpts(requestArgs, spec, tokens) {
   var path = spec.path,
@@ -93,7 +93,9 @@ function getTokens(self) {
     var tokens = tokenStore.getTokens();
     if (!tokens) return;
 
-    var canRefreshToken = !!tokens.refreshToken;
+    var beforeRefreshToken = self._stelace.getApiField('beforeRefreshToken');
+
+    var canRefreshToken = !!tokens.refreshToken || beforeRefreshToken;
     if (!canRefreshToken) return tokens;
 
     var accessToken = tokens.accessToken;
@@ -106,18 +108,43 @@ function getTokens(self) {
       return tokens;
     }
 
-    return getNewAccessToken(self, refreshToken).then(function (accessToken) {
-      var newTokens = {
-        accessToken: accessToken,
-        refreshToken: refreshToken
+    if (beforeRefreshToken) {
+      // wrap `beforeRefreshToken` so it can be a callback or a promise
+      var beforeRefreshTokenPromise = function beforeRefreshTokenPromise(tokens) {
+        return new Promise(function (resolve, reject) {
+          var callback = function callback(err, newTokens) {
+            if (err) reject(err);else resolve(newTokens);
+          };
+
+          var returnedObject = beforeRefreshToken(tokens, callback);
+
+          if (isPromise(returnedObject)) {
+            returnedObject.then(resolve).catch(reject);
+          }
+        });
       };
 
-      tokenStore.setTokens(newTokens);
+      return beforeRefreshTokenPromise(tokens).then(function (newTokens) {
+        if ((typeof newTokens === 'undefined' ? 'undefined' : _typeof(newTokens)) !== 'object') {
+          throw new Error('Wrong result');
+        }
 
-      return newTokens;
-    }).catch(function () {
-      return tokens;
-    });
+        tokenStore.setTokens(newTokens);
+
+        return newTokens;
+      }).catch(function () {
+        return tokens;
+      });
+    } else {
+      return getNewAccessToken(self, refreshToken).then(function (accessToken) {
+        var newTokens = Object.assign({}, tokens, { accessToken: accessToken });
+        tokenStore.setTokens(newTokens);
+
+        return newTokens;
+      }).catch(function () {
+        return tokens;
+      });
+    }
   });
 }
 
