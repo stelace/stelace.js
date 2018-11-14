@@ -8604,6 +8604,48 @@ Password.prototype.resetConfirm = method({
 
 /***/ }),
 
+/***/ "./resources/Permissions.js":
+/*!**********************************!*\
+  !*** ./resources/Permissions.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Permissions = function (_Resource) {
+  _inherits(Permissions, _Resource);
+
+  function Permissions() {
+    _classCallCheck(this, Permissions);
+
+    return _possibleConstructorReturn(this, (Permissions.__proto__ || Object.getPrototypeOf(Permissions)).apply(this, arguments));
+  }
+
+  return Permissions;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Permissions);
+
+
+Permissions.prototype.check = method({
+  path: '/permissions/check',
+  method: 'POST'
+});
+
+/***/ }),
+
 /***/ "./resources/Ratings.js":
 /*!******************************!*\
   !*** ./resources/Ratings.js ***!
@@ -8927,17 +8969,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resources_Events__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./resources/Events */ "./resources/Events.js");
 /* harmony import */ var _resources_Messages__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Messages */ "./resources/Messages.js");
 /* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
-/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
-/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
-/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _resources_Permissions__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Permissions */ "./resources/Permissions.js");
+/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
+/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
+/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -8975,12 +9019,13 @@ var resources = {
   Events: _resources_Events__WEBPACK_IMPORTED_MODULE_11__["default"],
   Messages: _resources_Messages__WEBPACK_IMPORTED_MODULE_12__["default"],
   Password: _resources_Password__WEBPACK_IMPORTED_MODULE_13__["default"],
-  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_14__["default"],
-  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_15__["default"],
-  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_16__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_17__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_18__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_19__["default"]
+  Permissions: _resources_Permissions__WEBPACK_IMPORTED_MODULE_14__["default"],
+  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_15__["default"],
+  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_16__["default"],
+  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_17__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_18__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_19__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_20__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {

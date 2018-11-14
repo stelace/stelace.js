@@ -19,6 +19,7 @@ import CustomAttributes from './resources/CustomAttributes';
 import Events from './resources/Events';
 import Messages from './resources/Messages';
 import Password from './resources/Password';
+import Permissions from './resources/Permissions';
 import Ratings from './resources/Ratings';
 import Roles from './resources/Roles';
 import Search from './resources/Search';
@@ -40,6 +41,7 @@ var resources = {
   Events: Events,
   Messages: Messages,
   Password: Password,
+  Permissions: Permissions,
   Ratings: Ratings,
   Roles: Roles,
   Search: Search,

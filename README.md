@@ -512,6 +512,14 @@ stelace.password.resetConfirm(data, [options], [callback])
 
 
 
+### Permissions
+
+#### Check the permissions
+
+stelace.permissions.check(data, [options], [callback])
+
+
+
 ### Ratings
 
 #### Get ratings’ stats
