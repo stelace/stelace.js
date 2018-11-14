@@ -472,6 +472,30 @@ stelace.events.read(eventId, [queryParams], [options], [callback])
 
 
 
+### Messages
+
+#### List messages
+
+stelace.messages.list([queryParams], [options], [callback])
+
+#### Read an message
+
+stelace.messages.read(messageId, [queryParams], [options], [callback])
+
+#### Create an message
+
+stelace.messages.create(data, [options], [callback])
+
+#### Update an message
+
+stelace.messages.update(messageId, data, [options], [callback])
+
+#### Remove an message
+
+stelace.messages.remove(messageId, [options], [callback])
+
+
+
 ### Password
 
 #### Change the password
@@ -485,6 +509,34 @@ stelace.password.resetRequest(data, [options], [callback])
 #### Send a password reset confirmation
 
 stelace.password.resetConfirm(data, [options], [callback])
+
+
+
+### Ratings
+
+#### Get ratings’ stats
+
+stelace.ratings.getStats([queryParams], [options], [callback])
+
+#### List ratings
+
+stelace.ratings.list([queryParams], [options], [callback])
+
+#### Read an rating
+
+stelace.ratings.read(ratingId, [queryParams], [options], [callback])
+
+#### Create an rating
+
+stelace.ratings.create(data, [options], [callback])
+
+#### Update an rating
+
+stelace.ratings.update(ratingId, data, [options], [callback])
+
+#### Remove an rating
+
+stelace.ratings.remove(ratingId, [options], [callback])
 
 
 

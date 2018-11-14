@@ -17,7 +17,9 @@ import Categories from './resources/Categories';
 import Config from './resources/Config';
 import CustomAttributes from './resources/CustomAttributes';
 import Events from './resources/Events';
+import Messages from './resources/Messages';
 import Password from './resources/Password';
+import Ratings from './resources/Ratings';
 import Roles from './resources/Roles';
 import Search from './resources/Search';
 import Users from './resources/Users';
@@ -36,7 +38,9 @@ var resources = {
   Config: Config,
   CustomAttributes: CustomAttributes,
   Events: Events,
+  Messages: Messages,
   Password: Password,
+  Ratings: Ratings,
   Roles: Roles,
   Search: Search,
   Users: Users,
@@ -189,7 +193,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.2';
+Stelace.PACKAGE_VERSION = '0.0.3';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 export var createInstance = function createInstance() {

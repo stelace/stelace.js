@@ -8512,6 +8512,46 @@ _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Events, {
 
 /***/ }),
 
+/***/ "./resources/Messages.js":
+/*!*******************************!*\
+  !*** ./resources/Messages.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var Messages = function (_Resource) {
+  _inherits(Messages, _Resource);
+
+  function Messages() {
+    _classCallCheck(this, Messages);
+
+    return _possibleConstructorReturn(this, (Messages.__proto__ || Object.getPrototypeOf(Messages)).apply(this, arguments));
+  }
+
+  return Messages;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Messages);
+
+
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Messages, {
+  path: '/messages',
+  includeBasic: ['list', 'read', 'create', 'update', 'remove']
+});
+
+/***/ }),
+
 /***/ "./resources/Password.js":
 /*!*******************************!*\
   !*** ./resources/Password.js ***!
@@ -8560,6 +8600,54 @@ Password.prototype.resetRequest = method({
 Password.prototype.resetConfirm = method({
   path: '/password/reset/confirm',
   method: 'POST'
+});
+
+/***/ }),
+
+/***/ "./resources/Ratings.js":
+/*!******************************!*\
+  !*** ./resources/Ratings.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Ratings = function (_Resource) {
+  _inherits(Ratings, _Resource);
+
+  function Ratings() {
+    _classCallCheck(this, Ratings);
+
+    return _possibleConstructorReturn(this, (Ratings.__proto__ || Object.getPrototypeOf(Ratings)).apply(this, arguments));
+  }
+
+  return Ratings;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Ratings);
+
+
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Ratings, {
+  path: '/ratings',
+  includeBasic: ['list', 'read', 'create', 'update', 'remove']
+});
+
+Ratings.prototype.getStats = method({
+  path: '/ratings/stats',
+  method: 'GET',
+  paginationMeta: true
 });
 
 /***/ }),
@@ -8837,17 +8925,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resources_Config__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./resources/Config */ "./resources/Config.js");
 /* harmony import */ var _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./resources/CustomAttributes */ "./resources/CustomAttributes.js");
 /* harmony import */ var _resources_Events__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./resources/Events */ "./resources/Events.js");
-/* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
-/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
-/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _resources_Messages__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Messages */ "./resources/Messages.js");
+/* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
+/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
+/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
+/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
 
 
 
@@ -8881,12 +8973,14 @@ var resources = {
   Config: _resources_Config__WEBPACK_IMPORTED_MODULE_9__["default"],
   CustomAttributes: _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_10__["default"],
   Events: _resources_Events__WEBPACK_IMPORTED_MODULE_11__["default"],
-  Password: _resources_Password__WEBPACK_IMPORTED_MODULE_12__["default"],
-  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_13__["default"],
-  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_14__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_15__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_16__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_17__["default"]
+  Messages: _resources_Messages__WEBPACK_IMPORTED_MODULE_12__["default"],
+  Password: _resources_Password__WEBPACK_IMPORTED_MODULE_13__["default"],
+  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_14__["default"],
+  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_15__["default"],
+  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_16__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_17__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_18__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_19__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {
@@ -9034,7 +9128,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.2';
+Stelace.PACKAGE_VERSION = '0.0.3';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
