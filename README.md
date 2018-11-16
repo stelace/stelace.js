@@ -358,19 +358,19 @@ stelace.auth.logout()
 
 #### List availabilities
 
-stelace.availabilities.list(assetId, [queryParams], [options], [callback])
+stelace.availabilities.list([queryParams], [options], [callback])
 
 #### Create an availability
 
-stelace.availabilities.create(assetId, data, [options], [callback])
+stelace.availabilities.create(data, [options], [callback])
 
 #### Update an availability
 
-stelace.availabilities.update(assetId, availabilityId, data, [options], [callback])
+stelace.availabilities.update(availabilityId, data, [options], [callback])
 
 #### Remove an availability
 
-stelace.availabilities.remove(assetId, availabilityId, [options], [callback])
+stelace.availabilities.remove(availabilityId, [options], [callback])
 
 
 ### Bookings

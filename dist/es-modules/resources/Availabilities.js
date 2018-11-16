@@ -6,8 +6,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import Resource from '../Resource';
 
-var method = Resource.method;
-
 var Availabilities = function (_Resource) {
   _inherits(Availabilities, _Resource);
 
@@ -23,27 +21,7 @@ var Availabilities = function (_Resource) {
 export default Availabilities;
 
 
-Availabilities.prototype.list = method({
-  path: '/assets/:assetId/availabilities',
-  method: 'GET',
-  urlParams: ['assetId'],
-  paginationMeta: true
-});
-
-Availabilities.prototype.create = method({
-  path: '/assets/:assetId/availabilities',
-  method: 'POST',
-  urlParams: ['assetId']
-});
-
-Availabilities.prototype.update = method({
-  path: '/assets/:assetId/availabilities/:availabilityId',
-  method: 'PATCH',
-  urlParams: ['assetId', 'availabilityId']
-});
-
-Availabilities.prototype.remove = method({
-  path: '/assets/:assetId/availabilities/:availabilityId',
-  method: 'DELETE',
-  urlParams: ['assetId', 'availabilityId']
+Resource.addBasicMethods(Availabilities, {
+  path: '/availabilities',
+  includeBasic: ['list', 'create', 'update', 'remove']
 });

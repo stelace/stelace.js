@@ -38,7 +38,7 @@ Search.prototype.list = method({
       exhaustiveNbResults: res.exhaustiveNbResults
     };
 
-    var newResponse = res.assets || []; // add empty array for tests
+    var newResponse = res.results || []; // add empty array for tests
 
     addReadOnlyProperty(newResponse, 'lastResponse', lastResponse);
     addReadOnlyProperty(newResponse, 'paginationMeta', paginationMeta);

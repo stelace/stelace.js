@@ -6568,8 +6568,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
-
 var Availabilities = function (_Resource) {
   _inherits(Availabilities, _Resource);
 
@@ -6585,29 +6583,9 @@ var Availabilities = function (_Resource) {
 /* harmony default export */ __webpack_exports__["default"] = (Availabilities);
 
 
-Availabilities.prototype.list = method({
-  path: '/assets/:assetId/availabilities',
-  method: 'GET',
-  urlParams: ['assetId'],
-  paginationMeta: true
-});
-
-Availabilities.prototype.create = method({
-  path: '/assets/:assetId/availabilities',
-  method: 'POST',
-  urlParams: ['assetId']
-});
-
-Availabilities.prototype.update = method({
-  path: '/assets/:assetId/availabilities/:availabilityId',
-  method: 'PATCH',
-  urlParams: ['assetId', 'availabilityId']
-});
-
-Availabilities.prototype.remove = method({
-  path: '/assets/:assetId/availabilities/:availabilityId',
-  method: 'DELETE',
-  urlParams: ['assetId', 'availabilityId']
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Availabilities, {
+  path: '/availabilities',
+  includeBasic: ['list', 'create', 'update', 'remove']
 });
 
 /***/ }),
@@ -7120,7 +7098,7 @@ Search.prototype.list = method({
       exhaustiveNbResults: res.exhaustiveNbResults
     };
 
-    var newResponse = res.assets || []; // add empty array for tests
+    var newResponse = res.results || []; // add empty array for tests
 
     Object(_utils__WEBPACK_IMPORTED_MODULE_1__["addReadOnlyProperty"])(newResponse, 'lastResponse', lastResponse);
     Object(_utils__WEBPACK_IMPORTED_MODULE_1__["addReadOnlyProperty"])(newResponse, 'paginationMeta', paginationMeta);

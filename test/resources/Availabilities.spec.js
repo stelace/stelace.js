@@ -5,13 +5,15 @@ import { getSpyableStelace } from '../../testUtils'
 const stelace = getSpyableStelace()
 
 test('list: sends the correct request', (t) => {
-  return stelace.availabilities.list('asset_1')
+  return stelace.availabilities.list({ assetId: 'asset_1' })
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'GET',
-        path: '/assets/asset_1/availabilities',
+        path: '/availabilities',
         data: {},
-        queryParams: {},
+        queryParams: {
+          assetId: 'asset_1'
+        },
         headers: {}
       })
     })
@@ -19,16 +21,17 @@ test('list: sends the correct request', (t) => {
 
 test('create: sends the correct request', (t) => {
   const data = {
+    assetId: 'asset_1',
     startDate: '2018-01-01T00:00:00.000Z',
     endDate: '2018-01-10T00:00:00.000Z',
     quantity: 1
   }
 
-  return stelace.availabilities.create('asset_1', data)
+  return stelace.availabilities.create(data)
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'POST',
-        path: '/assets/asset_1/availabilities',
+        path: '/availabilities',
         data,
         queryParams: {},
         headers: {}
@@ -43,11 +46,11 @@ test('update: sends the correct request', (t) => {
     quantity: 2
   }
 
-  return stelace.availabilities.update('asset_1', 'availability_1', data)
+  return stelace.availabilities.update('availability_1', data)
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'PATCH',
-        path: '/assets/asset_1/availabilities/availability_1',
+        path: '/availabilities/availability_1',
         data,
         queryParams: {},
         headers: {}
@@ -56,11 +59,11 @@ test('update: sends the correct request', (t) => {
 })
 
 test('remove: sends the correct request', (t) => {
-  return stelace.availabilities.remove('asset_1', 'availability_1')
+  return stelace.availabilities.remove('availability_1')
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'DELETE',
-        path: '/assets/asset_1/availabilities/availability_1',
+        path: '/availabilities/availability_1',
         data: {},
         queryParams: {},
         headers: {}
