@@ -580,6 +580,62 @@ stelace.search.list(data, [options], [callback])
 
 
 
+### Transactions
+
+#### Preview a transaction
+
+stelace.transactions.preview(data, [options], [callback])
+
+#### List transactions
+
+stelace.transactions.list([queryParams], [options], [callback])
+
+#### Read a transaction
+
+stelace.transactions.read(transactionId, [queryParams], [options], [callback])
+
+#### Create a transaction
+
+stelace.transactions.create(data, [options], [callback])
+
+#### Update a transaction
+
+stelace.transactions.update(transactionId, data, [options], [callback])
+
+
+
+### Transaction lines
+
+#### Read a transaction line
+
+stelace.transactionLines.read(transactionLineId, [queryParams], [options], [callback])
+
+#### Create a transaction line
+
+stelace.transactionLines.create(data, [options], [callback])
+
+#### Update a transaction line
+
+stelace.transactionLines.update(transactionLineId, data, [options], [callback])
+
+
+
+### Transaction moves
+
+#### Read a transaction move
+
+stelace.transactionMoves.read(transactionMoveId, [queryParams], [options], [callback])
+
+#### Create a transaction move
+
+stelace.transactionMoves.create(data, [options], [callback])
+
+#### Update a transaction move
+
+stelace.transactionMoves.update(transactionMoveId, data, [options], [callback])
+
+
+
 ### Users
 
 #### Check the username availability

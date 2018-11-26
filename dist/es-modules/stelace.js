@@ -23,6 +23,9 @@ import Permissions from './resources/Permissions';
 import Ratings from './resources/Ratings';
 import Roles from './resources/Roles';
 import Search from './resources/Search';
+import Transactions from './resources/Transactions';
+import TransactionLines from './resources/TransactionLines';
+import TransactionMoves from './resources/TransactionMoves';
 import Users from './resources/Users';
 import Webhooks from './resources/Webhooks';
 import Workflows from './resources/Workflows';
@@ -45,6 +48,9 @@ var resources = {
   Ratings: Ratings,
   Roles: Roles,
   Search: Search,
+  Transactions: Transactions,
+  TransactionLines: TransactionLines,
+  TransactionMoves: TransactionMoves,
   Users: Users,
   Webhooks: Webhooks,
   Workflows: Workflows
@@ -195,7 +201,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.3';
+Stelace.PACKAGE_VERSION = '0.0.4';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 export var createInstance = function createInstance() {

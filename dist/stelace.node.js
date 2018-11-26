@@ -7109,6 +7109,133 @@ Search.prototype.list = method({
 
 /***/ }),
 
+/***/ "./resources/TransactionLines.js":
+/*!***************************************!*\
+  !*** ./resources/TransactionLines.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var TransactionLines = function (_Resource) {
+  _inherits(TransactionLines, _Resource);
+
+  function TransactionLines() {
+    _classCallCheck(this, TransactionLines);
+
+    return _possibleConstructorReturn(this, (TransactionLines.__proto__ || Object.getPrototypeOf(TransactionLines)).apply(this, arguments));
+  }
+
+  return TransactionLines;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (TransactionLines);
+
+
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(TransactionLines, {
+  path: '/transaction_lines',
+  includeBasic: ['read', 'create', 'update']
+});
+
+/***/ }),
+
+/***/ "./resources/TransactionMoves.js":
+/*!***************************************!*\
+  !*** ./resources/TransactionMoves.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var TransactionMoves = function (_Resource) {
+  _inherits(TransactionMoves, _Resource);
+
+  function TransactionMoves() {
+    _classCallCheck(this, TransactionMoves);
+
+    return _possibleConstructorReturn(this, (TransactionMoves.__proto__ || Object.getPrototypeOf(TransactionMoves)).apply(this, arguments));
+  }
+
+  return TransactionMoves;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (TransactionMoves);
+
+
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(TransactionMoves, {
+  path: '/transaction_moves',
+  includeBasic: ['read', 'create', 'update']
+});
+
+/***/ }),
+
+/***/ "./resources/Transactions.js":
+/*!***********************************!*\
+  !*** ./resources/Transactions.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Transactions = function (_Resource) {
+  _inherits(Transactions, _Resource);
+
+  function Transactions() {
+    _classCallCheck(this, Transactions);
+
+    return _possibleConstructorReturn(this, (Transactions.__proto__ || Object.getPrototypeOf(Transactions)).apply(this, arguments));
+  }
+
+  return Transactions;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Transactions);
+
+
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Transactions, {
+  path: '/transactions',
+  includeBasic: ['list', 'read', 'create', 'update']
+});
+
+Transactions.prototype.preview = method({
+  path: '/transactions/preview',
+  method: 'POST'
+});
+
+/***/ }),
+
 /***/ "./resources/Users.js":
 /*!****************************!*\
   !*** ./resources/Users.js ***!
@@ -7279,14 +7406,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
 /* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
 /* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
+/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
+/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
 
 
 
@@ -7329,9 +7462,12 @@ var resources = {
   Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_15__["default"],
   Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_16__["default"],
   Search: _resources_Search__WEBPACK_IMPORTED_MODULE_17__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_18__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_19__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_20__["default"]
+  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_18__["default"],
+  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_19__["default"],
+  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_20__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_21__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_22__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_23__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {
@@ -7479,7 +7615,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.3';
+Stelace.PACKAGE_VERSION = '0.0.4';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
