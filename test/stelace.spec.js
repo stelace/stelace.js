@@ -108,6 +108,35 @@ test('Set the target user for a specific request', (t) => {
     })
 })
 
+test('Set the target organization for a specific request', (t) => {
+  const stelace = getSpyableStelace()
+
+  return stelace.users.list()
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/users',
+        data: {},
+        queryParams: {},
+        headers: {}
+      })
+    })
+    .then(() => {
+      return stelace.users.list({ stelaceOrganizationId: 'organization_1' })
+    })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/users',
+        data: {},
+        queryParams: {},
+        headers: {
+          'x-stelace-organization-id': 'organization_1'
+        }
+      })
+    })
+})
+
 test('Sets the token store', (t) => {
   const stelace = getSpyableStelace()
 

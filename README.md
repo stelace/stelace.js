@@ -149,6 +149,7 @@ All methods can accept an optional `options` object containing one or more of th
 
 - `stelaceVersion` - use a specific Stelace API version for this request
 - `stelaceUserId` - perform the request as the specified user ID, needs specific permissions to do so
+- `stelaceOrganizationId` - perform the request as the specified organization ID, the user must belong to the specified organization
 
 This `options` object can be included as the last argument for any method:
 
@@ -661,6 +662,10 @@ stelace.users.update(userId, data, [options], [callback])
 #### Remove a user
 
 stelace.users.remove(userId, [options], [callback])
+
+#### Update a user’s organizations config
+
+stelace.users.updateOrganizations(userId, data, [options], [callback])
 
 
 
