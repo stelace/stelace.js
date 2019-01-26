@@ -6,35 +6,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import Resource from '../Resource';
 
-var method = Resource.method;
+var Entries = function (_Resource) {
+  _inherits(Entries, _Resource);
 
-var Users = function (_Resource) {
-  _inherits(Users, _Resource);
+  function Entries() {
+    _classCallCheck(this, Entries);
 
-  function Users() {
-    _classCallCheck(this, Users);
-
-    return _possibleConstructorReturn(this, (Users.__proto__ || Object.getPrototypeOf(Users)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Entries.__proto__ || Object.getPrototypeOf(Entries)).apply(this, arguments));
   }
 
-  return Users;
+  return Entries;
 }(Resource);
 
-export default Users;
+export default Entries;
 
 
-Resource.addBasicMethods(Users, {
-  path: '/users',
+Resource.addBasicMethods(Entries, {
+  path: '/entries',
   includeBasic: ['list', 'read', 'create', 'update', 'remove']
-});
-
-Users.prototype.checkAvailability = method({
-  path: '/users/check-availability',
-  method: 'GET'
-});
-
-Users.prototype.updateOrganizations = method({
-  path: '/users/:id/organizations',
-  method: 'PATCH',
-  urlParams: ['id']
 });

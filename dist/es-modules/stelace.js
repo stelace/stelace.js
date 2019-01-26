@@ -16,6 +16,7 @@ import Bookings from './resources/Bookings';
 import Categories from './resources/Categories';
 import Config from './resources/Config';
 import CustomAttributes from './resources/CustomAttributes';
+import Entries from './resources/Entries';
 import Events from './resources/Events';
 import Messages from './resources/Messages';
 import Password from './resources/Password';
@@ -41,6 +42,7 @@ var resources = {
   Categories: Categories,
   Config: Config,
   CustomAttributes: CustomAttributes,
+  Entries: Entries,
   Events: Events,
   Messages: Messages,
   Password: Password,
@@ -85,7 +87,8 @@ var resources = {
       version: Stelace.DEFAULT_API_VERSION,
       timeout: Stelace.DEFAULT_TIMEOUT,
       tokenStore: null,
-      beforeRefreshToken: null
+      beforeRefreshToken: null,
+      organizationId: null
     };
 
     this._initResources();
@@ -157,6 +160,11 @@ var resources = {
       if (typeof beforeRefreshToken !== 'function') return;
 
       this._setApiField('beforeRefreshToken', beforeRefreshToken);
+    }
+  }, {
+    key: 'setOrganizationId',
+    value: function setOrganizationId(organizationId) {
+      this._setApiField('organizationId', organizationId);
     }
   }, {
     key: 'getApiField',

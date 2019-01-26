@@ -2236,6 +2236,38 @@ module.exports = arrayEach;
 
 /***/ }),
 
+/***/ "../node_modules/lodash/_arrayMap.js":
+/*!*******************************************!*\
+  !*** ../node_modules/lodash/_arrayMap.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * A specialized version of `_.map` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function arrayMap(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length,
+      result = Array(length);
+
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+
+module.exports = arrayMap;
+
+
+/***/ }),
+
 /***/ "../node_modules/lodash/_assignValue.js":
 /*!**********************************************!*\
   !*** ../node_modules/lodash/_assignValue.js ***!
@@ -2618,6 +2650,216 @@ var baseCreate = (function() {
 }());
 
 module.exports = baseCreate;
+
+
+/***/ }),
+
+/***/ "../node_modules/lodash/_baseGet.js":
+/*!******************************************!*\
+  !*** ../node_modules/lodash/_baseGet.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Gets the value at `key` of `object`.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {string} key The key of the property to get.
+ * @returns {*} Returns the property value.
+ */
+function getValue(object, key) {
+  return object == null ? undefined : object[key];
+}
+
+module.exports = getValue;
+
+
+/***/ }),
+
+/***/ "../node_modules/lodash/_baseIteratee.js":
+/*!***********************************************!*\
+  !*** ../node_modules/lodash/_baseIteratee.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
+
+module.exports = identity;
+
+
+/***/ }),
+
+/***/ "../node_modules/lodash/_basePickBy.js":
+/*!*********************************************!*\
+  !*** ../node_modules/lodash/_basePickBy.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGet = __webpack_require__(/*! ./_baseGet */ "../node_modules/lodash/_baseGet.js"),
+    baseSet = __webpack_require__(/*! ./_baseSet */ "../node_modules/lodash/_baseSet.js"),
+    castPath = __webpack_require__(/*! ./_castPath */ "../node_modules/lodash/_castPath.js");
+
+/**
+ * The base implementation of  `_.pickBy` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The source object.
+ * @param {string[]} paths The property paths to pick.
+ * @param {Function} predicate The function invoked per property.
+ * @returns {Object} Returns the new object.
+ */
+function basePickBy(object, paths, predicate) {
+  var index = -1,
+      length = paths.length,
+      result = {};
+
+  while (++index < length) {
+    var path = paths[index],
+        value = baseGet(object, path);
+
+    if (predicate(value, path)) {
+      baseSet(result, castPath(path, object), value);
+    }
+  }
+  return result;
+}
+
+module.exports = basePickBy;
+
+
+/***/ }),
+
+/***/ "../node_modules/lodash/_baseSet.js":
+/*!******************************************!*\
+  !*** ../node_modules/lodash/_baseSet.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var assignValue = __webpack_require__(/*! ./_assignValue */ "../node_modules/lodash/_assignValue.js"),
+    castPath = __webpack_require__(/*! ./_castPath */ "../node_modules/lodash/_castPath.js"),
+    isIndex = __webpack_require__(/*! ./_isIndex */ "../node_modules/lodash/_isIndex.js"),
+    isObject = __webpack_require__(/*! ./isObject */ "../node_modules/lodash/isObject.js"),
+    toKey = __webpack_require__(/*! ./_toKey */ "../node_modules/lodash/_toKey.js");
+
+/**
+ * The base implementation of `_.set`.
+ *
+ * @private
+ * @param {Object} object The object to modify.
+ * @param {Array|string} path The path of the property to set.
+ * @param {*} value The value to set.
+ * @param {Function} [customizer] The function to customize path creation.
+ * @returns {Object} Returns `object`.
+ */
+function baseSet(object, path, value, customizer) {
+  if (!isObject(object)) {
+    return object;
+  }
+  path = castPath(path, object);
+
+  var index = -1,
+      length = path.length,
+      lastIndex = length - 1,
+      nested = object;
+
+  while (nested != null && ++index < length) {
+    var key = toKey(path[index]),
+        newValue = value;
+
+    if (index != lastIndex) {
+      var objValue = nested[key];
+      newValue = customizer ? customizer(objValue, key, nested) : undefined;
+      if (newValue === undefined) {
+        newValue = isObject(objValue)
+          ? objValue
+          : (isIndex(path[index + 1]) ? [] : {});
+      }
+    }
+    assignValue(nested, key, newValue);
+    nested = nested[key];
+  }
+  return object;
+}
+
+module.exports = baseSet;
+
+
+/***/ }),
+
+/***/ "../node_modules/lodash/_castPath.js":
+/*!*******************************************!*\
+  !*** ../node_modules/lodash/_castPath.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArray = __webpack_require__(/*! ./isArray */ "../node_modules/lodash/isArray.js");
+
+/**
+ * Casts `value` as an array if it's not one.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.4.0
+ * @category Lang
+ * @param {*} value The value to inspect.
+ * @returns {Array} Returns the cast array.
+ * @example
+ *
+ * _.castArray(1);
+ * // => [1]
+ *
+ * _.castArray({ 'a': 1 });
+ * // => [{ 'a': 1 }]
+ *
+ * _.castArray('abc');
+ * // => ['abc']
+ *
+ * _.castArray(null);
+ * // => [null]
+ *
+ * _.castArray(undefined);
+ * // => [undefined]
+ *
+ * _.castArray();
+ * // => []
+ *
+ * var array = [1, 2, 3];
+ * console.log(_.castArray(array) === array);
+ * // => true
+ */
+function castArray() {
+  if (!arguments.length) {
+    return [];
+  }
+  var value = arguments[0];
+  return isArray(value) ? value : [value];
+}
+
+module.exports = castArray;
 
 
 /***/ }),
@@ -3323,6 +3565,42 @@ module.exports = initCloneObject;
 
 /***/ }),
 
+/***/ "../node_modules/lodash/_isIndex.js":
+/*!******************************************!*\
+  !*** ../node_modules/lodash/_isIndex.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  var type = typeof value;
+  length = length == null ? MAX_SAFE_INTEGER : length;
+
+  return !!length &&
+    (type == 'number' ||
+      (type != 'symbol' && reIsUint.test(value))) &&
+        (value > -1 && value % 1 == 0 && value < length);
+}
+
+module.exports = isIndex;
+
+
+/***/ }),
+
 /***/ "../node_modules/lodash/_isKeyable.js":
 /*!********************************************!*\
   !*** ../node_modules/lodash/_isKeyable.js ***!
@@ -3903,6 +4181,38 @@ module.exports = stackSet;
 
 /***/ }),
 
+/***/ "../node_modules/lodash/_toKey.js":
+/*!****************************************!*\
+  !*** ../node_modules/lodash/_toKey.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
+
+module.exports = identity;
+
+
+/***/ }),
+
 /***/ "../node_modules/lodash/clone.js":
 /*!***************************************!*\
   !*** ../node_modules/lodash/clone.js ***!
@@ -4243,6 +4553,54 @@ module.exports = last;
 
 /***/ }),
 
+/***/ "../node_modules/lodash/pickBy.js":
+/*!****************************************!*\
+  !*** ../node_modules/lodash/pickBy.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayMap = __webpack_require__(/*! ./_arrayMap */ "../node_modules/lodash/_arrayMap.js"),
+    baseIteratee = __webpack_require__(/*! ./_baseIteratee */ "../node_modules/lodash/_baseIteratee.js"),
+    basePickBy = __webpack_require__(/*! ./_basePickBy */ "../node_modules/lodash/_basePickBy.js"),
+    getAllKeysIn = __webpack_require__(/*! ./_getAllKeysIn */ "../node_modules/lodash/_getAllKeysIn.js");
+
+/**
+ * Creates an object composed of the `object` properties `predicate` returns
+ * truthy for. The predicate is invoked with two arguments: (value, key).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Object
+ * @param {Object} object The source object.
+ * @param {Function} [predicate=_.identity] The function invoked per property.
+ * @returns {Object} Returns the new object.
+ * @example
+ *
+ * var object = { 'a': 1, 'b': '2', 'c': 3 };
+ *
+ * _.pickBy(object, _.isNumber);
+ * // => { 'a': 1, 'c': 3 }
+ */
+function pickBy(object, predicate) {
+  if (object == null) {
+    return {};
+  }
+  var props = arrayMap(getAllKeysIn(object), function(prop) {
+    return [prop];
+  });
+  predicate = baseIteratee(predicate);
+  return basePickBy(object, props, function(value, path) {
+    return predicate(value, path[0]);
+  });
+}
+
+module.exports = pickBy;
+
+
+/***/ }),
+
 /***/ "../node_modules/process/browser.js":
 /*!******************************************!*\
   !*** ../node_modules/process/browser.js ***!
@@ -4513,11 +4871,14 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_clone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/clone */ "../node_modules/lodash/clone.js");
 /* harmony import */ var lodash_clone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_clone__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "../node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _method__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./method */ "./method.js");
-/* harmony import */ var _method_basic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./method.basic */ "./method.basic.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils */ "./utils.js");
+/* harmony import */ var lodash_pickBy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/pickBy */ "../node_modules/lodash/pickBy.js");
+/* harmony import */ var lodash_pickBy__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_pickBy__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "../node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _method__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./method */ "./method.js");
+/* harmony import */ var _method_basic__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./method.basic */ "./method.basic.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils */ "./utils.js");
+
 
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -4557,9 +4918,18 @@ var Resource = function () {
         headers['x-stelace-version'] = apiVersion;
       }
 
+      var organizationId = this._stelace.getApiField('organizationId');
+      if (organizationId) {
+        headers['x-stelace-organization-id'] = organizationId;
+      }
+
       if (options.headers) {
         Object.assign(headers, options.headers);
       }
+
+      headers = lodash_pickBy__WEBPACK_IMPORTED_MODULE_1___default()(headers, function (key) {
+        return typeof key !== 'undefined' && key !== null;
+      });
 
       var requestParams = {
         url: path,
@@ -4576,7 +4946,7 @@ var Resource = function () {
         requestParams.data = data;
       }
 
-      return axios__WEBPACK_IMPORTED_MODULE_1___default()(requestParams).then(this._responseHandler).catch(this._errorHandler);
+      return axios__WEBPACK_IMPORTED_MODULE_2___default()(requestParams).then(this._responseHandler).catch(this._errorHandler);
     }
   }, {
     key: '_responseHandler',
@@ -4588,7 +4958,7 @@ var Resource = function () {
         statusCode: res.status
       };
 
-      Object(_utils__WEBPACK_IMPORTED_MODULE_4__["addReadOnlyProperty"])(response, 'lastResponse', lastResponse);
+      Object(_utils__WEBPACK_IMPORTED_MODULE_5__["addReadOnlyProperty"])(response, 'lastResponse', lastResponse);
 
       return response;
     }
@@ -4614,7 +4984,7 @@ var Resource = function () {
         statusCode: rawResponse.status
       };
 
-      Object(_utils__WEBPACK_IMPORTED_MODULE_4__["addReadOnlyProperty"])(error, 'lastResponse', lastResponse);
+      Object(_utils__WEBPACK_IMPORTED_MODULE_5__["addReadOnlyProperty"])(error, 'lastResponse', lastResponse);
 
       throw error;
     }
@@ -4634,7 +5004,7 @@ var Resource = function () {
           _ref2$includeBasic = _ref2.includeBasic,
           includeBasic = _ref2$includeBasic === undefined ? [] : _ref2$includeBasic;
 
-      var basicMethods = Object(_method_basic__WEBPACK_IMPORTED_MODULE_3__["default"])(path, _method__WEBPACK_IMPORTED_MODULE_2__["default"]);
+      var basicMethods = Object(_method_basic__WEBPACK_IMPORTED_MODULE_4__["default"])(path, _method__WEBPACK_IMPORTED_MODULE_3__["default"]);
 
       includeBasic.forEach(function (name) {
         resource.prototype[name] = basicMethods[name];
@@ -4648,7 +5018,7 @@ var Resource = function () {
 /* harmony default export */ __webpack_exports__["default"] = (Resource);
 
 
-Resource.method = _method__WEBPACK_IMPORTED_MODULE_2__["default"];
+Resource.method = _method__WEBPACK_IMPORTED_MODULE_3__["default"];
 
 /***/ }),
 
@@ -5447,6 +5817,46 @@ _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(CustomAttribut
 
 /***/ }),
 
+/***/ "./resources/Entries.js":
+/*!******************************!*\
+  !*** ./resources/Entries.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var Entries = function (_Resource) {
+  _inherits(Entries, _Resource);
+
+  function Entries() {
+    _classCallCheck(this, Entries);
+
+    return _possibleConstructorReturn(this, (Entries.__proto__ || Object.getPrototypeOf(Entries)).apply(this, arguments));
+  }
+
+  return Entries;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Entries);
+
+
+_Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Entries, {
+  path: '/entries',
+  includeBasic: ['list', 'read', 'create', 'update', 'remove']
+});
+
+/***/ }),
+
 /***/ "./resources/Events.js":
 /*!*****************************!*\
   !*** ./resources/Events.js ***!
@@ -5950,6 +6360,12 @@ Users.prototype.checkAvailability = method({
   method: 'GET'
 });
 
+Users.prototype.updateOrganizations = method({
+  path: '/users/:id/organizations',
+  method: 'PATCH',
+  urlParams: ['id']
+});
+
 /***/ }),
 
 /***/ "./resources/Webhooks.js":
@@ -6068,24 +6484,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resources_Categories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./resources/Categories */ "./resources/Categories.js");
 /* harmony import */ var _resources_Config__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./resources/Config */ "./resources/Config.js");
 /* harmony import */ var _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./resources/CustomAttributes */ "./resources/CustomAttributes.js");
-/* harmony import */ var _resources_Events__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./resources/Events */ "./resources/Events.js");
-/* harmony import */ var _resources_Messages__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Messages */ "./resources/Messages.js");
-/* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
-/* harmony import */ var _resources_Permissions__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Permissions */ "./resources/Permissions.js");
-/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
-/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
-/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
-/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
-/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _resources_Entries__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./resources/Entries */ "./resources/Entries.js");
+/* harmony import */ var _resources_Events__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./resources/Events */ "./resources/Events.js");
+/* harmony import */ var _resources_Messages__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Messages */ "./resources/Messages.js");
+/* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
+/* harmony import */ var _resources_Permissions__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Permissions */ "./resources/Permissions.js");
+/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
+/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
+/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
+/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
+/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
+/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -6124,19 +6542,20 @@ var resources = {
   Categories: _resources_Categories__WEBPACK_IMPORTED_MODULE_8__["default"],
   Config: _resources_Config__WEBPACK_IMPORTED_MODULE_9__["default"],
   CustomAttributes: _resources_CustomAttributes__WEBPACK_IMPORTED_MODULE_10__["default"],
-  Events: _resources_Events__WEBPACK_IMPORTED_MODULE_11__["default"],
-  Messages: _resources_Messages__WEBPACK_IMPORTED_MODULE_12__["default"],
-  Password: _resources_Password__WEBPACK_IMPORTED_MODULE_13__["default"],
-  Permissions: _resources_Permissions__WEBPACK_IMPORTED_MODULE_14__["default"],
-  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_15__["default"],
-  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_16__["default"],
-  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_17__["default"],
-  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_18__["default"],
-  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_19__["default"],
-  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_20__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_21__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_22__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_23__["default"]
+  Entries: _resources_Entries__WEBPACK_IMPORTED_MODULE_11__["default"],
+  Events: _resources_Events__WEBPACK_IMPORTED_MODULE_12__["default"],
+  Messages: _resources_Messages__WEBPACK_IMPORTED_MODULE_13__["default"],
+  Password: _resources_Password__WEBPACK_IMPORTED_MODULE_14__["default"],
+  Permissions: _resources_Permissions__WEBPACK_IMPORTED_MODULE_15__["default"],
+  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_16__["default"],
+  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_17__["default"],
+  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_18__["default"],
+  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_19__["default"],
+  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_20__["default"],
+  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_21__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_22__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_23__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_24__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {
@@ -6168,7 +6587,8 @@ var resources = {
       version: Stelace.DEFAULT_API_VERSION,
       timeout: Stelace.DEFAULT_TIMEOUT,
       tokenStore: null,
-      beforeRefreshToken: null
+      beforeRefreshToken: null,
+      organizationId: null
     };
 
     this._initResources();
@@ -6240,6 +6660,11 @@ var resources = {
       if (typeof beforeRefreshToken !== 'function') return;
 
       this._setApiField('beforeRefreshToken', beforeRefreshToken);
+    }
+  }, {
+    key: 'setOrganizationId',
+    value: function setOrganizationId(organizationId) {
+      this._setApiField('organizationId', organizationId);
     }
   }, {
     key: 'getApiField',
@@ -6378,7 +6803,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-var OPTIONS_KEYS = ['stelaceVersion', 'stelaceUserId'];
+var OPTIONS_KEYS = ['stelaceVersion', 'stelaceUserId', 'stelaceOrganizationId'];
 
 var hasOwn = {}.hasOwnProperty;
 
@@ -6479,6 +6904,9 @@ var getOptionsFromArgs = function getOptionsFromArgs(args) {
       }
       if (params.stelaceUserId) {
         opts.headers['x-stelace-user-id'] = params.stelaceUserId;
+      }
+      if (params.stelaceOrganizationId) {
+        opts.headers['x-stelace-organization-id'] = params.stelaceOrganizationId;
       }
     }
   }

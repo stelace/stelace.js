@@ -1,4 +1,5 @@
 import _clone from 'lodash/clone';
+import _pickBy from 'lodash/pickBy';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -37,9 +38,18 @@ var Resource = function () {
         headers['x-stelace-version'] = apiVersion;
       }
 
+      var organizationId = this._stelace.getApiField('organizationId');
+      if (organizationId) {
+        headers['x-stelace-organization-id'] = organizationId;
+      }
+
       if (options.headers) {
         Object.assign(headers, options.headers);
       }
+
+      headers = _pickBy(headers, function (key) {
+        return typeof key !== 'undefined' && key !== null;
+      });
 
       var requestParams = {
         url: path,

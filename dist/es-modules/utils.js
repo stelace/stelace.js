@@ -5,7 +5,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 import jwtDecode from 'jwt-decode';
 
-var OPTIONS_KEYS = ['stelaceVersion', 'stelaceUserId'];
+var OPTIONS_KEYS = ['stelaceVersion', 'stelaceUserId', 'stelaceOrganizationId'];
 
 var hasOwn = {}.hasOwnProperty;
 
@@ -106,6 +106,9 @@ export var getOptionsFromArgs = function getOptionsFromArgs(args) {
       }
       if (params.stelaceUserId) {
         opts.headers['x-stelace-user-id'] = params.stelaceUserId;
+      }
+      if (params.stelaceOrganizationId) {
+        opts.headers['x-stelace-organization-id'] = params.stelaceOrganizationId;
       }
     }
   }
