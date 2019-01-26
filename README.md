@@ -461,6 +461,30 @@ stelace.customAttributes.remove(customAttributeId, [options], [callback])
 
 
 
+### Entries
+
+#### List entries
+
+stelace.entries.list([queryParams], [options], [callback])
+
+#### Read an entry
+
+stelace.entries.read(entryId, [queryParams], [options], [callback])
+
+#### Create an entry
+
+stelace.entries.create(data, [options], [callback])
+
+#### Update an entry
+
+stelace.entries.update(entryId, data, [options], [callback])
+
+#### Remove an entry
+
+stelace.entries.remove(entryId, [options], [callback])
+
+
+
 ### Events
 
 #### List events
