@@ -503,19 +503,19 @@ stelace.events.read(eventId, [queryParams], [options], [callback])
 
 stelace.messages.list([queryParams], [options], [callback])
 
-#### Read an message
+#### Read a message
 
 stelace.messages.read(messageId, [queryParams], [options], [callback])
 
-#### Create an message
+#### Create a message
 
 stelace.messages.create(data, [options], [callback])
 
-#### Update an message
+#### Update a message
 
 stelace.messages.update(messageId, data, [options], [callback])
 
-#### Remove an message
+#### Remove a message
 
 stelace.messages.remove(messageId, [options], [callback])
 
@@ -555,19 +555,19 @@ stelace.ratings.getStats([queryParams], [options], [callback])
 
 stelace.ratings.list([queryParams], [options], [callback])
 
-#### Read an rating
+#### Read a rating
 
 stelace.ratings.read(ratingId, [queryParams], [options], [callback])
 
-#### Create an rating
+#### Create a rating
 
 stelace.ratings.create(data, [options], [callback])
 
-#### Update an rating
+#### Update a rating
 
 stelace.ratings.update(ratingId, data, [options], [callback])
 
-#### Remove an rating
+#### Remove a rating
 
 stelace.ratings.remove(ratingId, [options], [callback])
 
