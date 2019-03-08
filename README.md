@@ -392,6 +392,14 @@ stelace.bookings.create(data, [options], [callback])
 
 stelace.bookings.update(bookingId, data, [options], [callback])
 
+#### Pay a booking
+
+stelace.bookings.pay(bookingId, [options], [callback])
+
+#### Confirm a booking
+
+stelace.bookings.confirm(bookingId, [options], [callback])
+
 #### Accept a booking
 
 stelace.bookings.accept(bookingId, data, [options], [callback])
@@ -399,6 +407,10 @@ stelace.bookings.accept(bookingId, data, [options], [callback])
 #### Cancel a booking
 
 stelace.bookings.cancel(bookingId, data, [options], [callback])
+
+#### Process a booking
+
+stelace.bookings.process(bookingId, data, [options], [callback])
 
 
 ### Categories
