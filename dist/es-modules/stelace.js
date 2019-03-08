@@ -209,7 +209,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.5';
+Stelace.PACKAGE_VERSION = '0.0.7';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 export var createInstance = function createInstance() {

@@ -2387,7 +2387,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.7' };
+var core = module.exports = { version: '2.6.3' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -3745,7 +3745,7 @@ var store = global[SHARED] || (global[SHARED] = {});
 })('versions', []).push({
   version: core.version,
   mode: __webpack_require__(/*! ./_library */ "../node_modules/core-js/modules/_library.js") ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
 });
 
 
@@ -7912,9 +7912,13 @@ var Resource = function () {
           options = _ref$options === undefined ? {} : _ref$options;
 
       var headers = {
-        'x-api-key': this._stelace.getApiField('key'),
-        'user-agent': this._stelace.getUserAgent()
-      };
+        'x-api-key': this._stelace.getApiField('key')
+
+        // cannot set the user agent in browser environment
+        // https://github.com/axios/axios/issues/1231
+      };if (!Object(_utils__WEBPACK_IMPORTED_MODULE_5__["isBrowser"])()) {
+        headers['user-agent'] = this._stelace.getUserAgent();
+      }
 
       var apiVersion = this._stelace.getApiField('version');
       if (apiVersion) {
@@ -8672,6 +8676,18 @@ _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Bookings, {
   includeBasic: ['list', 'read', 'create', 'update']
 });
 
+Bookings.prototype.pay = method({
+  path: '/bookings/:id/payments',
+  method: 'POST',
+  urlParams: ['id']
+});
+
+Bookings.prototype.confirm = method({
+  path: '/bookings/:id/confirmation',
+  method: 'POST',
+  urlParams: ['id']
+});
+
 Bookings.prototype.accept = method({
   path: '/bookings/:id/acceptation',
   method: 'POST',
@@ -8680,6 +8696,12 @@ Bookings.prototype.accept = method({
 
 Bookings.prototype.cancel = method({
   path: '/bookings/:id/cancellation',
+  method: 'POST',
+  urlParams: ['id']
+});
+
+Bookings.prototype.process = method({
+  path: '/bookings/:id/process',
   method: 'POST',
   urlParams: ['id']
 });
@@ -9712,7 +9734,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.5';
+Stelace.PACKAGE_VERSION = '0.0.7';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
@@ -9778,7 +9800,7 @@ var createDefaultTokenStore = function createDefaultTokenStore() {
 /*!******************!*\
   !*** ./utils.js ***!
   \******************/
-/*! exports provided: isApiKey, isSecretApiKey, asCallback, isPromise, interpolatePath, isOptionsHash, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken */
+/*! exports provided: isApiKey, isSecretApiKey, asCallback, isPromise, interpolatePath, isOptionsHash, getDataFromArgs, getOptionsFromArgs, addReadOnlyProperty, decodeJwtToken, isBrowser */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9793,6 +9815,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOptionsFromArgs", function() { return getOptionsFromArgs; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addReadOnlyProperty", function() { return addReadOnlyProperty; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "decodeJwtToken", function() { return decodeJwtToken; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBrowser", function() { return isBrowser; });
 /* harmony import */ var lodash_last__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/last */ "../node_modules/lodash/last.js");
 /* harmony import */ var lodash_last__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_last__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/isObject */ "../node_modules/lodash/isObject.js");
@@ -9938,6 +9961,10 @@ function emitWarning(warning) {
     return process.emitWarning(warning, 'Stelace');
   }
 }
+
+var isBrowser = function isBrowser() {
+  return (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object';
+};
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/process/browser.js */ "../node_modules/process/browser.js")))
 
 /***/ }),

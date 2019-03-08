@@ -137,3 +137,7 @@ function emitWarning(warning) {
     return process.emitWarning(warning, 'Stelace');
   }
 }
+
+export var isBrowser = function isBrowser() {
+  return (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object';
+};

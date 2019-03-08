@@ -9,7 +9,7 @@ import axios from 'axios';
 
 import method from './method';
 import getBasicMethods from './method.basic';
-import { addReadOnlyProperty } from './utils';
+import { addReadOnlyProperty, isBrowser } from './utils';
 
 var Resource = function () {
   function Resource(stelace) {
@@ -29,9 +29,13 @@ var Resource = function () {
           options = _ref$options === undefined ? {} : _ref$options;
 
       var headers = {
-        'x-api-key': this._stelace.getApiField('key'),
-        'user-agent': this._stelace.getUserAgent()
-      };
+        'x-api-key': this._stelace.getApiField('key')
+
+        // cannot set the user agent in browser environment
+        // https://github.com/axios/axios/issues/1231
+      };if (!isBrowser()) {
+        headers['user-agent'] = this._stelace.getUserAgent();
+      }
 
       var apiVersion = this._stelace.getApiField('version');
       if (apiVersion) {
