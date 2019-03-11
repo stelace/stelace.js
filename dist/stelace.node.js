@@ -2007,10 +2007,10 @@ module.exports = {
 /*!******************************************!*\
   !*** ../node_modules/axios/package.json ***!
   \******************************************/
-/*! exports provided: _from, _id, _inBundle, _integrity, _location, _phantomChildren, _requested, _requiredBy, _resolved, _shasum, _spec, _where, author, browser, bugs, bundleDependencies, bundlesize, dependencies, deprecated, description, devDependencies, homepage, keywords, license, main, name, repository, scripts, typings, version, default */
+/*! exports provided: name, version, description, main, scripts, repository, keywords, author, license, bugs, homepage, devDependencies, browser, typings, dependencies, bundlesize, default */
 /***/ (function(module) {
 
-module.exports = {"_from":"axios@0.18.0","_id":"axios@0.18.0","_inBundle":false,"_integrity":"sha1-MtU+SFHv3AoRmTts0AB4nXDAUQI=","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.18.0","name":"axios","escapedName":"axios","rawSpec":"0.18.0","saveSpec":null,"fetchSpec":"0.18.0"},"_requiredBy":["/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.18.0.tgz","_shasum":"32d53e4851efdc0a11993b6cd000789d70c05102","_spec":"axios@0.18.0","_where":"/home/wingon/git/stelace-js-sdk","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.3.0","is-buffer":"^1.1.5"},"deprecated":false,"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"bundlesize":"^0.5.7","coveralls":"^2.11.9","es6-promise":"^4.0.5","grunt":"^1.0.1","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.0.0","grunt-contrib-nodeunit":"^1.0.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^19.0.0","grunt-karma":"^2.0.0","grunt-ts":"^6.0.0-beta.3","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.0.0","karma-coverage":"^1.0.0","karma-firefox-launcher":"^1.0.0","karma-jasmine":"^1.0.2","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.1.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","sinon":"^1.17.4","typescript":"^2.0.3","url-search-params":"^0.6.1","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"homepage":"https://github.com/axios/axios","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test && bundlesize","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","version":"0.18.0"};
+module.exports = {"name":"axios","version":"0.18.0","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test && bundlesize","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://github.com/axios/axios","devDependencies":{"bundlesize":"^0.5.7","coveralls":"^2.11.9","es6-promise":"^4.0.5","grunt":"^1.0.1","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.0.0","grunt-contrib-nodeunit":"^1.0.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^19.0.0","grunt-karma":"^2.0.0","grunt-ts":"^6.0.0-beta.3","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.0.0","karma-coverage":"^1.0.0","karma-firefox-launcher":"^1.0.0","karma-jasmine":"^1.0.2","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.1.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","sinon":"^1.17.4","webpack":"^1.13.1","webpack-dev-server":"^1.14.1","url-search-params":"^0.6.1","typescript":"^2.0.3"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.3.0","is-buffer":"^1.1.5"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]};
 
 /***/ }),
 
@@ -2992,6 +2992,26 @@ function init (debug) {
  */
 
 exports.enable(load());
+
+
+/***/ }),
+
+/***/ "../node_modules/has-flag/index.js":
+/*!*****************************************!*\
+  !*** ../node_modules/has-flag/index.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+module.exports = (flag, argv) => {
+	argv = argv || process.argv;
+	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
+	const pos = argv.indexOf(prefix + flag);
+	const terminatorPos = argv.indexOf('--');
+	return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
+};
 
 
 /***/ }),
@@ -6004,55 +6024,136 @@ function plural(ms, n, name) {
 
 "use strict";
 
-var argv = process.argv;
+const os = __webpack_require__(/*! os */ "os");
+const hasFlag = __webpack_require__(/*! has-flag */ "../node_modules/has-flag/index.js");
 
-var terminator = argv.indexOf('--');
-var hasFlag = function (flag) {
-	flag = '--' + flag;
-	var pos = argv.indexOf(flag);
-	return pos !== -1 && (terminator !== -1 ? pos < terminator : true);
-};
+const env = process.env;
 
-module.exports = (function () {
-	if ('FORCE_COLOR' in process.env) {
-		return true;
-	}
+let forceColor;
+if (hasFlag('no-color') ||
+	hasFlag('no-colors') ||
+	hasFlag('color=false')) {
+	forceColor = false;
+} else if (hasFlag('color') ||
+	hasFlag('colors') ||
+	hasFlag('color=true') ||
+	hasFlag('color=always')) {
+	forceColor = true;
+}
+if ('FORCE_COLOR' in env) {
+	forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
+}
 
-	if (hasFlag('no-color') ||
-		hasFlag('no-colors') ||
-		hasFlag('color=false')) {
+function translateLevel(level) {
+	if (level === 0) {
 		return false;
 	}
 
-	if (hasFlag('color') ||
-		hasFlag('colors') ||
-		hasFlag('color=true') ||
-		hasFlag('color=always')) {
-		return true;
+	return {
+		level,
+		hasBasic: true,
+		has256: level >= 2,
+		has16m: level >= 3
+	};
+}
+
+function supportsColor(stream) {
+	if (forceColor === false) {
+		return 0;
 	}
 
-	if (process.stdout && !process.stdout.isTTY) {
-		return false;
+	if (hasFlag('color=16m') ||
+		hasFlag('color=full') ||
+		hasFlag('color=truecolor')) {
+		return 3;
 	}
+
+	if (hasFlag('color=256')) {
+		return 2;
+	}
+
+	if (stream && !stream.isTTY && forceColor !== true) {
+		return 0;
+	}
+
+	const min = forceColor ? 1 : 0;
 
 	if (process.platform === 'win32') {
-		return true;
+		// Node.js 7.5.0 is the first version of Node.js to include a patch to
+		// libuv that enables 256 color output on Windows. Anything earlier and it
+		// won't work. However, here we target Node.js 8 at minimum as it is an LTS
+		// release, and Node.js 7 is not. Windows 10 build 10586 is the first Windows
+		// release that supports 256 colors. Windows 10 build 14931 is the first release
+		// that supports 16m/TrueColor.
+		const osRelease = os.release().split('.');
+		if (
+			Number(process.versions.node.split('.')[0]) >= 8 &&
+			Number(osRelease[0]) >= 10 &&
+			Number(osRelease[2]) >= 10586
+		) {
+			return Number(osRelease[2]) >= 14931 ? 3 : 2;
+		}
+
+		return 1;
 	}
 
-	if ('COLORTERM' in process.env) {
-		return true;
+	if ('CI' in env) {
+		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+			return 1;
+		}
+
+		return min;
 	}
 
-	if (process.env.TERM === 'dumb') {
-		return false;
+	if ('TEAMCITY_VERSION' in env) {
+		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
 	}
 
-	if (/^screen|^xterm|^vt100|color|ansi|cygwin|linux/i.test(process.env.TERM)) {
-		return true;
+	if (env.COLORTERM === 'truecolor') {
+		return 3;
 	}
 
-	return false;
-})();
+	if ('TERM_PROGRAM' in env) {
+		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+		switch (env.TERM_PROGRAM) {
+			case 'iTerm.app':
+				return version >= 3 ? 3 : 2;
+			case 'Apple_Terminal':
+				return 2;
+			// No default
+		}
+	}
+
+	if (/-256(color)?$/i.test(env.TERM)) {
+		return 2;
+	}
+
+	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+		return 1;
+	}
+
+	if ('COLORTERM' in env) {
+		return 1;
+	}
+
+	if (env.TERM === 'dumb') {
+		return min;
+	}
+
+	return min;
+}
+
+function getSupportLevel(stream) {
+	const level = supportsColor(stream);
+	return translateLevel(level);
+}
+
+module.exports = {
+	supportsColor: getSupportLevel,
+	stdout: getSupportLevel(process.stdout),
+	stderr: getSupportLevel(process.stderr)
+};
 
 
 /***/ }),
@@ -7283,6 +7384,48 @@ Permissions.prototype.check = method({
 
 /***/ }),
 
+/***/ "./resources/Providers.js":
+/*!********************************!*\
+  !*** ./resources/Providers.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Providers = function (_Resource) {
+  _inherits(Providers, _Resource);
+
+  function Providers() {
+    _classCallCheck(this, Providers);
+
+    return _possibleConstructorReturn(this, (Providers.__proto__ || Object.getPrototypeOf(Providers)).apply(this, arguments));
+  }
+
+  return Providers;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Providers);
+
+
+Providers.prototype.stripeRequest = method({
+  path: '/providers/stripe/request',
+  method: 'POST'
+});
+
+/***/ }),
+
 /***/ "./resources/Ratings.js":
 /*!******************************!*\
   !*** ./resources/Ratings.js ***!
@@ -7741,20 +7884,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resources_Messages__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./resources/Messages */ "./resources/Messages.js");
 /* harmony import */ var _resources_Password__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./resources/Password */ "./resources/Password.js");
 /* harmony import */ var _resources_Permissions__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./resources/Permissions */ "./resources/Permissions.js");
-/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
-/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
-/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
-/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
-/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _resources_Providers__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./resources/Providers */ "./resources/Providers.js");
+/* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
+/* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
+/* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
+/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
+/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
+/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -7799,15 +7944,16 @@ var resources = {
   Messages: _resources_Messages__WEBPACK_IMPORTED_MODULE_13__["default"],
   Password: _resources_Password__WEBPACK_IMPORTED_MODULE_14__["default"],
   Permissions: _resources_Permissions__WEBPACK_IMPORTED_MODULE_15__["default"],
-  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_16__["default"],
-  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_17__["default"],
-  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_18__["default"],
-  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_19__["default"],
-  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_20__["default"],
-  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_21__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_22__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_23__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_24__["default"]
+  Providers: _resources_Providers__WEBPACK_IMPORTED_MODULE_16__["default"],
+  Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_17__["default"],
+  Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_18__["default"],
+  Search: _resources_Search__WEBPACK_IMPORTED_MODULE_19__["default"],
+  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_20__["default"],
+  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_21__["default"],
+  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_22__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_23__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_24__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_25__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {
@@ -7961,7 +8107,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.7';
+Stelace.PACKAGE_VERSION = '0.0.8';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
@@ -8237,6 +8383,17 @@ module.exports = require("http");
 /***/ (function(module, exports) {
 
 module.exports = require("https");
+
+/***/ }),
+
+/***/ "os":
+/*!*********************!*\
+  !*** external "os" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("os");
 
 /***/ }),
 

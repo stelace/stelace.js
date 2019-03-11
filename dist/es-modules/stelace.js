@@ -21,6 +21,7 @@ import Events from './resources/Events';
 import Messages from './resources/Messages';
 import Password from './resources/Password';
 import Permissions from './resources/Permissions';
+import Providers from './resources/Providers';
 import Ratings from './resources/Ratings';
 import Roles from './resources/Roles';
 import Search from './resources/Search';
@@ -47,6 +48,7 @@ var resources = {
   Messages: Messages,
   Password: Password,
   Permissions: Permissions,
+  Providers: Providers,
   Ratings: Ratings,
   Roles: Roles,
   Search: Search,
@@ -209,7 +211,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.7';
+Stelace.PACKAGE_VERSION = '0.0.8';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 export var createInstance = function createInstance() {
