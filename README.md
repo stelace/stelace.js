@@ -89,6 +89,8 @@ A token store must be an object implementing the following functions:
 - setTokens(tokens: `object`)
 - removeTokens()
 
+For convenience, we provide `stelace.getTokenStore()` if you need to perform some operation on tokens.
+
 
 
 ### Using Promises
