@@ -6708,6 +6708,11 @@ var resources = {
       this._setApiField('timeout', typeof timeout === 'number' ? timeout : Stelace.DEFAULT_TIMEOUT);
     }
   }, {
+    key: 'getTokenStore',
+    value: function getTokenStore() {
+      return this.getApiField('tokenStore') || null;
+    }
+  }, {
     key: 'setTokenStore',
     value: function setTokenStore(tokenStore) {
       var validTokenStore = this.isValidTokenStore(tokenStore);
@@ -6776,7 +6781,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.8';
+Stelace.PACKAGE_VERSION = '0.0.9';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
