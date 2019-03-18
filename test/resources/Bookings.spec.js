@@ -56,64 +56,12 @@ test('update: sends the correct request', (t) => {
     })
 })
 
-test('pay: sends the correct request', (t) => {
-  return stelace.bookings.pay('booking_1')
-    .then(() => {
-      t.deepEqual(stelace.LAST_REQUEST, {
-        method: 'POST',
-        path: '/bookings/booking_1/payments',
-        data: {},
-        queryParams: {},
-        headers: {}
-      })
-    })
-})
-
-test('confirm: sends the correct request', (t) => {
-  return stelace.bookings.confirm('booking_1')
-    .then(() => {
-      t.deepEqual(stelace.LAST_REQUEST, {
-        method: 'POST',
-        path: '/bookings/booking_1/confirmation',
-        data: {},
-        queryParams: {},
-        headers: {}
-      })
-    })
-})
-
-test('accept: sends the correct request', (t) => {
-  return stelace.bookings.accept('booking_1')
-    .then(() => {
-      t.deepEqual(stelace.LAST_REQUEST, {
-        method: 'POST',
-        path: '/bookings/booking_1/acceptation',
-        data: {},
-        queryParams: {},
-        headers: {}
-      })
-    })
-})
-
-test('cancel: sends the correct request', (t) => {
-  return stelace.bookings.cancel('booking_1', { reasonType: 'userRequest' })
-    .then(() => {
-      t.deepEqual(stelace.LAST_REQUEST, {
-        method: 'POST',
-        path: '/bookings/booking_1/cancellation',
-        data: { reasonType: 'userRequest' },
-        queryParams: {},
-        headers: {}
-      })
-    })
-})
-
 test('process: sends the correct request', (t) => {
-  return stelace.bookings.process('booking_1')
+  return stelace.bookings.createTransition('booking_1')
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'POST',
-        path: '/bookings/booking_1/process',
+        path: '/bookings/booking_1/transitions',
         data: {},
         queryParams: {},
         headers: {}
