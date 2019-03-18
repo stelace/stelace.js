@@ -603,6 +603,18 @@ stelace.search.list(data, [options], [callback])
 
 
 
+### Tokens
+
+#### Request a token check
+
+stelace.tokens.checkRequest(data, [options], [callback])
+
+#### Confirm a token check
+
+stelace.tokens.checkConfirm([queryParams], [options], [callback])
+
+
+
 ### Transactions
 
 #### Preview a transaction
