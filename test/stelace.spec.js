@@ -137,6 +137,68 @@ test('Set the target organization for a specific request', (t) => {
     })
 })
 
+test('Override the global target organization for a specific request', (t) => {
+  const stelace = getSpyableStelace()
+
+  stelace.setOrganizationId('organization_1')
+
+  return stelace.users.list()
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/users',
+        data: {},
+        queryParams: {},
+        headers: {} // global headers don't display here
+      })
+    })
+    .then(() => {
+      return stelace.users.list({ stelaceOrganizationId: 'organization_2' })
+    })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/users',
+        data: {},
+        queryParams: {},
+        headers: {
+          'x-stelace-organization-id': 'organization_2'
+        }
+      })
+    })
+})
+
+test('Remove the target organization for a specific request', (t) => {
+  const stelace = getSpyableStelace()
+
+  stelace.setOrganizationId('organization_1')
+
+  return stelace.users.list()
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/users',
+        data: {},
+        queryParams: {},
+        headers: {} // global headers don't display here
+      })
+    })
+    .then(() => {
+      return stelace.users.list({ stelaceOrganizationId: null })
+    })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/users',
+        data: {},
+        queryParams: {},
+        headers: {
+          'x-stelace-organization-id': null // null value will be removed when sending the requets
+        }
+      })
+    })
+})
+
 test('Sets the token store', (t) => {
   const stelace = getSpyableStelace()
 
