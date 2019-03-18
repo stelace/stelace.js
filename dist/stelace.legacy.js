@@ -8676,32 +8676,8 @@ _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Bookings, {
   includeBasic: ['list', 'read', 'create', 'update']
 });
 
-Bookings.prototype.pay = method({
-  path: '/bookings/:id/payments',
-  method: 'POST',
-  urlParams: ['id']
-});
-
-Bookings.prototype.confirm = method({
-  path: '/bookings/:id/confirmation',
-  method: 'POST',
-  urlParams: ['id']
-});
-
-Bookings.prototype.accept = method({
-  path: '/bookings/:id/acceptation',
-  method: 'POST',
-  urlParams: ['id']
-});
-
-Bookings.prototype.cancel = method({
-  path: '/bookings/:id/cancellation',
-  method: 'POST',
-  urlParams: ['id']
-});
-
-Bookings.prototype.process = method({
-  path: '/bookings/:id/process',
+Bookings.prototype.createTransition = method({
+  path: '/bookings/:id/transitions',
   method: 'POST',
   urlParams: ['id']
 });
@@ -9255,6 +9231,54 @@ Search.prototype.list = method({
 
 /***/ }),
 
+/***/ "./resources/Tokens.js":
+/*!*****************************!*\
+  !*** ./resources/Tokens.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Resource */ "./Resource.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var method = _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].method;
+
+var Tokens = function (_Resource) {
+  _inherits(Tokens, _Resource);
+
+  function Tokens() {
+    _classCallCheck(this, Tokens);
+
+    return _possibleConstructorReturn(this, (Tokens.__proto__ || Object.getPrototypeOf(Tokens)).apply(this, arguments));
+  }
+
+  return Tokens;
+}(_Resource__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Tokens);
+
+
+Tokens.prototype.checkRequest = method({
+  path: '/tokens/check/request',
+  method: 'POST'
+});
+
+Tokens.prototype.checkConfirm = method({
+  path: '/tokens/check/:token',
+  method: 'GET',
+  urlParams: ['token']
+});
+
+/***/ }),
+
 /***/ "./resources/TransactionLines.js":
 /*!***************************************!*\
   !*** ./resources/TransactionLines.js ***!
@@ -9560,17 +9584,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resources_Ratings__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./resources/Ratings */ "./resources/Ratings.js");
 /* harmony import */ var _resources_Roles__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./resources/Roles */ "./resources/Roles.js");
 /* harmony import */ var _resources_Search__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./resources/Search */ "./resources/Search.js");
-/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
-/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
-/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
-/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
-/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
-/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
+/* harmony import */ var _resources_Tokens__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./resources/Tokens */ "./resources/Tokens.js");
+/* harmony import */ var _resources_Transactions__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./resources/Transactions */ "./resources/Transactions.js");
+/* harmony import */ var _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./resources/TransactionLines */ "./resources/TransactionLines.js");
+/* harmony import */ var _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./resources/TransactionMoves */ "./resources/TransactionMoves.js");
+/* harmony import */ var _resources_Users__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./resources/Users */ "./resources/Users.js");
+/* harmony import */ var _resources_Webhooks__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./resources/Webhooks */ "./resources/Webhooks.js");
+/* harmony import */ var _resources_Workflows__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./resources/Workflows */ "./resources/Workflows.js");
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -9620,12 +9646,13 @@ var resources = {
   Ratings: _resources_Ratings__WEBPACK_IMPORTED_MODULE_17__["default"],
   Roles: _resources_Roles__WEBPACK_IMPORTED_MODULE_18__["default"],
   Search: _resources_Search__WEBPACK_IMPORTED_MODULE_19__["default"],
-  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_20__["default"],
-  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_21__["default"],
-  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_22__["default"],
-  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_23__["default"],
-  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_24__["default"],
-  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_25__["default"]
+  Tokens: _resources_Tokens__WEBPACK_IMPORTED_MODULE_20__["default"],
+  Transactions: _resources_Transactions__WEBPACK_IMPORTED_MODULE_21__["default"],
+  TransactionLines: _resources_TransactionLines__WEBPACK_IMPORTED_MODULE_22__["default"],
+  TransactionMoves: _resources_TransactionMoves__WEBPACK_IMPORTED_MODULE_23__["default"],
+  Users: _resources_Users__WEBPACK_IMPORTED_MODULE_24__["default"],
+  Webhooks: _resources_Webhooks__WEBPACK_IMPORTED_MODULE_25__["default"],
+  Workflows: _resources_Workflows__WEBPACK_IMPORTED_MODULE_26__["default"]
 
   // export Stelace for tests
 };var Stelace = function () {
@@ -9784,7 +9811,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.9';
+Stelace.PACKAGE_VERSION = '0.0.10';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {
@@ -9981,7 +10008,7 @@ var getOptionsFromArgs = function getOptionsFromArgs(args) {
       if (params.stelaceUserId) {
         opts.headers['x-stelace-user-id'] = params.stelaceUserId;
       }
-      if (params.stelaceOrganizationId) {
+      if (typeof params.stelaceOrganizationId !== 'undefined') {
         opts.headers['x-stelace-organization-id'] = params.stelaceOrganizationId;
       }
     }

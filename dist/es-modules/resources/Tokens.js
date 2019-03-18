@@ -8,28 +8,28 @@ import Resource from '../Resource';
 
 var method = Resource.method;
 
-var Bookings = function (_Resource) {
-  _inherits(Bookings, _Resource);
+var Tokens = function (_Resource) {
+  _inherits(Tokens, _Resource);
 
-  function Bookings() {
-    _classCallCheck(this, Bookings);
+  function Tokens() {
+    _classCallCheck(this, Tokens);
 
-    return _possibleConstructorReturn(this, (Bookings.__proto__ || Object.getPrototypeOf(Bookings)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Tokens.__proto__ || Object.getPrototypeOf(Tokens)).apply(this, arguments));
   }
 
-  return Bookings;
+  return Tokens;
 }(Resource);
 
-export default Bookings;
+export default Tokens;
 
 
-Resource.addBasicMethods(Bookings, {
-  path: '/bookings',
-  includeBasic: ['list', 'read', 'create', 'update']
+Tokens.prototype.checkRequest = method({
+  path: '/tokens/check/request',
+  method: 'POST'
 });
 
-Bookings.prototype.createTransition = method({
-  path: '/bookings/:id/transitions',
-  method: 'POST',
-  urlParams: ['id']
+Tokens.prototype.checkConfirm = method({
+  path: '/tokens/check/:token',
+  method: 'GET',
+  urlParams: ['token']
 });

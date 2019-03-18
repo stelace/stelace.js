@@ -107,7 +107,7 @@ export var getOptionsFromArgs = function getOptionsFromArgs(args) {
       if (params.stelaceUserId) {
         opts.headers['x-stelace-user-id'] = params.stelaceUserId;
       }
-      if (params.stelaceOrganizationId) {
+      if (typeof params.stelaceOrganizationId !== 'undefined') {
         opts.headers['x-stelace-organization-id'] = params.stelaceOrganizationId;
       }
     }
