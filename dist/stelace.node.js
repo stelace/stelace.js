@@ -7221,7 +7221,7 @@ var Events = function (_Resource) {
 
 _Resource__WEBPACK_IMPORTED_MODULE_0__["default"].addBasicMethods(Events, {
   path: '/events',
-  includeBasic: ['list', 'read']
+  includeBasic: ['list', 'read', 'create']
 });
 
 /***/ }),
@@ -8139,7 +8139,7 @@ Stelace.DEFAULT_PROTOCOL = 'https';
 Stelace.DEFAULT_PORT = 443;
 Stelace.DEFAULT_API_VERSION = null;
 Stelace.DEFAULT_TIMEOUT = 30 * 1000; // 30s
-Stelace.PACKAGE_VERSION = '0.0.10';
+Stelace.PACKAGE_VERSION = '0.0.11';
 Stelace.USER_AGENT_STRING = 'Stelace/' + Stelace.PACKAGE_VERSION;
 
 var createInstance = function createInstance() {

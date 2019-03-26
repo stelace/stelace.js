@@ -23,5 +23,5 @@ export default Events;
 
 Resource.addBasicMethods(Events, {
   path: '/events',
-  includeBasic: ['list', 'read']
+  includeBasic: ['list', 'read', 'create']
 });
