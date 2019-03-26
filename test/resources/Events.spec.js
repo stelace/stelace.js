@@ -29,3 +29,23 @@ test('read: sends the correct request', (t) => {
       })
     })
 })
+
+test('create: sends the correct request', (t) => {
+  const data = {
+    type: 'custom_event',
+    metadata: {
+      test: true
+    }
+  }
+
+  return stelace.events.create(data)
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'POST',
+        path: '/events',
+        data,
+        queryParams: {},
+        headers: {}
+      })
+    })
+})

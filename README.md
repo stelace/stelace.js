@@ -493,6 +493,10 @@ stelace.events.list([queryParams], [options], [callback])
 
 stelace.events.read(eventId, [queryParams], [options], [callback])
 
+#### Create an event
+
+stelace.events.create(data, [options], [callback])
+
 
 
 ### Messages
