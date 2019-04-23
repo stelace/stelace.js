@@ -1,8 +1,8 @@
 // This file is just a base configuration for karma and not directly usable
 // Use karma.conf.local.js for local tests
 
-const _ = require('lodash')
-const webpackConfig = _.cloneDeep(require('./webpack.config.js')[1])
+const cloneDeep = require('lodash/cloneDeep')
+const webpackConfig = cloneDeep(require('./webpack.config.js')[1])
 delete webpackConfig.entry
 delete webpackConfig.output
 webpackConfig.devtool = 'inline-source-map'

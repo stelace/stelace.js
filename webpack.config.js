@@ -2,8 +2,6 @@ const path = require('path')
 
 const webpack = require('webpack')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
-const clone = require('lodash/cloneDeep')
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 const PROD = process.env.NODE_ENV === 'production'
 
@@ -11,10 +9,6 @@ const plugins = [
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-  }),
-  new LodashModuleReplacementPlugin({
-    caching: true,
-    cloning: true
   })
 ]
 
