@@ -2,108 +2,80 @@ const path = require('path')
 
 const webpack = require('webpack')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const PROD = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production'
 
-const plugins = [
-  new webpack.optimize.OccurrenceOrderPlugin(),
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-  })
-]
-
-if (PROD) {
-  plugins.push(
-    new MinifyPlugin()
-  )
-  plugins.push(
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false
+const getPlugins = (envName) => {
+  const plugins = [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
-  )
+  ]
+
+  if (isProd) {
+    plugins.push(
+      new MinifyPlugin()
+    )
+    if (envName === 'browser') {
+      plugins.push(
+        new BundleAnalyzerPlugin({ analyzerPort: 9898 })
+      )
+    }
+  }
+
+  return plugins
 }
 
 const baseFileName = 'stelace'
 
-const baseBundleConfig = {
-  mode: PROD ? 'production' : 'development',
-  context: path.join(__dirname, 'lib'),
-  entry: [`./${baseFileName}.js`],
-  output: {
-    path: path.join(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    library: 'stelace'
-  },
-  module: {
-    rules: []
-  },
-  devtool: PROD ? false : 'source-map',
-  plugins,
-  node: {
-    os: 'empty'
-  },
-  // Show minimal information, but all errors and warnings
-  // Except for log generation which have to contain all information
-  stats: process.env.WEBPACK_MODE === 'log' ? 'verbose' : 'normal'
+const getBaseBundleConfig = (envName) => {
+  const isNode = envName === 'node'
+
+  return {
+    mode: isProd ? 'production' : 'development',
+    context: path.join(__dirname, 'lib'),
+    entry: [`./${baseFileName}.js`],
+    target: isNode ? 'node' : 'web', // 'web' is webpack default
+    output: {
+      path: path.join(__dirname, 'dist'),
+      libraryTarget: isNode ? 'commonjs2' : 'umd',
+      library: 'stelace'
+    },
+    module: {
+      rules: [{
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: { envName }
+        }
+      }]
+    },
+    devtool: isProd ? false : 'source-map',
+    plugins: getPlugins(envName),
+    node: false, // remove this property for node
+    // https://webpack.js.org/configuration/stats/
+    stats: process.env.DEBUG_BUILD === 'true' ? 'verbose' : true
+  }
 }
 
-const defaultBabelLoader = {
-  test: /\.js?$/,
-  exclude: /node_modules/,
-  loader: 'babel-loader',
-  options: {}
-}
+// Latest browsers
+const evergreenBundle = getBaseBundleConfig('evergreen')
+evergreenBundle.output.filename = `${baseFileName}.evergreen${isProd ? '.min' : ''}.js`
 
-// Browsers
-const browserBundle = clone(baseBundleConfig)
-browserBundle.module.rules = [
-  Object.assign({}, defaultBabelLoader, {
-    options: Object.assign({}, defaultBabelLoader.options, {
-      forceEnv: 'browser'
-    })
-  })
-]
-browserBundle.output.filename = `${baseFileName}.browser${PROD ? '.min' : ''}.js`
-
-// Legacy browsers like IE11
-const legacyBundle = clone(baseBundleConfig)
-legacyBundle.module.rules = [
-  Object.assign({}, defaultBabelLoader, {
-    options: Object.assign({}, defaultBabelLoader.options, {
-      forceEnv: 'legacy'
-    })
-  })
-]
-// To be replaced with babel-polyfill with babel-preset-env 2.0:
-// https://github.com/babel/babel-preset-env#usebuiltins
-// https://github.com/babel/babel-preset-env/pull/241
-legacyBundle.entry = [
-  'core-js/fn/promise',
-  'core-js/fn/object/assign',
-  'core-js/fn/array/from',
-  'core-js/fn/array/find',
-  'core-js/fn/set'
-].concat(legacyBundle.entry)
-
-legacyBundle.output.filename = `${baseFileName}.legacy${PROD ? '.min' : ''}.js`
-
+// Supports legacy browsers like IE 11
+const browserBundle = getBaseBundleConfig('browser')
+browserBundle.output.filename = `${baseFileName}.browser${isProd ? '.min' : ''}.js`
 // Node
-const nodeBundle = clone(baseBundleConfig)
-nodeBundle.module.rules = [
-  Object.assign({}, defaultBabelLoader, {
-    options: Object.assign({}, defaultBabelLoader.options, {
-      forceEnv: 'node'
-    })
-  })
-]
+const nodeBundle = getBaseBundleConfig('node')
+nodeBundle.output.filename = `${baseFileName}.node${isProd ? '.min' : ''}.js`
 nodeBundle.target = 'node'
-nodeBundle.output.libraryTarget = 'commonjs2'
-nodeBundle.output.filename = `${baseFileName}.node${PROD ? '.min' : ''}.js`
 delete nodeBundle.node
 
 module.exports = [
+  evergreenBundle,
   browserBundle,
-  legacyBundle,
   nodeBundle
 ]

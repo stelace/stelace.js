@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-require('babel-core/register')()
+require('@babel/register')
 
 require('require-all')({
   dirname: process.cwd() + '/test',

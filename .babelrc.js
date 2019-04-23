@@ -1,104 +1,69 @@
-// About this file:
-// Babel 7 introduces .babelrc.js files. The .babelrc file can be removed when Babel 7 is released. (https://github.com/babel/babel/pull/4892)
+// Use this file rather than .babelrc for dynamic config (babel 7)
 
-// Babel 7 will also remove the 'env' option --> https://github.com/babel/babel/issues/4539#issuecomment-284870486
-var env = process.env.BABEL_ENV || process.env.NODE_ENV
-
-var defaultBabelPresetEnvConfig = {
-  // No module transformation, webpack will take care of this if necessary.
-  'modules': false
+// https://babeljs.io/docs/en/babel-preset-env
+const defaultBabelPresetEnvConfig = {
+  modules: false, // keep ES6 modules, webpack will take care of conversion if necessary
+  useBuiltIns: 'usage',
+  corejs: 3,
+  debug: process.env.DEBUG_BUILD === 'true'
 }
 
-// Latest browsers
-var browserBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
-  'targets': {
-    'browsers': [
-      'last 2 versions',
-      'not ie < 13',
-      'not android < 50'
-    ]
-  }
+// Modern browser bundle, for minimal size
+const evergreenBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
+  targets: '> 0.5%, not ie 11, not op_mini all, not android <= 5, not samsung <= 5'
 })
 
-// Legacy browsers
-var legacyBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
-  'targets': {
-    'browsers': [
-      'last 5 versions',
-      'not ie < 10'
-    ]
-  }
+const defaultBrowserTargets = 'last 2 versions, Firefox ESR, > 0.2%'
+
+// Supports most browsers used globally, with heavier bundle
+const browserBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
+  // This currently includes IE11 and popular but feature-limited browsers such as Opera Mini
+  targets: defaultBrowserTargets
+})
+
+// ES6 modules, but content is still transpiled to ES5 for wide browser support
+const modulesBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
+  // no targets
+  targets: defaultBrowserTargets,
 })
 
 // Node
-var nodeBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
-  'targets': {
-    'node': '4.7'
-  }
+const nodeBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
+  targets: 'node >= 6.17' // EOL: 2019-04-30
 })
 
-// Combined node and browser environment for es6 modules version and tests
-var modulesBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
-  'targets': Object.assign(legacyBabelPresetEnvConfig.targets, nodeBabelPresetEnvConfig.targets)
+// Tests need to transform modules
+const testBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
+  targets: `${nodeBabelPresetEnvConfig.targets}, ${browserBabelPresetEnvConfig.targets}`,
+  modules: 'commonjs'
 })
 
-var testBabelPresetEnvConfig = Object.assign({}, modulesBabelPresetEnvConfig, {
-  // Tests need to transform modules
-  'modules': 'commonjs'
-})
-
-var plugins = [
-  'transform-object-rest-spread',
-  'lodash',
-  'add-module-exports',
+const plugins = [
+  '@babel/plugin-proposal-object-rest-spread',
+  'lodash', // https://github.com/lodash/babel-plugin-lodash
   ['inline-replace-variables', {
     // Inject version number into code
     '__VERSION__': require('./package.json').version
   }]
 ]
 
-var babelConfig = {
-  plugins
-}
+function getBabelConfig (envName) {
+  let preset
 
-if (env === 'browser') {
-  babelConfig = Object.assign(babelConfig, {
-    'presets': [
-      ['env', browserBabelPresetEnvConfig]
+  if (envName === 'evergreen') preset = evergreenBabelPresetEnvConfig
+  else if (envName === 'browser') preset = browserBabelPresetEnvConfig
+  else if (envName === 'modules') preset = modulesBabelPresetEnvConfig
+  else if (envName === 'node') preset = nodeBabelPresetEnvConfig
+  else if (envName === 'test') preset = testBabelPresetEnvConfig
+
+  return {
+    plugins,
+    presets: [
+      ['@babel/preset-env', preset]
     ]
-  })
+  }
 }
 
-if (env === 'legacy') {
-  babelConfig = Object.assign(babelConfig, {
-    'presets': [
-      ['env', legacyBabelPresetEnvConfig]
-    ]
-  })
+module.exports = function (api) {
+  return getBabelConfig(api.env())
 }
-
-if (env === 'modules') {
-  babelConfig = Object.assign(babelConfig, {
-    'presets': [
-      ['env', modulesBabelPresetEnvConfig]
-    ]
-  })
-}
-
-if (env === 'node') {
-  babelConfig = Object.assign(babelConfig, {
-    'presets': [
-      ['env', nodeBabelPresetEnvConfig]
-    ]
-  })
-}
-
-if (env === 'test') {
-  babelConfig = Object.assign(babelConfig, {
-    'presets': [
-      ['env', testBabelPresetEnvConfig]
-    ]
-  })
-}
-
-module.exports = babelConfig
