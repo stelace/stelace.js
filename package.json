@@ -29,6 +29,9 @@
     "type": "git",
     "url": "https://github.com/stelace/stelace-js-sdk"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "axios": "^0.18.0",
     "core-js": "3",
