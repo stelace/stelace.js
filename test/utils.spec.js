@@ -10,9 +10,12 @@ import {
 
 test('Checks if an API key has the right format', (t) => {
   t.true(isApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY5o'))
-  t.false(isApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY5od')) // too long
+  t.true(isApiKey('custom_live_wakWA41rBTUXs1Y5oNRjeY5o'))
+  t.false(isApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY')) // too short
+  t.false(isApiKey('k_test_wakkWA41rBTUXs1Y5oNRjeYo')) // too short prefix
   t.false(isApiKey('123456789'))
   t.false(isApiKey(123))
+  t.false(isApiKey())
   t.end()
 })
 
