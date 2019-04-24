@@ -1,11 +1,22 @@
 # Stelace Javascript SDK
 
-The Stelace Javascript SDK provides convenient access to the Stelace API from applications written in server-side JavaScript or client-side.
+> Stelace Javascript SDK makes it easy to use [Stelace API](https://stelace.com/docs) in your client or server-side JavaScript applications.
 
+**What is Stelace?**
+
+[Stelace](https://stelace.com/) provides search, inventory and user management infrastructure for Web platforms, ranging from search-intensive marketplaces to online community apps. Stelace offers powerful backend and APIs including advanced search, automation, and content delivery, to let you focus on what makes your platform unique.
 
 ## Usage
 
-This package needs to be used with secret or public api keys that you can find in Stelace Dashboard.
+### Installation
+
+```js
+npm install stelace
+```
+
+This package needs to be used with secret or publishable api keys you can find in Stelace Dashboard.
+
+#### Node
 
 ``` js
 const { createInstance } = require('stelace')
@@ -16,7 +27,8 @@ const asset = await stelace.assets.create({
 })
 ```
 
-Or with versions of Node.js prior to v7.9:
+<details>
+<summary>Versions of Node.js prior to v7.9</summary>
 
 ``` js
 const Stelace = require('stelace')
@@ -30,19 +42,46 @@ stelace.assets.create({
 })
 ```
 
-Or using ES modules, this looks more like:
+</details>
+<br/>
+
+> **Warning**: secret apiKey `sk_...` must only be used in secure environments as it grants all endpoint permissions.
+
+#### Browser
+
+Installing the SDK with npm/yarn is the most reliable way.
+
+You can use ES modules if you build your app with a bundler like Webpack:
 
 ``` js
 import { createInstance } from 'stelace'
-const stelace = createInstance({ apiKey: 'sk_test_...' })
+const stelace = createInstance({ apiKey: 'pk_test_...' })
 //…
 ```
 
+> Note: please use publishable apiKey `pk_...` in browser environment.
 
-### Using user credentials
+For convenience you may want to load UMD file we built for you instead:
 
-A public api key is used to identify your marketplace. Only public endpoints are accessible with it.
-The public api keys are more suitable for user authentication when each user has its own permissions.
+```html
+<script src="https://unpkg.com/stelace@0.0.11/dist/stelace.browser.min.js"></script>
+```
+
+You can then use `stelace` global variable.
+
+We also offer a smaller build for modern browsers (excluding IE11 and Opera Mini in particular):
+
+```html
+<script src="https://unpkg.com/stelace@0.0.11/dist/stelace.evergreen.min.js"></script>
+```
+
+### Authentication
+
+A publishable api key identifies your marketplace and enables all publicly accessible endpoints.
+
+You’ll often need to call endpoints as one of your authenticated platform `user`s (typically from your front-end).
+
+Publishable apiKey is also what you need here since each user has its own set of permissions depending on user `roles`: all user permissions are automatically added to public permissions.
 
 ``` js
 const { createInstance } = require('stelace')
@@ -65,13 +104,17 @@ After successful login, the access and refresh tokens will be returned.
 
 Stelace SDK handles the authentication for you and will automatically renew the access token when it's expired.
 
+<details>
+<summary>Custom authentication</summary>
+
+Advanced options are available for custom authentication workflows.
 
 #### Token store
 
 By default, Stelace provides a default token store for the authentication tokens storage.
-The tokens are stored into localStorage in browser environment and into memory in Node.js.
+Tokens are stored into localStorage in browser environment and into memory in Node.js.
 
-But if a custom storage is needed, a token store can be provided at initialization:
+If custom storage is needed, a token store can be provided at initialization:
 
 ```js
 const myCustomTokenStore = {...}
@@ -85,17 +128,51 @@ stelace.setTokenStore(myCustomTokenStore)
 ```
 
 A token store must be an object implementing the following functions:
+
 - getTokens()
-- setTokens(tokens: `object`)
+- setTokens(tokens: `Object`)
 - removeTokens()
 
 For convenience, we provide `stelace.getTokenStore()` if you need to perform some operation on tokens.
 
+#### Refreshing tokens your way
 
+In some case (e.g. external authentication), you may need a custom workflow to refresh tokens.
+
+`beforeRefreshToken` function can also be provided at initialization:
+
+```js
+const myBeforeRefreshToken = function (tokens, cb) {
+  getNewTokens(tokens, function (err, newTokens) {
+    cb(err, newTokens)
+  })
+}
+
+const stelace = createInstance({ apiKey: 'pk_test_...', beforeRefreshToken: myBeforeRefreshToken })
+```
+
+or at run-time:
+
+```js
+stelace.setBeforeRefreshToken(myBeforeRefreshToken)
+```
+
+The function `beforeRefreshToken` can also be a promise:
+
+```js
+const myBeforeRefreshToken = async function (tokens) {
+  const newTokens = await getNewTokens(tokens)
+  return newTokens
+}
+```
+
+Note: Any token will be stored as is in token store.
+
+</details>
 
 ### Using Promises
 
-Each method request returns a promise that you can use in place of callbacks:
+Each method request returns a promise (or `await` as above) that you can use in place of callbacks:
 
 ``` js
 // Create an asset type and create an asset with it
@@ -114,7 +191,6 @@ stelace.assetTypes.create({
   // Handle this error
 })
 ```
-
 
 ### Configuring Timeout
 
@@ -142,7 +218,6 @@ assets.paginationMeta.page
 assets.paginationMeta.nbResultsPerPage
 ```
 
-
 ### Options
 
 Options are additional parameters that you can pass after the required arguments after any given method.
@@ -168,42 +243,6 @@ stelace.categories.create({
   stelaceVersion: '2018-07-30'
 })
 ```
-
-
-### Custom refresh token
-
-As mentioned in the token store section, Stelace automatically refreshes the access token when it expires.
-But in some case (e.g. external authentication), you may need a custom refresh workflow.
-
-The function `beforeRefreshToken` can be provided at initialization:
-
-```js
-const myBeforeRefreshToken = function (tokens, cb) {
-  getNewTokens(tokens, function (err, newTokens) {
-    cb(err, newTokens)
-  })
-}
-
-const stelace = createInstance({ apiKey: 'pk_test_...', beforeRefreshToken: myBeforeRefreshToken })
-```
-
-or at run-time:
-
-```js
-stelace.setBeforeRefreshToken(myBeforeRefreshToken)
-```
-
-The function `beforeRefreshToken` can also be a promise:
-
-```js
-const myBeforeRefreshToken = async function (tokens) {
-  const newTokens = await getNewTokens(tokens)
-  return newTokens
-}
-```
-
-Note: The new tokens will be stored via the token store as is.
-
 
 ## Development
 
