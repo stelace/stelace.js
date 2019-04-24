@@ -5,7 +5,9 @@ import {
   isSecretApiKey,
   asCallback,
   interpolatePath,
-  decodeJwtToken
+  decodeJwtToken,
+
+  clone
 } from '../lib/utils'
 
 test('Checks if an API key has the right format', (t) => {
@@ -69,5 +71,23 @@ test('Decodes JWT token', (t) => {
     iat: 1538229572,
     exp: 1538233172
   })
+  t.end()
+})
+
+test('Properly clones array or object', (t) => {
+  const arr = [{ id: 1 }, { id: '2' }]
+  t.deepEqual(arr, clone(arr))
+  t.not(arr, clone(arr))
+
+  const obj = { id: '3', name: 'test', metadata: { is: true } }
+  t.deepEqual(obj, clone(obj))
+  t.not(obj, clone(obj))
+
+  const fn = _ => _ // obj.length === 1, but return untouched
+  t.is(fn, clone(fn))
+
+  const str = 'test' // untouched too
+  t.is(str, clone(str))
+
   t.end()
 })

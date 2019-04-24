@@ -1,6 +1,9 @@
 import test from 'blue-tape'
 
-import { getSpyableStelace } from '../testUtils'
+import { clone } from '../lib/utils'
+
+import { getSpyableStelace, getStelaceStub } from '../testUtils'
+
 import Resource from '../lib/Resource'
 
 test('Gets correct API base URL', (t) => {
@@ -14,6 +17,123 @@ test('Gets correct API base URL', (t) => {
   t.is(resource.getBaseURL(), 'http://127.0.0.1:3000')
 
   t.end()
+})
+
+test('Extracts pagination "results" from response', (t) => {
+  const stelace = getSpyableStelace()
+  const resource = new Resource(stelace)
+
+  const api = getStelaceStub()
+  api.startStub()
+
+  const customAttributes = {
+    nbResults: 1,
+    nbPages: 1,
+    page: 1,
+    nbResultsPerPage: 20,
+    results: [{
+      id: 'attr_wjPjVe1DAs1hP3H2DAO',
+      createdDate: '2019-04-04T03:17:55.564Z',
+      updatedDate: '2019-04-08T02:17:53.375Z',
+      name: 'bluetooth',
+      type: 'boolean',
+      listValues: null,
+      metadata: {
+        label: 'Bluetooth'
+      },
+      marketplaceData: {},
+      livemode: false
+    }]
+  }
+
+  const res = {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: customAttributes
+  }
+
+  const baseURL = api.customAttributes.getBaseURL()
+  api.stubRequest(`${baseURL}/custom-attributes`, res)
+
+  return api.customAttributes.list()
+    .then(ca => {
+      t.deepEqual(ca, customAttributes.results)
+
+      // TODO: clean this once we use proper moxios.wait
+      // To have proper axios response format with `data` property
+      // https://github.com/axios/moxios/blob/v0.4.0/test.js#L127
+      const axiosResponse = clone(res)
+      axiosResponse.data = axiosResponse.response
+      delete axiosResponse.response
+
+      t.deepEqual(resource._responseHandler(axiosResponse), res.response)
+    })
+    .then(() => api.stopStub())
+    .catch(err => {
+      api.stopStub()
+      throw err
+    })
+})
+
+test('Passes plan array response as is', (t) => {
+  const stelace = getSpyableStelace()
+  const resource = new Resource(stelace)
+
+  const api = getStelaceStub()
+  api.startStub()
+
+  // Some resources are not paginated
+  const categories = [{
+    id: 'ctgy_ejQQps1I3a1gJYz2I3a',
+    name: 'Cars',
+    parentId: null,
+    metadata: {},
+    marketplaceData: {},
+    createdDate: '2018-04-14T08:53:59.076Z',
+    updatedDate: '2018-04-14T08:53:59.076Z',
+    livemode: false
+  }, {
+    id: 'ctgy_naEQps1I3a1gJYz2I3a',
+    name: 'Vans',
+    parentId: null,
+    metadata: {},
+    marketplaceData: {},
+    createdDate: '2018-04-15T08:53:59.076Z',
+    updatedDate: '2018-04-15T08:53:59.076Z',
+    livemode: false
+  }]
+
+  const res = {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: categories
+  }
+
+  const baseURL = api.categories.getBaseURL()
+  api.stubRequest(`${baseURL}/categories`, res)
+
+  return api.categories.list()
+    .then(cat => {
+      t.deepEqual(cat, categories)
+
+      // TODO: clean this once we use proper moxios.wait
+      // To have proper axios response format with `data` property
+      // https://github.com/axios/moxios/blob/v0.4.0/test.js#L127
+      const axiosResponse = clone(res)
+      axiosResponse.data = axiosResponse.response
+      delete axiosResponse.response
+
+      t.deepEqual(resource._responseHandler(axiosResponse), res.response)
+    })
+    .then(() => api.stopStub())
+    .catch(err => {
+      api.stopStub()
+      throw err
+    })
 })
 
 test('Adds basic methods for Resource instances', (t) => {
