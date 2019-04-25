@@ -3,7 +3,7 @@
 > Stelace Javascript SDK makes it easy to use [Stelace API](https://stelace.com/docs) in your client or server-side JavaScript applications.
 
 <p>
-  <img src="https://circleci.com/gh/stelace/stelace-core.svg?style=svg" alt="CI status" />
+  <img src="https://circleci.com/gh/stelace/stelace-js-sdk.svg?style=svg" alt="CI status" />
 
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="MIT License" />
@@ -35,9 +35,7 @@
 
 Other browsers with similar feature set should also work.
 
-## Usage
-
-### Installation
+## Installation
 
 ```js
 npm install stelace
@@ -45,7 +43,7 @@ npm install stelace
 
 This package needs to be used with secret or publishable api keys you can find in Stelace Dashboard.
 
-#### Node
+### Node
 
 ``` js
 const { createInstance } = require('stelace')
@@ -76,11 +74,11 @@ stelace.assets.create({
 
 > **Warning**: secret apiKey `sk_...` must only be used in secure environments as it grants all endpoint permissions.
 
-#### Browser
+### Browser
 
 For browser you can either install (with npm/yarn) or add a `<script>` tag in your HTML.
 
-##### ES module
+#### ES module
 
 Installing the SDK is the recommended way:
 
@@ -97,7 +95,7 @@ const stelace = createInstance({ apiKey: 'pk_test_...' })
 
 > Note: please use publishable apiKey `pk_...` in browser environment.
 
-##### Script tag
+#### Script tag
 
 For convenience you may want to load one of the UMD files we built for you instead:
 
@@ -114,6 +112,8 @@ We offer a smaller build for modern browsers (excluding IE11 and Opera Mini in p
 ```
 
 Unminified and map files are also [available](https://www.jsdelivr.com/package/npm/stelace).
+
+## Usage
 
 ### Authentication
 
