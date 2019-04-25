@@ -2,20 +2,38 @@
 
 > Stelace Javascript SDK makes it easy to use [Stelace API](https://stelace.com/docs) in your client or server-side JavaScript applications.
 
-<img src="https://circleci.com/gh/stelace/stelace-core.svg?style=svg" alt="CI status" />
+<p>
+  <img src="https://circleci.com/gh/stelace/stelace-core.svg?style=svg" alt="CI status" />
 
-<a href="LICENSE">
-  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="MIT License" />
-</a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="MIT License" />
+  </a>
 
-<a href="https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js">
-  <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js?compression=gzip&style=flat-square" alt="GZIP bundle size">
-</a>
-<br/>
+  <a href="https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js">
+    <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js?compression=gzip&style=flat-square" alt="GZIP bundle size">
+  </a>
+</p>
 
 **What is Stelace?**
 
 [Stelace](https://stelace.com/) provides search, inventory and user management infrastructure for Web platforms, ranging from search-intensive marketplaces to online community apps. Stelace offers powerful backend and APIs including advanced search, automation, and content delivery, to let you focus on what makes your platform unique.
+
+## Core Features
+
+- Full Stelace API endpoints coverage
+- API key and Auth Tokens handling
+- ES6 modules / bundler support
+
+### Supported browsers and Node.js versions
+
+- Chrome
+- Firefox
+- Edge
+- Safari
+- IE11 (except when using pre-packaged [evergreen version](#script-tag))
+- Node.js (>=6.17)
+
+Other browsers with similar feature set should also work.
 
 ## Usage
 
@@ -81,7 +99,7 @@ const stelace = createInstance({ apiKey: 'pk_test_...' })
 
 ##### Script tag
 
-For convenience you may want to load UMD file we built for you instead:
+For convenience you may want to load one of the UMD files we built for you instead:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/stelace@0.1.0/stelace.browser.min.js"></script>
