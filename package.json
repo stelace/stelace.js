@@ -11,12 +11,12 @@
     "build:modules": "BABEL_ENV=modules babel lib -d dist/es-modules/",
     "build:standalone": "NODE_ENV=development webpack && NODE_ENV=production webpack",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "BABEL_ENV=test node ./test/runner | tap-spec",
     "test:ci": "BABEL_ENV=test node ./test/runner | tap-xunit",
     "test:browser-local": "BABEL_ENV=test karma start karma.conf.local.js",
     "test:prepush": "npm run build && npm run test"
   },
-  "precommit": ["lint", "test"],
   "author": "Stelace Team",
   "license": "MIT",
   "homepage": "https://stelace.com",
@@ -62,15 +62,16 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "husky": "^2.1.0",
     "jsonwebtoken": "^8.3.0",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-tap": "^4.1.4",
     "karma-webpack": "^3.0.5",
+    "lint-staged": "^8.1.5",
     "lodash": "^4.17.11",
     "moxios": "^0.4.0",
-    "pre-commit": "^1.2.2",
     "require-all": "^3.0.0",
     "rimraf": "^2.6.2",
     "sinon": "^6.3.4",
@@ -82,5 +83,10 @@
   },
   "engines": {
     "node": ">=8.9"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
