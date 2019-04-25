@@ -2,6 +2,17 @@
 
 > Stelace Javascript SDK makes it easy to use [Stelace API](https://stelace.com/docs) in your client or server-side JavaScript applications.
 
+<img src="https://circleci.com/gh/stelace/stelace-core.svg?style=svg" alt="CI status" />
+
+<a href="LICENSE">
+  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="MIT License" />
+</a>
+
+<a href="https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js">
+  <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js?compression=gzip&style=flat-square" alt="GZIP bundle size">
+</a>
+<br/>
+
 **What is Stelace?**
 
 [Stelace](https://stelace.com/) provides search, inventory and user management infrastructure for Web platforms, ranging from search-intensive marketplaces to online community apps. Stelace offers powerful backend and APIs including advanced search, automation, and content delivery, to let you focus on what makes your platform unique.
@@ -49,9 +60,16 @@ stelace.assets.create({
 
 #### Browser
 
-Installing the SDK with npm/yarn is the most reliable way.
+For browser you can either install (with npm/yarn) or add a `<script>` tag in your HTML.
 
-You can use ES modules if you build your app with a bundler like Webpack:
+##### ES module
+
+Installing the SDK is the recommended way:
+
+- tree-shaking can reduce Stelace SDK size from 70% with shared dependencies (mostly axios and core-js polyfills).
+- no surprise due to potential jsDelivr/unpkg CDN failure.
+
+You just have to use ES modules with your favorite bundler like Webpack:
 
 ``` js
 import { createInstance } from 'stelace'
@@ -61,19 +79,23 @@ const stelace = createInstance({ apiKey: 'pk_test_...' })
 
 > Note: please use publishable apiKey `pk_...` in browser environment.
 
+##### Script tag
+
 For convenience you may want to load UMD file we built for you instead:
 
 ```html
-<script src="https://unpkg.com/stelace@0.0.11/dist/stelace.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stelace@0.1.0/stelace.browser.min.js"></script>
 ```
 
 You can then use `stelace` global variable.
 
-We also offer a smaller build for modern browsers (excluding IE11 and Opera Mini in particular):
+We offer a smaller build for modern browsers (excluding IE11 and Opera Mini in particular):
 
 ```html
-<script src="https://unpkg.com/stelace@0.0.11/dist/stelace.evergreen.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stelace@0.1.0/dist/stelace.evergreen.min.js"></script>
 ```
+
+Unminified and map files are also [available](https://www.jsdelivr.com/package/npm/stelace).
 
 ### Authentication
 
@@ -192,14 +214,6 @@ stelace.assetTypes.create({
 })
 ```
 
-### Configuring Timeout
-
-Request timeout is configurable (the default is 30 seconds):
-
-``` js
-stelace.setTimeout(10000); // in ms (this is 10 seconds)
-```
-
 ### Examining Responses
 
 Some information about the response is provided in the `lastResponse` property as convenience:
@@ -209,7 +223,16 @@ asset.lastResponse.requestId
 asset.lastResponse.statusCode
 ```
 
-When pagination is enabled in list endpoints, you can find the `paginationMeta` property:
+When pagination is available in list endpoints, you’ll directly get `results` array as response:
+
+```js
+const assets = await stelace.assets.list()
+console.log(Array.isArray(assets)) // true
+console.log(assets.lastResponse.statusCode) // 200
+console.log(assets.paginationMeta.page) // 1
+```
+
+Here are the properties included in `paginationMeta`:
 
 ```js
 assets.paginationMeta.nbResults
@@ -228,7 +251,7 @@ All methods can accept an optional `options` object containing one or more of th
 - `stelaceUserId` - perform the request as the specified user ID, needs specific permissions to do so
 - `stelaceOrganizationId` - perform the request as the specified organization ID, the user must belong to the specified organization; `null` value allowed to remove the global value set by `stelace.setOrganizationId()`
 
-This `options` object can be included as the last argument for any method:
+This `options` object can be included as the last argument for any method (or second to last when using callbacks):
 
 ```js
 // Only the category data object
@@ -244,18 +267,27 @@ stelace.categories.create({
 })
 ```
 
+### Configuring Timeout
+
+Request timeout in case of network failure is configurable (the default is 30 seconds):
+
+``` js
+stelace.setTimeout(10000); // in ms (10 seconds)
+```
+
 ## Development
 
 Run all tests:
 
 ```bash
-$ npm install
-$ npm test
+npm install
+npm test
 ```
 
 Run tests in browser environments (Chrome and Firefox):
+
 ```bash
-$ npm test:browser-local
+npm test:browser-local
 ```
 
 
@@ -263,17 +295,17 @@ $ npm test:browser-local
 
 Most of the methods follow the same schema concerning arguments:
 
-***Id**: `string` - Object ID
+**Id**: `string` - Object ID
 
-**queryParams**: `object` - Query parameters in GET requests (usually used for pagination)
+**queryParams**: `object` - Query parameters in GET requests (usually for pagination)
 
-**data**: `object` - Body of the request for POST/PATCH requests (usually used for the creation or the update of an object)
+**data**: `object` - Body of the request for POST/PATCH requests (usually for creation or update of an object)
 
 **options**: `object` - Options parameters described above
 
 **callback**: `function` - Callback function. Omit it when using promises
 
-The optional arguments are displayed within brackets.
+The optional arguments are within [brackets].
 
 
 ### API keys
@@ -387,6 +419,7 @@ stelace.auth.login(data, [options], [callback])
 stelace.auth.info()
 
 Returns an object with the following properties:
+
 - **isAuthenticated**: `boolean`
 - **userId**: `string|null`
 
