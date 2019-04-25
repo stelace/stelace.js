@@ -12,7 +12,7 @@
     "build:standalone": "NODE_ENV=development webpack && NODE_ENV=production webpack",
     "lint": "eslint .",
     "test": "BABEL_ENV=test node ./test/runner | tap-spec",
-    "test:ci": "BABEL_ENV=test node ./test/runner | tape-xunit",
+    "test:ci": "BABEL_ENV=test node ./test/runner | tap-xunit",
     "test:browser-local": "BABEL_ENV=test karma start karma.conf.local.js",
     "test:prepush": "npm run build && npm run test"
   },
