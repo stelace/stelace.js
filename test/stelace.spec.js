@@ -1,6 +1,12 @@
 import test from 'blue-tape'
+import moxios from 'moxios'
 
-import { getSpyableStelace, getStelaceStub } from '../testUtils'
+import {
+  getApiKey,
+  getSpyableStelace,
+  getStelaceStub,
+  encodeJwtToken
+} from '../testUtils'
 
 import { Stelace, createInstance } from '../lib/stelace'
 
@@ -48,6 +54,127 @@ test('Methods return a promise', (t) => {
   return stelace.categories.list()
     .then(categories => t.ok(categories))
     .catch(err => t.notOk(err))
+})
+
+test('Sets Authorization header with token and apiKey', (t) => {
+  const stelace = getStelaceStub({ keyType: 'pk' })
+  stelace.startStub()
+  const baseURL = stelace.auth.getBaseURL()
+  const accessToken = encodeJwtToken({ userId: 'user_1' }, { expiresIn: '1h' })
+  const testApiKey = getApiKey({ type: 'pk' })
+
+  const basicAuthorizationRegex = /Basic\s(.*)/i
+  // Stelace custom Authorization scheme params
+  // https://tools.ietf.org/html/draft-ietf-httpbis-p7-auth-19#appendix-B
+  const stelaceSchemeParamRegex = /(apiKey|token)\s?=\s?([^,\s]*)/ig
+  const expectedParams = {
+    apiKey: testApiKey,
+    token: accessToken
+  }
+  // Expects RegExp exec object
+  const validateSchemeParam = exec => exec && exec[2] === expectedParams[exec[1]]
+
+  stelace.stubRequest(`${baseURL}/auth/login`, {
+    status: 200,
+    headers: { 'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0' },
+    response: {
+      tokenType: 'Bearer',
+      userId: 'user_1',
+      accessToken,
+      refreshToken: '39ac0373-e457-4f7a-970f-20dc7d97e0d4'
+    }
+  })
+
+  stelace.stubRequest(`${baseURL}/users/user_1`, {
+    status: 200,
+    headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
+    response: {
+      id: 'user_1',
+      username: 'foo',
+      firstname: 'Foo',
+      lastname: 'Bar'
+    }
+  })
+
+  stelace.stubRequest(`${baseURL}/auth/logout`, {
+    status: 200,
+    headers: { 'x-request-id': 'e79a0f16-ebd1-468a-b35d-9ea9f6bcff0d' },
+    response: { success: true }
+  })
+
+  return stelace.users.read('user_1')
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const basic = headers['authorization'].match(basicAuthorizationRegex)
+
+      t.true(headers['x-api-key'] === testApiKey)
+      t.true(basic[1] === testApiKey)
+
+      return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const basic = headers['authorization'].match(basicAuthorizationRegex)
+
+      t.true(headers['x-api-key'] === testApiKey)
+      t.true(basic[1] === testApiKey)
+
+      return stelace.users.read('user_1')
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+
+      const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      // Should reset RexExp lastIndex
+      const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers['authorization'])
+
+      t.true(headers['x-api-key'] === testApiKey)
+      t.true(headers['authorization'].startsWith('Stelace-V1 '))
+      // Checking we have both apiKey and token
+      t.not(stelaceSchemeParam1[1], stelaceSchemeParam2[1])
+      t.not(stelaceSchemeParam1[2], stelaceSchemeParam2[2])
+      t.true(stelaceSchemeParam3 === null)
+      t.true(validateSchemeParam(stelaceSchemeParam1))
+      t.true(validateSchemeParam(stelaceSchemeParam2))
+
+      return stelace.auth.logout()
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+
+      const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers['authorization'])
+
+      t.true(headers['x-api-key'] === testApiKey)
+      t.true(headers['authorization'].startsWith('Stelace-V1 '))
+      // Checking we have both apiKey and token
+      t.not(stelaceSchemeParam1[1], stelaceSchemeParam2[1])
+      t.not(stelaceSchemeParam1[2], stelaceSchemeParam2[2])
+      t.true(stelaceSchemeParam3 === null)
+      t.true(validateSchemeParam(stelaceSchemeParam1))
+      t.true(validateSchemeParam(stelaceSchemeParam2))
+
+      return stelace.users.read('user_1')
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const basic = headers['authorization'].match(basicAuthorizationRegex)
+
+      t.true(headers['x-api-key'] === testApiKey)
+      t.true(basic[1] === testApiKey)
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
 })
 
 test('Set the API version for a specific request', (t) => {

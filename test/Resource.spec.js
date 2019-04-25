@@ -77,7 +77,7 @@ test('Extracts pagination "results" from response', (t) => {
     })
 })
 
-test('Passes plan array response as is', (t) => {
+test('Passes plain array response as is', (t) => {
   const stelace = getSpyableStelace()
   const resource = new Resource(stelace)
 
