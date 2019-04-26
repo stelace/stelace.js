@@ -449,6 +449,10 @@ stelace.auth.logout()
 
 ### Availability
 
+#### Get availabilities graph
+
+stelace.availabilities.getGraph([queryParams], [options], [callback])
+
 #### List availabilities
 
 stelace.availabilities.list([queryParams], [options], [callback])

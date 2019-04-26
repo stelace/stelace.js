@@ -4,6 +4,21 @@ import { getSpyableStelace } from '../../testUtils'
 
 const stelace = getSpyableStelace()
 
+test('getGraph: sends the correct request', (t) => {
+  return stelace.availabilities.getGraph({ assetId: 'asset_1' })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/availabilities/graph',
+        data: {},
+        queryParams: {
+          assetId: 'asset_1'
+        },
+        headers: {}
+      })
+    })
+})
+
 test('list: sends the correct request', (t) => {
   return stelace.availabilities.list({ assetId: 'asset_1' })
     .then(() => {
