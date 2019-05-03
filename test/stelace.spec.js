@@ -108,7 +108,9 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const headers = request.config.headers
       const basic = headers['authorization'].match(basicAuthorizationRegex)
 
+      // DEPRECATED: remove x-api-key header (same below)
       t.true(headers['x-api-key'] === testApiKey)
+      // DEPRECATED:END
       t.true(basic[1] === testApiKey)
 
       return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
@@ -134,6 +136,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
 
       t.true(headers['x-api-key'] === testApiKey)
       t.true(headers['authorization'].startsWith('Stelace-V1 '))
+      t.true(headers['authorization'].includes(',')) // 2 auth-params
       // Checking we have both apiKey and token
       t.not(stelaceSchemeParam1[1], stelaceSchemeParam2[1])
       t.not(stelaceSchemeParam1[2], stelaceSchemeParam2[2])
@@ -153,6 +156,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
 
       t.true(headers['x-api-key'] === testApiKey)
       t.true(headers['authorization'].startsWith('Stelace-V1 '))
+      t.true(headers['authorization'].includes(',')) // 2 auth-params
       // Checking we have both apiKey and token
       t.not(stelaceSchemeParam1[1], stelaceSchemeParam2[1])
       t.not(stelaceSchemeParam1[2], stelaceSchemeParam2[2])
