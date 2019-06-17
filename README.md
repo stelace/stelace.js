@@ -3,7 +3,7 @@
 > Stelace Javascript SDK makes it easy to use [Stelace API](https://stelace.com/docs) in your client or server-side JavaScript applications.
 
 <p>
-  <img src="https://circleci.com/gh/stelace/stelace-js-sdk.svg?style=svg" alt="CI status" />
+  <img src="https://circleci.com/gh/stelace/stelace.js.svg?style=svg" alt="CI status" />
 
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="MIT License" />
