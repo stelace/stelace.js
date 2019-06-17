@@ -344,7 +344,7 @@ test('Sets the token store', (t) => {
   t.end()
 })
 
-test('Methods returns lastResponse', (t) => {
+test('Methods return lastResponse', (t) => {
   const stelace = getStelaceStub()
 
   stelace.startStub()
@@ -373,7 +373,7 @@ test('Methods returns lastResponse', (t) => {
     })
 })
 
-test('Methods returns paginationMeta for list endpoints', (t) => {
+test('Methods return paginationMeta for list endpoints', (t) => {
   const stelace = getStelaceStub()
 
   stelace.startStub()
@@ -405,6 +405,53 @@ test('Methods returns paginationMeta for list endpoints', (t) => {
         nbPages: 1,
         page: 1,
         nbResultsPerPage: 10
+      })
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
+
+test('Methods return array from list endpoints without pagination', (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.workflows.getBaseURL()
+  stelace.stubRequest(`${baseURL}/workflows`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: []
+  })
+  stelace.stubRequest(`${baseURL}/webhooks`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
+    },
+    response: [{ id: 'webhook_1', name: 'Webhook 1' }, { id: 'webhook_2', name: 'Webhook 2' }]
+  })
+
+  return stelace.workflows.list()
+    .then(workflows => {
+      t.true(Array.isArray(workflows))
+      t.is(workflows.length, 0)
+      t.deepEqual(workflows.lastResponse, {
+        statusCode: 200,
+        requestId: 'f1f25173-32a5-48da-aa2f-0079568abea0'
+      })
+
+      return stelace.webhooks.list()
+    })
+    .then(webhooks => {
+      t.true(Array.isArray(webhooks))
+      t.deepEqual(webhooks, [{ id: 'webhook_1', name: 'Webhook 1' }, { id: 'webhook_2', name: 'Webhook 2' }])
+      t.deepEqual(webhooks.lastResponse, {
+        statusCode: 200,
+        requestId: 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
       })
     })
     .then(() => stelace.stopStub())
