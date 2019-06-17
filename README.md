@@ -47,7 +47,7 @@ This package needs to be used with secret or publishable api keys you can find i
 
 ``` js
 const { createInstance } = require('stelace')
-const stelace = createInstance({ apiKey: 'sk_test_...' })
+const stelace = createInstance({ apiKey: 'seck_test_...' })
 
 const asset = await stelace.assets.create({
   name: 'Car'
@@ -59,7 +59,7 @@ const asset = await stelace.assets.create({
 
 ``` js
 const Stelace = require('stelace')
-const stelace = Stelace.createInstance({ apiKey: 'sk_test_...' })
+const stelace = Stelace.createInstance({ apiKey: 'seck_test_...' })
 
 stelace.assets.create({
   name: 'Car'
@@ -72,7 +72,7 @@ stelace.assets.create({
 </details>
 <br/>
 
-> **Warning**: secret apiKey `sk_...` must only be used in secure environments as it grants all endpoint permissions.
+> **Warning**: secret apiKey `seck_...` must only be used in secure environments as it grants all endpoint permissions.
 
 ### Browser
 

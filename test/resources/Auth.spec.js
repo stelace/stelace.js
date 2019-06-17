@@ -212,7 +212,7 @@ test('Refreshes authentication tokens when access token is expired', (t) => {
 test('Do not need to refresh authentication token if using secret API key', (t) => {
   const clock = sinon.useFakeTimers()
 
-  const stelace = getStelaceStub({ keyType: 'sk' })
+  const stelace = getStelaceStub({ keyType: 'seck' })
 
   stelace.startStub()
 

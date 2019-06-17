@@ -12,12 +12,12 @@ import { Stelace, createInstance } from '../lib/stelace'
 
 test('Sets the API key', (t) => {
   const stelace = createInstance({
-    apiKey: 'sk_test_example1'
+    apiKey: 'seck_test_example1'
   })
-  t.is(stelace.getApiField('key'), 'sk_test_example1')
+  t.is(stelace.getApiField('key'), 'seck_test_example1')
 
-  stelace.setApiKey('sk_test_example2')
-  t.is(stelace.getApiField('key'), 'sk_test_example2')
+  stelace.setApiKey('seck_test_example2')
+  t.is(stelace.getApiField('key'), 'seck_test_example2')
 
   t.end()
 })
