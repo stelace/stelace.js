@@ -62,7 +62,7 @@ export function getStelaceStub ({ keyType } = {}) {
 }
 
 export function encodeJwtToken (data, { secret = 'secret', expiresIn }) {
-  const token = jwt.sign(data, 'secret', { expiresIn })
+  const token = jwt.sign(data, secret, { expiresIn })
   return token
 }
 
