@@ -259,6 +259,13 @@ assets.paginationMeta.page
 assets.paginationMeta.nbResultsPerPage
 ```
 
+Currently, the following list endpoints don't support pagination:
+- asset type
+- category
+- role
+- webhook
+- workflow
+
 ### Options
 
 Options are additional parameters that you can pass after the required arguments after any given method.
@@ -404,7 +411,7 @@ stelace.assets.remove(assetId, [options], [callback])
 
 ### Asset types
 
-#### List Asset types
+#### List Asset types (no pagination)
 
 stelace.assetTypes.list([queryParams], [options], [callback])
 
@@ -495,7 +502,7 @@ stelace.bookings.createTransition(bookingId, data, [options], [callback])
 
 ### Categories
 
-#### List categories
+#### List categories (no pagination)
 
 stelace.categories.list([queryParams], [options], [callback])
 
@@ -671,7 +678,7 @@ stelace.ratings.remove(ratingId, [options], [callback])
 
 ### Roles
 
-#### List roles
+#### List roles (no pagination)
 
 stelace.roles.list([queryParams], [options], [callback])
 
@@ -804,7 +811,7 @@ stelace.users.updateOrganizations(userId, data, [options], [callback])
 
 ### Webhooks
 
-#### List webhooks
+#### List webhooks (no pagination)
 
 stelace.webhooks.list([queryParams], [options], [callback])
 
@@ -828,7 +835,7 @@ stelace.webhooks.remove(webhookId, [options], [callback])
 
 ### Workflows
 
-#### List workflows
+#### List workflows (no pagination)
 
 stelace.workflows.list([queryParams], [options], [callback])
 
