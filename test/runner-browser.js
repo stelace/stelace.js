@@ -3,11 +3,9 @@
 
 require('./Resource.spec.js')
 require('./stelace.spec.js')
-require('./tokenStore.spec.js')
 require('./utils.spec.js')
 
 require('./resources/ApiKeys.spec.js')
-require('./resources/Assessments.spec.js')
 require('./resources/Assets.spec.js')
 require('./resources/AssetTypes.spec.js')
 require('./resources/Auth.spec.js')
