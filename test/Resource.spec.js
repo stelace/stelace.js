@@ -41,7 +41,7 @@ test('Extracts pagination "results" from response', (t) => {
       metadata: {
         label: 'Bluetooth'
       },
-      marketplaceData: {},
+      platformData: {},
       livemode: false
     }]
   }
@@ -90,7 +90,7 @@ test('Passes plain array response as is', (t) => {
     name: 'Cars',
     parentId: null,
     metadata: {},
-    marketplaceData: {},
+    platformData: {},
     createdDate: '2018-04-14T08:53:59.076Z',
     updatedDate: '2018-04-14T08:53:59.076Z',
     livemode: false
@@ -99,7 +99,7 @@ test('Passes plain array response as is', (t) => {
     name: 'Vans',
     parentId: null,
     metadata: {},
-    marketplaceData: {},
+    platformData: {},
     createdDate: '2018-04-15T08:53:59.076Z',
     updatedDate: '2018-04-15T08:53:59.076Z',
     livemode: false

@@ -89,11 +89,11 @@ You just have to use ES modules with your favorite bundler like Webpack:
 
 ``` js
 import { createInstance } from 'stelace'
-const stelace = createInstance({ apiKey: 'pk_test_...' })
+const stelace = createInstance({ apiKey: 'pubk_test_...' })
 //…
 ```
 
-> Note: please use publishable apiKey `pk_...` in browser environment.
+> Note: please use publishable apiKey `pubk_...` in browser environment.
 
 #### Script tag
 
@@ -117,7 +117,7 @@ Unminified and map files are also [available](https://www.jsdelivr.com/package/n
 
 ### Authentication
 
-A publishable api key identifies your marketplace and enables all publicly accessible endpoints.
+A publishable api key identifies your platform and enables all publicly accessible endpoints.
 
 You’ll often need to call endpoints as one of your authenticated platform `user`s (typically from your front-end).
 
@@ -125,7 +125,7 @@ Publishable apiKey is also what you need here since each user has its own set of
 
 ``` js
 const { createInstance } = require('stelace')
-const stelace = createInstance({ apiKey: 'pk_test_...' })
+const stelace = createInstance({ apiKey: 'pubk_test_...' })
 
 // Login as the user 'foo@example.com'
 await stelace.auth.login({
@@ -158,7 +158,7 @@ If custom storage is needed, a token store can be provided at initialization:
 
 ```js
 const myCustomTokenStore = {...}
-const stelace = createInstance({ apiKey: 'pk_test_...', tokenStore: myCustomTokenStore })
+const stelace = createInstance({ apiKey: 'pubk_test_...', tokenStore: myCustomTokenStore })
 ```
 
 or at run-time:
@@ -188,7 +188,7 @@ const myBeforeRefreshToken = function (tokens, cb) {
   })
 }
 
-const stelace = createInstance({ apiKey: 'pk_test_...', beforeRefreshToken: myBeforeRefreshToken })
+const stelace = createInstance({ apiKey: 'pubk_test_...', beforeRefreshToken: myBeforeRefreshToken })
 ```
 
 or at run-time:
@@ -218,8 +218,8 @@ Each method request returns a promise (or `await` as above) that you can use in 
 // Create an asset type and create an asset with it
 stelace.assetTypes.create({
   name: 'Renting',
-  TIME: 'TIME_FLEXIBLE',
-  QUANTITY: 'UNIQUE'
+  timeBased: true,
+  infiniteStock: false
 }).then(function (assetType) {
   return stelace.assets.create({
     name: 'Car',
