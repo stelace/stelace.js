@@ -449,28 +449,6 @@ stelace.availabilities.update(availabilityId, data, [options], [callback])
 stelace.availabilities.remove(availabilityId, [options], [callback])
 
 
-### Bookings
-
-#### List bookings
-
-stelace.bookings.list([queryParams], [options], [callback])
-
-#### Read a booking
-
-stelace.bookings.read(bookingId, [queryParams], [options], [callback])
-
-#### Create a booking
-
-stelace.bookings.create(data, [options], [callback])
-
-#### Update a booking
-
-stelace.bookings.update(bookingId, data, [options], [callback])
-
-#### Create a booking transition
-
-stelace.bookings.createTransition(bookingId, data, [options], [callback])
-
 
 ### Categories
 
@@ -677,6 +655,30 @@ stelace.roles.remove(roleId, [options], [callback])
 #### Search assets
 
 stelace.search.list(data, [options], [callback])
+
+
+
+### Transactions
+
+#### List transactions
+
+stelace.transactions.list([queryParams], [options], [callback])
+
+#### Read a transaction
+
+stelace.transactions.read(transactionId, [queryParams], [options], [callback])
+
+#### Create a transaction
+
+stelace.transactions.create(data, [options], [callback])
+
+#### Update a transaction
+
+stelace.transactions.update(transactionId, data, [options], [callback])
+
+#### Create a transaction transition
+
+stelace.transactions.createTransition(transactionId, data, [options], [callback])
 
 
 
