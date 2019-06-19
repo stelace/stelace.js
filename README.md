@@ -708,10 +708,13 @@ stelace.users.update(userId, data, [options], [callback])
 
 stelace.users.remove(userId, [options], [callback])
 
-#### Update a user’s organizations config
+#### Add a user to an organization or update roles within
 
-stelace.users.updateOrganizations(userId, data, [options], [callback])
+stelace.users.updateOrganization(userId, organizationId, data, [options], [callback])
 
+#### Remove a user from an organization
+
+stelace.users.removeFromOrganization(userId, organizationId, [options], [callback])
 
 
 

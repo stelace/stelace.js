@@ -83,12 +83,25 @@ test('remove: sends the correct request', (t) => {
 })
 
 test('updateOrganization: sends the correct request', (t) => {
-  return stelace.users.updateOrganizations('user_1', { organization_1: { roles: ['user'] } })
+  return stelace.users.updateOrganization('user_1', 'organization_1', { roles: ['user'] })
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'PATCH',
-        path: '/users/user_1/organizations',
-        data: { organization_1: { roles: ['user'] } },
+        path: '/users/user_1/organizations/organization_1',
+        data: { roles: ['user'] },
+        queryParams: {},
+        headers: {}
+      })
+    })
+})
+
+test('removeFromOrganization: sends the correct request', (t) => {
+  return stelace.users.removeFromOrganization('user_1', 'organization_1')
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'DELETE',
+        path: '/users/user_1/organizations/organization_1',
+        data: {},
         queryParams: {},
         headers: {}
       })
