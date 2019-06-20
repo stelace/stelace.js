@@ -3,11 +3,21 @@ import jwt from 'jsonwebtoken'
 
 import { createInstance } from '../lib/stelace'
 
-export function getApiKey ({ type = 'sk' } = {}) {
-  if (type === 'sk') {
-    return 'sk_test_wakWA41rBTUXs1Y5oNRjeY5o'
-  } else {
-    return 'pk_test_wakWA41rBTUXs1Y5oNRjeY5o'
+export function getApiKey ({ type = 'seck' } = {}) {
+  const secretKey = 'seck_test_wakWA41rBTUXs1Y5oNRjeY5o'
+  const publishableKey = 'pubk_test_wakWA41rBTUXs1Y5oNRjeY5o'
+
+  switch (type) {
+    case 'seck':
+    case 'sk': // DEPRECATED: old format secret key
+      return secretKey
+
+    case 'pubk':
+    case 'pk': // DEPRECATED: old format publishable key
+      return publishableKey
+
+    default:
+      return secretKey
   }
 }
 
@@ -62,7 +72,7 @@ export function getStelaceStub ({ keyType } = {}) {
 }
 
 export function encodeJwtToken (data, { secret = 'secret', expiresIn }) {
-  const token = jwt.sign(data, 'secret', { expiresIn })
+  const token = jwt.sign(data, secret, { expiresIn })
   return token
 }
 

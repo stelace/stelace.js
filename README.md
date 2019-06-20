@@ -3,7 +3,7 @@
 > Stelace Javascript SDK makes it easy to use [Stelace API](https://stelace.com/docs) in your client or server-side JavaScript applications.
 
 <p>
-  <img src="https://circleci.com/gh/stelace/stelace-js-sdk.svg?style=svg" alt="CI status" />
+  <img src="https://circleci.com/gh/stelace/stelace.js.svg?style=svg" alt="CI status" />
 
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="MIT License" />
@@ -47,7 +47,7 @@ This package needs to be used with secret or publishable api keys you can find i
 
 ``` js
 const { createInstance } = require('stelace')
-const stelace = createInstance({ apiKey: 'sk_test_...' })
+const stelace = createInstance({ apiKey: 'seck_test_...' })
 
 const asset = await stelace.assets.create({
   name: 'Car'
@@ -59,7 +59,7 @@ const asset = await stelace.assets.create({
 
 ``` js
 const Stelace = require('stelace')
-const stelace = Stelace.createInstance({ apiKey: 'sk_test_...' })
+const stelace = Stelace.createInstance({ apiKey: 'seck_test_...' })
 
 stelace.assets.create({
   name: 'Car'
@@ -72,7 +72,7 @@ stelace.assets.create({
 </details>
 <br/>
 
-> **Warning**: secret apiKey `sk_...` must only be used in secure environments as it grants all endpoint permissions.
+> **Warning**: secret apiKey `seck_...` must only be used in secure environments as it grants all endpoint permissions.
 
 ### Browser
 
@@ -89,11 +89,11 @@ You just have to use ES modules with your favorite bundler like Webpack:
 
 ``` js
 import { createInstance } from 'stelace'
-const stelace = createInstance({ apiKey: 'pk_test_...' })
+const stelace = createInstance({ apiKey: 'pubk_test_...' })
 //…
 ```
 
-> Note: please use publishable apiKey `pk_...` in browser environment.
+> Note: please use publishable apiKey `pubk_...` in browser environment.
 
 #### Script tag
 
@@ -117,7 +117,7 @@ Unminified and map files are also [available](https://www.jsdelivr.com/package/n
 
 ### Authentication
 
-A publishable api key identifies your marketplace and enables all publicly accessible endpoints.
+A publishable api key identifies your platform and enables all publicly accessible endpoints.
 
 You’ll often need to call endpoints as one of your authenticated platform `user`s (typically from your front-end).
 
@@ -125,7 +125,7 @@ Publishable apiKey is also what you need here since each user has its own set of
 
 ``` js
 const { createInstance } = require('stelace')
-const stelace = createInstance({ apiKey: 'pk_test_...' })
+const stelace = createInstance({ apiKey: 'pubk_test_...' })
 
 // Login as the user 'foo@example.com'
 await stelace.auth.login({
@@ -158,7 +158,7 @@ If custom storage is needed, a token store can be provided at initialization:
 
 ```js
 const myCustomTokenStore = {...}
-const stelace = createInstance({ apiKey: 'pk_test_...', tokenStore: myCustomTokenStore })
+const stelace = createInstance({ apiKey: 'pubk_test_...', tokenStore: myCustomTokenStore })
 ```
 
 or at run-time:
@@ -188,7 +188,7 @@ const myBeforeRefreshToken = function (tokens, cb) {
   })
 }
 
-const stelace = createInstance({ apiKey: 'pk_test_...', beforeRefreshToken: myBeforeRefreshToken })
+const stelace = createInstance({ apiKey: 'pubk_test_...', beforeRefreshToken: myBeforeRefreshToken })
 ```
 
 or at run-time:
@@ -218,8 +218,8 @@ Each method request returns a promise (or `await` as above) that you can use in 
 // Create an asset type and create an asset with it
 stelace.assetTypes.create({
   name: 'Renting',
-  TIME: 'TIME_FLEXIBLE',
-  QUANTITY: 'UNIQUE'
+  timeBased: true,
+  infiniteStock: false
 }).then(function (assetType) {
   return stelace.assets.create({
     name: 'Car',
@@ -258,6 +258,13 @@ assets.paginationMeta.nbPages
 assets.paginationMeta.page
 assets.paginationMeta.nbResultsPerPage
 ```
+
+Currently, the following list endpoints don't support pagination:
+- asset type
+- category
+- role
+- webhook
+- workflow
 
 ### Options
 
@@ -350,34 +357,6 @@ stelace.apiKeys.remove(apiKeyId, [options], [callback])
 
 
 
-### Assessments
-
-#### List assessments
-
-stelace.assessments.list([queryParams], [options], [callback])
-
-#### Read an assessment
-
-stelace.assessments.read(assessmentId, [queryParams], [options], [callback])
-
-#### Create an assessment
-
-stelace.assessments.create(data, [options], [callback])
-
-#### Update an assessment
-
-stelace.assessments.update(assessmentId, data, [options], [callback])
-
-#### Remove an assessment
-
-stelace.assessments.remove(assessmentId, [options], [callback])
-
-#### Sign an assessment
-
-stelace.assessments.sign(assessmentId, data, [options], [callback])
-
-
-
 ### Assets
 
 #### List Assets
@@ -404,7 +383,7 @@ stelace.assets.remove(assetId, [options], [callback])
 
 ### Asset types
 
-#### List Asset types
+#### List Asset types (no pagination)
 
 stelace.assetTypes.list([queryParams], [options], [callback])
 
@@ -470,32 +449,10 @@ stelace.availabilities.update(availabilityId, data, [options], [callback])
 stelace.availabilities.remove(availabilityId, [options], [callback])
 
 
-### Bookings
-
-#### List bookings
-
-stelace.bookings.list([queryParams], [options], [callback])
-
-#### Read a booking
-
-stelace.bookings.read(bookingId, [queryParams], [options], [callback])
-
-#### Create a booking
-
-stelace.bookings.create(data, [options], [callback])
-
-#### Update a booking
-
-stelace.bookings.update(bookingId, data, [options], [callback])
-
-#### Create a booking transition
-
-stelace.bookings.createTransition(bookingId, data, [options], [callback])
-
 
 ### Categories
 
-#### List categories
+#### List categories (no pagination)
 
 stelace.categories.list([queryParams], [options], [callback])
 
@@ -671,7 +628,7 @@ stelace.ratings.remove(ratingId, [options], [callback])
 
 ### Roles
 
-#### List roles
+#### List roles (no pagination)
 
 stelace.roles.list([queryParams], [options], [callback])
 
@@ -701,23 +658,7 @@ stelace.search.list(data, [options], [callback])
 
 
 
-### Tokens
-
-#### Request a token check
-
-stelace.tokens.checkRequest(data, [options], [callback])
-
-#### Confirm a token check
-
-stelace.tokens.checkConfirm([queryParams], [options], [callback])
-
-
-
 ### Transactions
-
-#### Preview a transaction
-
-stelace.transactions.preview(data, [options], [callback])
 
 #### List transactions
 
@@ -735,37 +676,9 @@ stelace.transactions.create(data, [options], [callback])
 
 stelace.transactions.update(transactionId, data, [options], [callback])
 
+#### Create a transaction transition
 
-
-### Transaction lines
-
-#### Read a transaction line
-
-stelace.transactionLines.read(transactionLineId, [queryParams], [options], [callback])
-
-#### Create a transaction line
-
-stelace.transactionLines.create(data, [options], [callback])
-
-#### Update a transaction line
-
-stelace.transactionLines.update(transactionLineId, data, [options], [callback])
-
-
-
-### Transaction moves
-
-#### Read a transaction move
-
-stelace.transactionMoves.read(transactionMoveId, [queryParams], [options], [callback])
-
-#### Create a transaction move
-
-stelace.transactionMoves.create(data, [options], [callback])
-
-#### Update a transaction move
-
-stelace.transactionMoves.update(transactionMoveId, data, [options], [callback])
+stelace.transactions.createTransition(transactionId, data, [options], [callback])
 
 
 
@@ -795,16 +708,19 @@ stelace.users.update(userId, data, [options], [callback])
 
 stelace.users.remove(userId, [options], [callback])
 
-#### Update a user’s organizations config
+#### Add a user to an organization or update roles within
 
-stelace.users.updateOrganizations(userId, data, [options], [callback])
+stelace.users.updateOrganization(userId, organizationId, data, [options], [callback])
 
+#### Remove a user from an organization
+
+stelace.users.removeFromOrganization(userId, organizationId, [options], [callback])
 
 
 
 ### Webhooks
 
-#### List webhooks
+#### List webhooks (no pagination)
 
 stelace.webhooks.list([queryParams], [options], [callback])
 
@@ -828,7 +744,7 @@ stelace.webhooks.remove(webhookId, [options], [callback])
 
 ### Workflows
 
-#### List workflows
+#### List workflows (no pagination)
 
 stelace.workflows.list([queryParams], [options], [callback])
 
