@@ -112,9 +112,6 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const headers = request.config.headers
       const basic = headers['authorization'].match(basicAuthorizationRegex)
 
-      // DEPRECATED: remove x-api-key header (same below)
-      t.true(headers['x-api-key'] === testApiKey)
-      // DEPRECATED:END
       t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
 
       return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
@@ -124,7 +121,6 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const headers = request.config.headers
       const basic = headers['authorization'].match(basicAuthorizationRegex)
 
-      t.true(headers['x-api-key'] === testApiKey)
       t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
 
       return stelace.users.read('user_1')
@@ -138,7 +134,6 @@ test('Sets Authorization header with token and apiKey', (t) => {
       // Should reset RexExp lastIndex
       const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers['authorization'])
 
-      t.true(headers['x-api-key'] === testApiKey)
       t.true(headers['authorization'].startsWith('Stelace-V1 '))
       t.true(headers['authorization'].includes(',')) // 2 auth-params
       // Checking we have both apiKey and token
@@ -158,7 +153,6 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers['authorization'])
       const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers['authorization'])
 
-      t.true(headers['x-api-key'] === testApiKey)
       t.true(headers['authorization'].startsWith('Stelace-V1 '))
       t.true(headers['authorization'].includes(',')) // 2 auth-params
       // Checking we have both apiKey and token
@@ -175,7 +169,6 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const headers = request.config.headers
       const basic = headers['authorization'].match(basicAuthorizationRegex)
 
-      t.true(headers['x-api-key'] === testApiKey)
       t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
     })
     .then(() => stelace.stopStub())
