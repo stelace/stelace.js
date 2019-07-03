@@ -8,6 +8,10 @@ import {
   encodeJwtToken
 } from '../testUtils'
 
+import {
+  decodeBase64
+} from '../lib/utils'
+
 import { Stelace, createInstance } from '../lib/stelace'
 
 test('Sets the API key', (t) => {
@@ -111,7 +115,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       // DEPRECATED: remove x-api-key header (same below)
       t.true(headers['x-api-key'] === testApiKey)
       // DEPRECATED:END
-      t.true(basic[1] === testApiKey)
+      t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
 
       return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
     })
@@ -121,7 +125,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const basic = headers['authorization'].match(basicAuthorizationRegex)
 
       t.true(headers['x-api-key'] === testApiKey)
-      t.true(basic[1] === testApiKey)
+      t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
 
       return stelace.users.read('user_1')
     })
@@ -172,7 +176,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const basic = headers['authorization'].match(basicAuthorizationRegex)
 
       t.true(headers['x-api-key'] === testApiKey)
-      t.true(basic[1] === testApiKey)
+      t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
     })
     .then(() => stelace.stopStub())
     .catch(err => {
