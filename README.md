@@ -424,6 +424,25 @@ Returns an object with the following properties:
 
 stelace.auth.logout()
 
+#### User session expiration
+
+To detect when the user session has expired and handle it properly, you can listen to the following error event:
+```
+stelace.onError('userSessionExpired', function () {
+  // Remove authentication tokens via the token store, e.g.
+  const tokenStore = stelace.getTokenStore()
+  tokenStore.removeTokens()
+  // In browser, you can also notify users that they must reconnect
+  // ...
+})
+```
+
+To stop listening to the event, you can unsubscribe by calling the returned function:
+```
+const unsubscribe = stelace.onError('userSessionExpired', function () { ... })
+unsubscribe() // stops listening
+```
+
 
 
 ### Availability
