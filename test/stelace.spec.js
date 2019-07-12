@@ -1,4 +1,5 @@
 import test from 'blue-tape'
+import sinon from 'sinon'
 import moxios from 'moxios'
 
 import {
@@ -455,5 +456,87 @@ test('Methods return array from list endpoints without pagination', (t) => {
     .catch(err => {
       stelace.stopStub()
       throw err
+    })
+})
+
+test('Emits an event when the user session has expired', (t) => {
+  const stelace = getStelaceStub({ keyType: 'pk' })
+
+  stelace.startStub()
+
+  const clock = sinon.useFakeTimers()
+
+  const baseURL = stelace.auth.getBaseURL()
+  const accessToken = encodeJwtToken({ userId: 'user_1' }, { expiresIn: '1h' })
+
+  let called1 = 0
+  let called2 = 0
+
+  let firstError
+  let secondError
+
+  const unsubscribe1 = stelace.onError('userSessionExpired', () => { called1 += 1 })
+  stelace.onError('userSessionExpired', () => { called2 += 1 })
+
+  stelace.stubRequest(`${baseURL}/auth/token`, {
+    status: 403,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: {
+      message: 'Refresh token expired'
+    }
+  })
+
+  stelace.stubRequest(`${baseURL}/auth/login`, {
+    status: 200,
+    headers: { 'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0' },
+    response: {
+      tokenType: 'Bearer',
+      userId: 'user_1',
+      accessToken,
+      refreshToken: '39ac0373-e457-4f7a-970f-20dc7d97e0d4'
+    }
+  })
+
+  stelace.stubRequest(`${baseURL}/assets`, {
+    status: 200,
+    headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
+    response: {
+      nbResults: 0,
+      nbPages: 0,
+      page: 1,
+      nbResultsPerPage: 20,
+      results: []
+    }
+  })
+
+  return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
+    .then(() => {
+      clock.tick(1000)
+      return stelace.assets.list()
+    })
+    .then(() => {
+      clock.tick(3600 * 1000)
+      return stelace.assets.list()
+        .catch(err => { firstError = err })
+    })
+    .then(() => {
+      unsubscribe1()
+      return stelace.assets.list()
+        .catch(err => { secondError = err })
+    })
+    .then(() => {
+      t.ok(firstError)
+      t.ok(secondError)
+
+      t.is(called1, 1)
+      t.is(called2, 2)
+
+      stelace.stopStub()
+      clock.restore()
+
+      const tokenStore = stelace.getTokenStore()
+      tokenStore.removeTokens() // clear tokens for other tests
     })
 })
