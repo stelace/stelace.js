@@ -687,6 +687,10 @@ stelace.transactions.list([queryParams], [options], [callback])
 
 stelace.transactions.read(transactionId, [queryParams], [options], [callback])
 
+#### Preview a transaction
+
+stelace.transactions.preview(data, [options], [callback])
+
 #### Create a transaction
 
 stelace.transactions.create(data, [options], [callback])
