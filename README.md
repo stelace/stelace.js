@@ -443,6 +443,10 @@ const unsubscribe = stelace.onError('userSessionExpired', function () { ... })
 unsubscribe() // stops listening
 ```
 
+#### Get tokens after SSO or social login
+
+stelace.auth.getTokens(data, [options], [callback])
+
 
 
 ### Availability

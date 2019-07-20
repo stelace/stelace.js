@@ -436,3 +436,41 @@ test('Calls the promise `beforeRefreshToken` before token expiration', (t) => {
       throw err
     })
 })
+
+test('Stores authentication tokens after getting token', (t) => {
+  const stelace = getStelaceStub({ keyType: 'pk' })
+
+  stelace.startStub()
+
+  const response = {
+    tokenType: 'Bearer',
+    userId: 'user_1',
+    accessToken: encodeJwtToken({ userId: 'user_1' }, { expiresIn: '1h' }),
+    refreshToken: '39ac0373-e457-4f7a-970f-20dc7d97e0d4'
+  }
+
+  const baseURL = stelace.auth.getBaseURL()
+  stelace.stubRequest(`${baseURL}/auth/token`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response
+  })
+
+  const tokenStore = stelace.getApiField('tokenStore')
+
+  t.notOk(tokenStore.getTokens())
+
+  return stelace.auth.getTokens({ grantType: 'authorizationCode', code: 'some_code' })
+    .then(() => {
+      const tokens = tokenStore.getTokens()
+      t.is(tokens.accessToken, response.accessToken)
+      t.is(tokens.refreshToken, response.refreshToken)
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
