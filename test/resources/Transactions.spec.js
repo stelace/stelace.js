@@ -30,6 +30,19 @@ test('read: sends the correct request', (t) => {
     })
 })
 
+test('preview: sends the correct request', (t) => {
+  return stelace.transactions.preview({ assetId: 'asset_1', quantity: 2 })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'POST',
+        path: '/transactions/preview',
+        data: { assetId: 'asset_1', quantity: 2 },
+        queryParams: {},
+        headers: {}
+      })
+    })
+})
+
 test('create: sends the correct request', (t) => {
   return stelace.transactions.create({ assetId: 'asset_1', quantity: 2 })
     .then(() => {

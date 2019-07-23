@@ -443,6 +443,10 @@ const unsubscribe = stelace.onError('userSessionExpired', function () { ... })
 unsubscribe() // stops listening
 ```
 
+#### Get tokens after SSO or social login
+
+stelace.auth.getTokens(data, [options], [callback])
+
 
 
 ### Availability
@@ -686,6 +690,10 @@ stelace.transactions.list([queryParams], [options], [callback])
 #### Read a transaction
 
 stelace.transactions.read(transactionId, [queryParams], [options], [callback])
+
+#### Preview a transaction
+
+stelace.transactions.preview(data, [options], [callback])
 
 #### Create a transaction
 
