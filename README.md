@@ -506,6 +506,14 @@ stelace.config.read([options], [callback])
 
 stelace.config.update([data], [options], [callback])
 
+#### Read private config
+
+stelace.config.readPrivate([options], [callback])
+
+#### Update private config
+
+stelace.config.updatePrivate([data], [options], [callback])
+
 
 
 ### Custom attributes
