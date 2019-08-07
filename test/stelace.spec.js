@@ -523,6 +523,11 @@ test('Emits an event when the user session has expired', (t) => {
     })
     .then(() => {
       unsubscribe1()
+
+      // recreate the authentication tokens
+      return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
+    })
+    .then(() => {
       return stelace.assets.list()
         .catch(err => { secondError = err })
     })
