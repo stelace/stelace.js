@@ -100,7 +100,7 @@ const stelace = createInstance({ apiKey: 'pubk_test_...' })
 For convenience you may want to load one of the UMD files we built for you instead:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/stelace@0.7.0/stelace.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stelace@0.8.0/stelace.browser.min.js"></script>
 ```
 
 You can then use `stelace` global variable.
@@ -108,7 +108,7 @@ You can then use `stelace` global variable.
 We offer a smaller build for modern browsers (excluding IE11 and Opera Mini in particular):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/stelace@0.7.0/dist/stelace.evergreen.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stelace@0.8.0/dist/stelace.evergreen.min.js"></script>
 ```
 
 Unminified and map files are also [available](https://www.jsdelivr.com/package/npm/stelace).

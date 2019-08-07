@@ -1,6 +1,6 @@
 {
   "name": "stelace",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Server and front-end client for Stelace API",
   "main": "dist/stelace.node.js",
   "module": "dist/es-modules/stelace.js",
