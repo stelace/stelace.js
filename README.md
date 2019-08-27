@@ -742,9 +742,9 @@ stelace.users.update(userId, data, [options], [callback])
 
 stelace.users.remove(userId, [options], [callback])
 
-#### Add a user to an organization or update roles within
+#### Make a user join an organization or update roles within
 
-stelace.users.updateOrganization(userId, organizationId, data, [options], [callback])
+stelace.users.joinOrganizationOrUpdateRights(userId, organizationId, data, [options], [callback])
 
 #### Remove a user from an organization
 

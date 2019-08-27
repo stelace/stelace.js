@@ -82,11 +82,25 @@ test('remove: sends the correct request', (t) => {
     })
 })
 
+// DEPRECATED
 test('updateOrganization: sends the correct request', (t) => {
   return stelace.users.updateOrganization('user_1', 'organization_1', { roles: ['user'] })
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
-        method: 'PATCH',
+        method: 'PUT',
+        path: '/users/user_1/organizations/organization_1',
+        data: { roles: ['user'] },
+        queryParams: {},
+        headers: {}
+      })
+    })
+})
+// DEPRECATED:END
+test('joinOrganizationOrUpdateRights: sends the correct request', (t) => {
+  return stelace.users.joinOrganizationOrUpdateRights('user_1', 'organization_1', { roles: ['user'] })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'PUT',
         path: '/users/user_1/organizations/organization_1',
         data: { roles: ['user'] },
         queryParams: {},
