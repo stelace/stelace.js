@@ -9,13 +9,9 @@ export function getApiKey ({ type = 'seck' } = {}) {
 
   switch (type) {
     case 'seck':
-    case 'sk': // DEPRECATED: old format secret key
       return secretKey
-
     case 'pubk':
-    case 'pk': // DEPRECATED: old format publishable key
       return publishableKey
-
     default:
       return secretKey
   }

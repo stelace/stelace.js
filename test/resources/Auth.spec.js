@@ -32,7 +32,7 @@ test('logout: sends the correct request', (t) => {
 })
 
 test('Stores authentication tokens after login', (t) => {
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   stelace.startStub()
 
@@ -70,7 +70,7 @@ test('Stores authentication tokens after login', (t) => {
 })
 
 test('Removes authentication tokens after logout', (t) => {
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   stelace.startStub()
 
@@ -123,7 +123,7 @@ test('Removes authentication tokens after logout', (t) => {
 test('Refreshes authentication tokens when access token is expired', (t) => {
   const clock = sinon.useFakeTimers()
 
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   const loginResponse = {
     tokenType: 'Bearer',
@@ -271,7 +271,7 @@ test('Do not need to refresh authentication token if using secret API key', (t) 
 test('Calls the callback function `beforeRefreshToken` before token expiration', (t) => {
   const clock = sinon.useFakeTimers()
 
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   let beforeRefreshTokenCalled = false
 
@@ -354,7 +354,7 @@ test('Calls the callback function `beforeRefreshToken` before token expiration',
 test('Calls the promise `beforeRefreshToken` before token expiration', (t) => {
   const clock = sinon.useFakeTimers()
 
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   let beforeRefreshTokenCalled = false
 
@@ -438,7 +438,7 @@ test('Calls the promise `beforeRefreshToken` before token expiration', (t) => {
 })
 
 test('Stores authentication tokens after getting token', (t) => {
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   stelace.startStub()
 

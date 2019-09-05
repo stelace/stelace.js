@@ -62,11 +62,11 @@ test('Methods return a promise', (t) => {
 })
 
 test('Sets Authorization header with token and apiKey', (t) => {
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
   stelace.startStub()
   const baseURL = stelace.auth.getBaseURL()
   const accessToken = encodeJwtToken({ userId: 'user_1' }, { expiresIn: '1h' })
-  const testApiKey = getApiKey({ type: 'pk' })
+  const testApiKey = getApiKey({ type: 'pubk' })
 
   const basicAuthorizationRegex = /Basic\s(.*)/i
   // Stelace custom Authorization scheme params
@@ -460,7 +460,7 @@ test('Methods return array from list endpoints without pagination', (t) => {
 })
 
 test('Emits an event when the user session has expired', (t) => {
-  const stelace = getStelaceStub({ keyType: 'pk' })
+  const stelace = getStelaceStub({ keyType: 'pubk' })
 
   stelace.startStub()
 

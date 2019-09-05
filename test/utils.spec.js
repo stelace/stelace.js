@@ -12,7 +12,6 @@ import {
 
 test('Checks if an API key has the right format', (t) => {
   t.true(isApiKey('seck_test_wakWA41rBTUXs1Y5oNRjeY5o'))
-  t.true(isApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY5o')) // DEPRECATED: old format
   t.true(isApiKey('custom_live_wakWA41rBTUXs1Y5oNRjeY5o'))
   t.false(isApiKey('seck_test_wakWA41rBTUXs1Y5oNRje')) // too short
   t.false(isApiKey('k_test_wakkWA41rBTUXs1Y5oNRjeYo')) // too short prefix
@@ -24,9 +23,7 @@ test('Checks if an API key has the right format', (t) => {
 
 test('Checks if an API key is a secret key', (t) => {
   t.true(isSecretApiKey('seck_test_wakWA41rBTUXs1Y5oNRjeY5o'))
-  t.true(isSecretApiKey('sk_test_wakWA41rBTUXs1Y5oNRjeY5o')) // DEPRECATED: old format
   t.false(isSecretApiKey('pubk_test_wakWA41rBTUXs1Y5oNRjeY5o'))
-  t.false(isSecretApiKey('pk_test_wakWA41rBTUXs1Y5oNRjeY5o')) // DEPRECATED: old format
   t.end()
 })
 
