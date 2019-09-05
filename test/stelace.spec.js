@@ -179,6 +179,35 @@ test('Sets Authorization header with token and apiKey', (t) => {
     })
 })
 
+test('Does not set Basic Authorization header when apiKey is missing', (t) => {
+  const stelace = getStelaceStub({ noKey: true })
+  stelace.startStub()
+  const baseURL = stelace.auth.getBaseURL()
+
+  stelace.stubRequest(`${baseURL}/search`, {
+    status: 200,
+    headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
+    response: {
+      page: 1,
+      nbResults: 0,
+      results: []
+    }
+  })
+
+  return stelace.search.list({ query: 'test' })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+
+      t.notOk(headers['authorization'])
+    })
+    .then(stelace.stopStub)
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
+
 test('Set the API version for a specific request', (t) => {
   const stelace = getSpyableStelace()
 

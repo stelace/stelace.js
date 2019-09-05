@@ -53,10 +53,10 @@ export function getSpyableStelace ({ keyType } = {}) {
   return stelace
 }
 
-export function getStelaceStub ({ keyType } = {}) {
+export function getStelaceStub ({ keyType, noKey } = {}) {
   const key = getApiKey({ type: keyType })
 
-  const stelace = createInstance({ apiKey: key })
+  const stelace = noKey ? createInstance({}) : createInstance({ apiKey: key })
 
   stelace.startStub = () => moxios.install()
   stelace.stopStub = () => moxios.uninstall()
