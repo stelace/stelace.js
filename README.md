@@ -680,10 +680,37 @@ stelace.roles.remove(roleId, [options], [callback])
 
 
 
+### Saved searches
+
+#### List saved searches
+
+stelace.savedSearch.list([queryParams], [options], [callback])
+
+#### Read a saved search
+
+stelace.savedSearch.read(savedSearchId, [queryParams], [options], [callback])
+
+#### Create a saved search
+
+stelace.savedSearch.create(data, [options], [callback])
+
+#### Update a saved search
+
+stelace.savedSearch.update(savedSearchId, data, [options], [callback])
+
+#### Remove a saved search
+
+stelace.savedSearch.remove(savedSearchId, [options], [callback])
+
+
+
 ### Search
 
 #### Search assets
 
+stelace.search.results(data, [options], [callback])
+
+Deprecated version:
 stelace.search.list(data, [options], [callback])
 
 
