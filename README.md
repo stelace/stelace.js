@@ -694,6 +694,10 @@ stelace.savedSearch.read(savedSearchId, [queryParams], [options], [callback])
 
 stelace.savedSearch.create(data, [options], [callback])
 
+`data` is the object that is passed to `POST /search` endpoint (same endpoint as `stelace.search.results` method), but with two differences:
+- `stelace.savedSearch.create` method automatically sets `save` to `true`
+- the property `name` is required to create a saved search
+
 #### Update a saved search
 
 stelace.savedSearch.update(savedSearchId, data, [options], [callback])
