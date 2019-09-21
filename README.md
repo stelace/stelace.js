@@ -680,10 +680,41 @@ stelace.roles.remove(roleId, [options], [callback])
 
 
 
+### Saved searches
+
+#### List saved searches
+
+stelace.savedSearch.list([queryParams], [options], [callback])
+
+#### Read a saved search
+
+stelace.savedSearch.read(savedSearchId, [queryParams], [options], [callback])
+
+#### Create a saved search
+
+stelace.savedSearch.create(data, [options], [callback])
+
+`data` is the object that is passed to `POST /search` endpoint (same endpoint as `stelace.search.results` method), but with two differences:
+- `stelace.savedSearch.create` method automatically sets `save` to `true`
+- the property `name` is required to create a saved search
+
+#### Update a saved search
+
+stelace.savedSearch.update(savedSearchId, data, [options], [callback])
+
+#### Remove a saved search
+
+stelace.savedSearch.remove(savedSearchId, [options], [callback])
+
+
+
 ### Search
 
 #### Search assets
 
+stelace.search.results(data, [options], [callback])
+
+Deprecated version:
 stelace.search.list(data, [options], [callback])
 
 
