@@ -2,12 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## 0.11.0 (2020-01-15)
+## 0.12.0 (2020-01-15)
 
+This release reduces bundle size using improvements in babel configuration [f5ff808](https://github.com/stelace/stelace.js/commit/f5ff808735e6aa3ba60aa76d185f5667b08da35c).
 
 ### ⚠ BREAKING CHANGES
 
 * bump minimum Node version to 8.17
+
+### Bug Fixes
+
+* do not add Basic Auth header when apiKey is missing ([678e357](https://github.com/stelace/stelace.js/commit/678e35777323879a8b6a0933338307b72e9061c5))
+
+### Build
+
+* bump minimum Node version to 8.17 ([01a9f2a](https://github.com/stelace/stelace.js/commit/01a9f2ade002d2e3f4703ee5af068b805f76dda3))
+
+
+## 0.11.0 (2020-01-15)
 
 ### Features
 
@@ -43,14 +55,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 * API key in basic auth must be encoded in base64 ([57c0572](https://github.com/stelace/stelace.js/commit/57c0572f3838c115bd46c95a30e6743bbdf1700d))
 * array response not cloned properly ([dc7f6e9](https://github.com/stelace/stelace.js/commit/dc7f6e93266a155bc95a12fb51b6701e11c71bec))
-* do not add Basic Auth header when apiKey is missing ([678e357](https://github.com/stelace/stelace.js/commit/678e35777323879a8b6a0933338307b72e9061c5))
 * Do not override the user agent in browser environment ([135df95](https://github.com/stelace/stelace.js/commit/135df951236f66f123dda56e43c537069b01081d))
 * Fix typo in README.md ([83da282](https://github.com/stelace/stelace.js/commit/83da282ce1abcbd965f6b04863471222db2a8058))
 * missing comma between auth-params in Stelace-V1 Authorization scheme ([f70413a](https://github.com/stelace/stelace.js/commit/f70413a053618db54e163d55e6a64cdabe888641))
 * **testUtils:** `encodeJwtToken` parameters aren't correctly passed ([0bcf54c](https://github.com/stelace/stelace.js/commit/0bcf54c590124fdb2dc544c7da84f1526f5fe1b9))
 * **util:** empty arrays aren't correctly cloned ([4de62e8](https://github.com/stelace/stelace.js/commit/4de62e884ea96ee573f998d9381c2f42a83130be))
-
-
-### Build
-
-* bump minimum Node version to 8.17 ([c341fe6](https://github.com/stelace/stelace.js/commit/c341fe6e1d13f448dff1e2645fbe8c9d41be26aa))
