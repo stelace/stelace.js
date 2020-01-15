@@ -41,6 +41,14 @@ const testBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, 
 const plugins = [
   '@babel/plugin-proposal-object-rest-spread',
   'lodash', // https://github.com/lodash/babel-plugin-lodash
+  ['@babel/plugin-transform-runtime',
+    {
+      "corejs": false,
+      "helpers": true,
+      "regenerator": true,
+      "version": "7.8.3"
+    }
+  ],
   ['inline-replace-variables', {
     // Inject version number into code
     '__VERSION__': require('./package.json').version
