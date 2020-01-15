@@ -29,7 +29,7 @@ const modulesBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfi
 
 // Node
 const nodeBabelPresetEnvConfig = Object.assign({}, defaultBabelPresetEnvConfig, {
-  targets: 'node >= 6.17' // EOL: 2019-04-30
+  targets: 'node >= 8.17' // EOL: 2019-12-31
 })
 
 // Tests need to transform modules

@@ -12,6 +12,10 @@
   <a href="https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js">
     <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/stelace/dist/stelace.evergreen.min.js?compression=gzip&style=flat-square" alt="GZIP bundle size">
   </a>
+
+  <a href="https://conventionalcommits.org)">
+    <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square">
+  </a>
 </p>
 
 **What is Stelace?**
@@ -31,7 +35,7 @@
 - Edge
 - Safari
 - IE11 (except when using pre-packaged [evergreen version](#script-tag))
-- Node.js (>=6.17)
+- Node.js (>=8.17)
 
 Other browsers with similar feature set should also work.
 
@@ -55,7 +59,7 @@ const asset = await stelace.assets.create({
 ```
 
 <details>
-<summary>Versions of Node.js prior to v7.9</summary>
+<summary>With callback</summary>
 
 ``` js
 const Stelace = require('stelace')
@@ -82,7 +86,7 @@ For browser you can either install (with npm/yarn) or add a `<script>` tag in yo
 
 Installing the SDK is the recommended way:
 
-- tree-shaking can reduce Stelace SDK size from 70% with shared dependencies (mostly axios and core-js polyfills).
+- tree-shaking can reduce Stelace SDK size by 70% with shared dependencies (mostly axios and core-js polyfills).
 - no surprise due to potential jsDelivr/unpkg CDN failure.
 
 You just have to use ES modules with your favorite bundler like Webpack:
