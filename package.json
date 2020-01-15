@@ -15,7 +15,8 @@
     "test": "BABEL_ENV=test node ./test/runner | tap-spec",
     "test:ci": "BABEL_ENV=test node ./test/runner | tap-xunit",
     "test:browser-local": "BABEL_ENV=test karma start karma.conf.local.js",
-    "test:prepush": "npm run build && npm run test"
+    "test:prepush": "npm run build && npm run test",
+    "release": "standard-version"
   },
   "author": "Stelace Team",
   "license": "MIT",
@@ -77,6 +78,7 @@
     "require-all": "^3.0.0",
     "rimraf": "^2.6.2",
     "sinon": "^8.0.4",
+    "standard-version": "^7.0.1",
     "tap-spec": "^5.0.0",
     "tap-xunit": "^2.3.0",
     "webpack": "^4.20.2",
@@ -89,6 +91,11 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
+    }
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true
     }
   }
 }
