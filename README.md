@@ -450,6 +450,10 @@ unsubscribe() // stops listening
 
 stelace.auth.getTokens(data, [options], [callback])
 
+#### Check authentication information
+
+stelace.auth.check(data, [options], [callback])
+
 
 
 ### Availability
