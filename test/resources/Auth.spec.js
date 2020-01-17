@@ -1,5 +1,6 @@
 import test from 'blue-tape'
 import sinon from 'sinon'
+import moxios from 'moxios'
 
 import { getSpyableStelace, getStelaceStub, encodeJwtToken } from '../../testUtils'
 
@@ -467,6 +468,77 @@ test('Stores authentication tokens after getting token', (t) => {
       const tokens = tokenStore.getTokens()
       t.is(tokens.accessToken, response.accessToken)
       t.is(tokens.refreshToken, response.refreshToken)
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
+
+test('check: sends the correct request', (t) => {
+  const stelace = getStelaceStub({ keyType: 'pubk' })
+
+  stelace.startStub()
+
+  const baseURL = stelace.auth.getBaseURL()
+  stelace.stubRequest(`${baseURL}/auth/check`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
+    },
+    response: {
+      valid: false,
+      apiKey: null,
+      user: null,
+      tokenExpired: null
+    }
+  })
+
+  const apiKey = 'apiKey_1'
+  const authorization = 'some_authorization'
+
+  return stelace.auth.check()
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const data = request.config.data
+
+      t.true(headers.authorization.startsWith('Basic'))
+      t.is(typeof data, 'undefined')
+
+      return stelace.auth.check({ apiKey })
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const data = JSON.parse(request.config.data)
+
+      t.true(headers.authorization.startsWith('Basic'))
+      t.is(data.apiKey, apiKey)
+      t.is(typeof data.authorization, 'undefined')
+
+      return stelace.auth.check({ authorization })
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const data = JSON.parse(request.config.data)
+
+      t.true(headers.authorization.startsWith('Basic'))
+      t.is(typeof data.apiKey, 'undefined')
+      t.is(data.authorization, authorization)
+
+      return stelace.auth.check({ apiKey, authorization })
+    })
+    .then(() => {
+      const request = moxios.requests.mostRecent()
+      const headers = request.config.headers
+      const data = JSON.parse(request.config.data)
+
+      t.true(headers.authorization.startsWith('Basic'))
+      t.is(data.apiKey, apiKey)
+      t.is(data.authorization, authorization)
     })
     .then(() => stelace.stopStub())
     .catch(err => {
