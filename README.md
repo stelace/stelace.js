@@ -35,7 +35,7 @@
 - Edge
 - Safari
 - IE11 (except when using pre-packaged [evergreen version](#script-tag))
-- Node.js (>=8.17)
+- Node.js (>=10.18)
 
 Other browsers with similar feature set should also work.
 
