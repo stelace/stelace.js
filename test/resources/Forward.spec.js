@@ -58,7 +58,6 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       t.true(headers.authorization.startsWith('Basic'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
-      else t.is(request.config.data, data)
     })
     .then(() => {
       return promiseFn('https://absolute-url.com/with/path', data)
@@ -72,7 +71,6 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       t.true(headers.authorization.startsWith('Basic'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
-      else t.is(request.config.data, data)
     })
     .then(() => {
       return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
@@ -89,7 +87,6 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       t.true(headers.authorization.startsWith('Stelace-V1'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
-      else t.is(request.config.data, data)
     })
 }
 
