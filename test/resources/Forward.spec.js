@@ -58,6 +58,7 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       t.true(headers.authorization.startsWith('Basic'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
+      else t.is(request.config.data, data)
     })
     .then(() => {
       return promiseFn('https://absolute-url.com/with/path', data)
@@ -71,6 +72,7 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       t.true(headers.authorization.startsWith('Basic'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
+      else t.is(request.config.data, data)
     })
     .then(() => {
       return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
@@ -87,6 +89,7 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       t.true(headers.authorization.startsWith('Stelace-V1'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
+      else t.is(request.config.data, data)
     })
 }
 
@@ -95,7 +98,7 @@ test('get: sends the correct request', (t) => {
   stelace.startStub()
 
   initStubbedRequests(stelace)
-  return checkForwardResponse({ t, stelace, method: 'get', data: undefined })
+  return checkForwardResponse({ t, stelace, method: 'get' })
 })
 
 test('post: sends the correct request', (t) => {
@@ -127,7 +130,7 @@ test('del: sends the correct request', (t) => {
   stelace.startStub()
 
   initStubbedRequests(stelace)
-  return checkForwardResponse({ t, stelace, method: 'delete', data: undefined })
+  return checkForwardResponse({ t, stelace, method: 'delete' })
 })
 
 test('options: sends the correct request', (t) => {
@@ -135,5 +138,5 @@ test('options: sends the correct request', (t) => {
   stelace.startStub()
 
   initStubbedRequests(stelace)
-  return checkForwardResponse({ t, stelace, method: 'options', data: undefined })
+  return checkForwardResponse({ t, stelace, method: 'options' })
 })
