@@ -455,6 +455,47 @@ stelace.auth.getTokens(data, [options], [callback])
 stelace.auth.check(data, [options], [callback])
 
 
+### Forward methods (advanced usage)
+
+Following methods are provided to hit custom endpoints with Stelace authentication headers.
+This is especially useful if you need to call external endpoints with custom logic, e.g. using serverless lambda functions.
+
+`url` can be a relative path to Stelace [REST API endpoints](https://docs.api.stelace.com) or an absolute external URL.
+Stelace API endpoint (relative) path is equivalent to using the equivalent SDK method, like:
+
+```js
+stelace.users.create(data)
+// same as
+stelace.forward.post('/users', data)
+```
+
+`forward.method`s map to corresponding HTTP verbs.
+
+#### GET verb
+
+stelace.forward.get(url, [callback])
+
+#### POST verb
+
+stelace.forward.post(url, [data], [callback])
+
+#### PUT verb
+
+stelace.forward.put(url, [data], [callback])
+
+#### PATCH verb
+
+stelace.forward.patch(url, [data], [callback])
+
+#### DELETE verb
+
+stelace.forward.del(url, [callback])
+
+#### OPTIONS verb
+
+stelace.forward.options(url, [callback])
+
+
 
 ### Availability
 
