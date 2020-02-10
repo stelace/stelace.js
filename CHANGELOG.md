@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 0.13.0 (2020-02-10)
+
+### ⚠ BREAKING CHANGES
+
+* bump minimum Node version to 10.18
+
+### Features
+
+* add `auth.check` method ([d7a186a](https://github.com/stelace/stelace.js/commit/d7a186a2b3c347e082eaac6f4f25c5589735ab02))
+* add forward methods ([799b150](https://github.com/stelace/stelace.js/commit/799b150fb1696cf9ca73df7aec917a83932969a9))
+
+### Build
+
+* bump minimum Node version from 8.9 to 10.18 ([9f0073f](https://github.com/stelace/stelace.js/commit/9f0073f7d8b8f9a708e803f2bfcdf5058e7844d0))
+
 ## 0.12.0 (2020-01-15)
 
 This release reduces bundle size using improvements in babel configuration [f5ff808](https://github.com/stelace/stelace.js/commit/f5ff808735e6aa3ba60aa76d185f5667b08da35c).
