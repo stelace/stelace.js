@@ -38,7 +38,7 @@ function initStubbedRequests (stelace) {
 function checkForwardResponse ({ t, stelace, method, data }) {
   const baseURL = stelace.auth.getBaseURL()
 
-  let promiseFn = (url, data) => {
+  const promiseFn = (url, data) => {
     const mapMethods = {
       delete: 'del'
     }

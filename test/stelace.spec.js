@@ -111,7 +111,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
     .then(() => {
       const request = moxios.requests.mostRecent()
       const headers = request.config.headers
-      const basic = headers['authorization'].match(basicAuthorizationRegex)
+      const basic = headers.authorization.match(basicAuthorizationRegex)
 
       t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
 
@@ -120,7 +120,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
     .then(() => {
       const request = moxios.requests.mostRecent()
       const headers = request.config.headers
-      const basic = headers['authorization'].match(basicAuthorizationRegex)
+      const basic = headers.authorization.match(basicAuthorizationRegex)
 
       t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
 
@@ -130,13 +130,13 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const request = moxios.requests.mostRecent()
       const headers = request.config.headers
 
-      const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers['authorization'])
-      const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers.authorization)
+      const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers.authorization)
       // Should reset RexExp lastIndex
-      const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers.authorization)
 
-      t.true(headers['authorization'].startsWith('Stelace-V1 '))
-      t.true(headers['authorization'].includes(',')) // 2 auth-params
+      t.true(headers.authorization.startsWith('Stelace-V1 '))
+      t.true(headers.authorization.includes(',')) // 2 auth-params
       // Checking we have both apiKey and token
       t.not(stelaceSchemeParam1[1], stelaceSchemeParam2[1])
       t.not(stelaceSchemeParam1[2], stelaceSchemeParam2[2])
@@ -150,12 +150,12 @@ test('Sets Authorization header with token and apiKey', (t) => {
       const request = moxios.requests.mostRecent()
       const headers = request.config.headers
 
-      const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers['authorization'])
-      const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers['authorization'])
-      const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers['authorization'])
+      const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers.authorization)
+      const stelaceSchemeParam2 = stelaceSchemeParamRegex.exec(headers.authorization)
+      const stelaceSchemeParam3 = stelaceSchemeParamRegex.exec(headers.authorization)
 
-      t.true(headers['authorization'].startsWith('Stelace-V1 '))
-      t.true(headers['authorization'].includes(',')) // 2 auth-params
+      t.true(headers.authorization.startsWith('Stelace-V1 '))
+      t.true(headers.authorization.includes(',')) // 2 auth-params
       // Checking we have both apiKey and token
       t.not(stelaceSchemeParam1[1], stelaceSchemeParam2[1])
       t.not(stelaceSchemeParam1[2], stelaceSchemeParam2[2])
@@ -168,7 +168,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
     .then(() => {
       const request = moxios.requests.mostRecent()
       const headers = request.config.headers
-      const basic = headers['authorization'].match(basicAuthorizationRegex)
+      const basic = headers.authorization.match(basicAuthorizationRegex)
 
       t.true(decodeBase64(basic[1]) === `${testApiKey}:`)
     })
@@ -199,7 +199,7 @@ test('Does not set Basic Authorization header when apiKey is missing', (t) => {
       const request = moxios.requests.mostRecent()
       const headers = request.config.headers
 
-      t.notOk(headers['authorization'])
+      t.notOk(headers.authorization)
     })
     .then(stelace.stopStub)
     .catch(err => {
