@@ -30,7 +30,7 @@ module.exports = {
   ],
 
   basePath: '',
-  frameworks: [ 'tap' ],
+  frameworks: ['tap'],
   files: [
     'test/runner-browser.js'
   ],
@@ -45,7 +45,7 @@ module.exports = {
   browserNoActivityTimeout: 4 * 60 * 1000,
   browserDisconnectTimeout: 10000,
   captureTimeout: 4 * 60 * 1000,
-  reporters: [ 'dots' ],
+  reporters: ['dots'],
   port: 9876,
   colors: true,
   autoWatch: false,
