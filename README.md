@@ -589,6 +589,34 @@ stelace.customAttributes.remove(customAttributeId, [options], [callback])
 
 
 
+### Documents
+
+#### Get documents’ stats
+
+stelace.documents.getStats([queryParams], [options], [callback])
+
+#### List documents
+
+stelace.documents.list([queryParams], [options], [callback])
+
+#### Read a document
+
+stelace.documents.read(documentId, [queryParams], [options], [callback])
+
+#### Create a document
+
+stelace.documents.create(data, [options], [callback])
+
+#### Update a document
+
+stelace.documents.update(documentId, data, [options], [callback])
+
+#### Remove a document
+
+stelace.documents.remove(documentId, [options], [callback])
+
+
+
 ### Entries
 
 #### List entries
