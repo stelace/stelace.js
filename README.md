@@ -657,6 +657,62 @@ stelace.messages.remove(messageId, [options], [callback])
 
 
 
+### Orders
+
+#### List orders
+
+stelace.orders.list([queryParams], [options], [callback])
+
+#### Read an order
+
+stelace.orders.read(orderId, [queryParams], [options], [callback])
+
+#### Preview an order
+
+stelace.orders.preview(data, [options], [callback])
+
+#### Create an order
+
+stelace.orders.create(data, [options], [callback])
+
+#### Update an order
+
+stelace.orders.update(orderId, data, [options], [callback])
+
+
+
+### Order lines
+
+#### Read an order line
+
+stelace.orderLines.read(orderLineId, [queryParams], [options], [callback])
+
+#### Create an order line
+
+stelace.orderLines.create(data, [options], [callback])
+
+#### Update an order line
+
+stelace.orderLines.update(orderLineId, data, [options], [callback])
+
+
+
+### Order moves
+
+#### Read an order move
+
+stelace.orderMoves.read(orderMoveId, [queryParams], [options], [callback])
+
+#### Create an order move
+
+stelace.orderMoves.create(data, [options], [callback])
+
+#### Update an order move
+
+stelace.orderMoves.update(orderMoveId, data, [options], [callback])
+
+
+
 ### Password
 
 #### Change the password
