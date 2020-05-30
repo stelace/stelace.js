@@ -768,6 +768,18 @@ stelace.search.list(data, [options], [callback])
 
 
 
+### Tokens
+
+#### Token check request
+
+stelace.tokens.checkRequest(data, [options], [callback])
+
+#### Token check confirm
+
+stelace.tokens.checkConfirm(tokenId, [queryParams], [options], [callback])
+
+
+
 ### Transactions
 
 #### List transactions
