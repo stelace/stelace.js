@@ -615,6 +615,10 @@ stelace.entries.remove(entryId, [options], [callback])
 
 ### Events
 
+#### Get events’ stats
+
+stelace.events.getStats([queryParams], [options], [callback])
+
 #### List events
 
 stelace.events.list([queryParams], [options], [callback])

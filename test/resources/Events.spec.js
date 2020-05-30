@@ -4,6 +4,19 @@ import { getSpyableStelace } from '../../testUtils'
 
 const stelace = getSpyableStelace()
 
+test('getStats: sends the correct request', (t) => {
+  return stelace.events.getStats({ orderBy: 'count', page: 2, nbResultsPerPage: 10, groupBy: 'objectId' })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/events/stats',
+        data: {},
+        queryParams: { orderBy: 'count', page: 2, nbResultsPerPage: 10, groupBy: 'objectId' },
+        headers: {}
+      })
+    })
+})
+
 test('list: sends the correct request', (t) => {
   return stelace.events.list({ page: 2, nbResultsPerPage: 10 })
     .then(() => {
