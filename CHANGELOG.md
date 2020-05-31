@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 0.14.0 (2020-05-31)
+
+### Features
+
+* add document resource ([121fdaa](https://github.com/stelace/stelace.js/commit/121fdaa88de347144954ff62030866f475fe197a))
+* add event getStats action ([93dccb4](https://github.com/stelace/stelace.js/commit/93dccb4819a625eb4eb41246be3e753c3255ede4))
+* add order, orderLine and orderMove resources ([e5c1c5c](https://github.com/stelace/stelace.js/commit/e5c1c5c02e5d40306d19fffc034d8fef24ea7f07))
+* add token resource ([c67f034](https://github.com/stelace/stelace.js/commit/c67f034c184fdfd3646c6d01d85973e70e802a99))
+
 ## 0.13.0 (2020-02-10)
 
 ### ⚠ BREAKING CHANGES
