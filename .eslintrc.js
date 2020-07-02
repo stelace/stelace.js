@@ -6,7 +6,7 @@ module.exports = {
     'promise'
   ],
   globals: {
-    '__VERSION__': true
+    __VERSION__: true
   },
 
   rules: {
