@@ -51,7 +51,7 @@ const plugins = [
   ],
   ['inline-replace-variables', {
     // Inject version number into code
-    '__VERSION__': require('./package.json').version
+    __VERSION__: require('./package.json').version
   }]
 ]
 
