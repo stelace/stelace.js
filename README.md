@@ -251,15 +251,30 @@ When pagination is available in list endpoints, you’ll directly get `results` 
 const assets = await stelace.assets.list()
 console.log(Array.isArray(assets)) // true
 console.log(assets.lastResponse.statusCode) // 200
+
+// For API version 2019-05-20 (offset pagination)
 console.log(assets.paginationMeta.page) // 1
+
+// For higher API version (cursor pagination)
+console.log(assets.paginationMeta.hasNextPage)
 ```
 
 Here are the properties included in `paginationMeta`:
 
+For API version 2019-05-20 (offset pagination):
 ```js
 assets.paginationMeta.nbResults
 assets.paginationMeta.nbPages
 assets.paginationMeta.page
+assets.paginationMeta.nbResultsPerPage
+```
+
+For higher API version (cursor pagination):
+```js
+assets.paginationMeta.startCursor
+assets.paginationMeta.endCursor
+assets.paginationMeta.hasPreviousPage
+assets.paginationMeta.hasNextPage
 assets.paginationMeta.nbResultsPerPage
 ```
 
