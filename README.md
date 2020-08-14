@@ -319,6 +319,10 @@ Request timeout in case of network failure is configurable (the default is 30 se
 stelace.setTimeout(10000); // in ms (10 seconds)
 ```
 
+## API version compatibility
+
+The current version of SDK (`0.14.0`) is compatible with Stelace API up to version `2019-05-20`.
+
 ## Development
 
 Run all tests:
