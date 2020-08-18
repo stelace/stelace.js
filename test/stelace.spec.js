@@ -419,9 +419,24 @@ test('Methods return paginationMeta for list endpoints', (t) => {
       results: [{ id: 'asset_1', name: 'Asset 1' }, { id: 'asset_2', name: 'Asset 2' }]
     }
   })
+  stelace.stubRequest(`${baseURL}/users`, {
+    status: 200,
+    headers: {
+      'x-request-id': 'b8eb517d-5f2e-4a49-83f2-321e66a980fb'
+    },
+    response: {
+      hasPreviousPage: false,
+      hasNextPage: false,
+      startCursor: 'startCursor',
+      endCursor: 'endCursor',
+      nbResultsPerPage: 10,
+      results: [{ id: 'user_1', displayName: 'User 1' }, { id: 'User_2', displayName: 'user 2' }]
+    }
+  })
 
   return stelace.assets.list()
     .then(assets => {
+      // offset pagination
       t.deepEqual(assets, [{ id: 'asset_1', name: 'Asset 1' }, { id: 'asset_2', name: 'Asset 2' }])
       t.deepEqual(assets.lastResponse, {
         statusCode: 200,
@@ -432,6 +447,23 @@ test('Methods return paginationMeta for list endpoints', (t) => {
         nbPages: 1,
         page: 1,
         nbResultsPerPage: 10
+      })
+
+      return stelace.users.list()
+    })
+    .then(users => {
+      // cursor pagination
+      t.deepEqual(users, [{ id: 'user_1', displayName: 'User 1' }, { id: 'User_2', displayName: 'user 2' }])
+      t.deepEqual(users.lastResponse, {
+        statusCode: 200,
+        requestId: 'b8eb517d-5f2e-4a49-83f2-321e66a980fb'
+      })
+      t.deepEqual(users.paginationMeta, {
+        hasPreviousPage: false,
+        hasNextPage: false,
+        startCursor: 'startCursor',
+        endCursor: 'endCursor',
+        nbResultsPerPage: 10,
       })
     })
     .then(() => stelace.stopStub())
