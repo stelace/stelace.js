@@ -1,6 +1,6 @@
 import test from 'blue-tape'
 
-import { getSpyableStelace } from '../../testUtils'
+import { getSpyableStelace, maxNbResultsPerPage } from '../../testUtils'
 
 const stelace = getSpyableStelace()
 
@@ -11,8 +11,25 @@ test('list: sends the correct request', (t) => {
         method: 'GET',
         path: '/webhooks',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {}
+      })
+    })
+})
+
+test('list: sends the correct request', (t) => {
+  return stelace.webhooks.list({ stelaceVersion: '2019-05-20' })
+    .then(() => {
+      t.deepEqual(stelace.LAST_REQUEST, {
+        method: 'GET',
+        path: '/webhooks',
+        data: {},
+        queryParams: {},
+        headers: {
+          'x-stelace-version': '2019-05-20'
+        }
       })
     })
 })

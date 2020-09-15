@@ -1,6 +1,6 @@
 import test from 'blue-tape'
 
-import { getSpyableStelace } from '../../testUtils'
+import { getSpyableStelace, maxNbResultsPerPage } from '../../testUtils'
 
 const stelace = getSpyableStelace()
 
@@ -27,7 +27,8 @@ test('list: sends the correct request', (t) => {
         path: '/availabilities',
         data: {},
         queryParams: {
-          assetId: 'asset_1'
+          assetId: 'asset_1',
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
         },
         headers: {}
       })

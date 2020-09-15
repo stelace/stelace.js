@@ -1,7 +1,7 @@
 import test from 'blue-tape'
 import _ from 'lodash'
 
-import { getStelaceStub } from '../testUtils'
+import { getStelaceStub, maxNbResultsPerPage } from '../testUtils'
 import qs from 'querystring'
 
 const nbResults = 1000 // total number of results
@@ -12,7 +12,9 @@ const getUrl = (urlPath, params) => `${urlPath}?${qs.stringify(params)}`
 const getRequestId = num => `requestId${num}`
 
 const initNonPaginationStubs = ({ stelace, endpointUrl, getObject, nbResults }) => {
-  stelace.stubRequest(endpointUrl, {
+  const url = getUrl(endpointUrl, { nbResultsPerPage: maxNbResultsPerPage })
+
+  stelace.stubRequest(url, {
     status: 200,
     headers: {
       'x-request-id': getRequestId(1)

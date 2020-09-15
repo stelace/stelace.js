@@ -2,7 +2,7 @@ import test from 'blue-tape'
 
 import { clone } from '../lib/utils'
 
-import { getSpyableStelace, getStelaceStub } from '../testUtils'
+import { getSpyableStelace, getStelaceStub, maxNbResultsPerPage } from '../testUtils'
 
 import Resource from '../lib/Resource'
 
@@ -55,7 +55,7 @@ test('Extracts pagination "results" from response', (t) => {
   }
 
   const baseURL = api.customAttributes.getBaseURL()
-  api.stubRequest(`${baseURL}/custom-attributes`, res)
+  api.stubRequest(`${baseURL}/custom-attributes?nbResultsPerPage=${maxNbResultsPerPage}`, res)
 
   return api.customAttributes.list()
     .then(ca => {
@@ -114,7 +114,7 @@ test('Passes plain array response as is', (t) => {
   }
 
   const baseURL = api.categories.getBaseURL()
-  api.stubRequest(`${baseURL}/categories`, res)
+  api.stubRequest(`${baseURL}/categories?nbResultsPerPage=${maxNbResultsPerPage}`, res)
 
   return api.categories.list()
     .then(cat => {

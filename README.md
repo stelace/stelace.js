@@ -320,7 +320,7 @@ We provide two ways to retrieve and perform actions on endpoints that have a lar
 If you are in an environment that supports [async iteration](https://github.com/tc39/proposal-async-iteration#the-async-iteration-statement-for-await-of), such as Node 10+ or [Babel](https://babeljs.io/docs/en/babel-plugin-transform-async-generator-functions), you can auto-paginate with the following code:
 
 ```js
-for await (const asset of stelace.assets.list({ nbResultsPerPage: 100 })) {
+for await (const asset of stelace.assets.list()) {
   doSomething(asset)
   if (shouldStop()) break
 }
@@ -332,7 +332,7 @@ If the number of results is relative small, you can use the `autoPagingToArray` 
 
 ```js
 const users = await stelace.users
-  .list({ createdDate: { gte: lastYear }, nbResultsPerPage: 100 })
+  .list({ createdDate: { gte: lastYear }})
   .autoPagingToArray({ limit: 10000 })
 ```
 
