@@ -5,7 +5,6 @@ import { getStelaceStub, maxNbResultsPerPage } from '../testUtils'
 import qs from 'querystring'
 
 const nbResults = 1000 // total number of results
-const nbResultsPerPage = 1 // requests objects one by one
 const maxAutopaginationLimit = 10000
 
 const getUrl = (urlPath, params) => `${urlPath}?${qs.stringify(params)}`
@@ -23,10 +22,15 @@ const initNonPaginationStubs = ({ stelace, endpointUrl, getObject, nbResults }) 
   })
 }
 
-const initOffsetPaginationStubs = ({ stelace, endpointUrl, params, getObject, nbResults }) => {
-  _.range(1, nbResults + 1).forEach((page) => {
+const initOffsetPaginationStubs = ({ stelace, endpointUrl, params, getObject, nbResults, nbResultsPerPage }) => {
+  const nums = _.range(1, nbResults + 1)
+  const numsByPage = _.chunk(nums, nbResultsPerPage)
+
+  numsByPage.forEach((nums, p) => {
+    const page = p + 1
     const urlParams = Object.assign({}, params)
     if (page !== 1) urlParams.page = page
+    if (!urlParams.nbResultsPerPage) urlParams.nbResultsPerPage = nbResultsPerPage
 
     const url = getUrl(endpointUrl, urlParams)
 
@@ -37,24 +41,28 @@ const initOffsetPaginationStubs = ({ stelace, endpointUrl, params, getObject, nb
       },
       response: {
         nbResults,
-        nbPages: nbResults,
+        nbPages: numsByPage.length,
         page,
         nbResultsPerPage,
-        results: [getObject(page)], // returns objects one by one
+        results: nums.map(getObject),
       }
     })
   })
 }
 
-const initCursorPaginationStubs = ({ stelace, endpointUrl, params, getObject, nbResults }) => {
+const initCursorPaginationStubs = ({ stelace, endpointUrl, params, getObject, nbResults, nbResultsPerPage }) => {
+  const nums = _.range(1, nbResults + 1)
+  const numsByPage = _.chunk(nums, nbResultsPerPage)
   const getCursor = (page) => `cursor${page}`
 
-  _.range(1, nbResults + 1).forEach((page) => {
+  numsByPage.forEach((nums, p) => {
+    const page = p + 1
     const urlParams = Object.assign({}, params)
 
     const cursor = getCursor(page)
     const previousCursor = getCursor(page - 1)
     if (page !== 1) urlParams.startingAfter = previousCursor
+    if (!urlParams.nbResultsPerPage) urlParams.nbResultsPerPage = nbResultsPerPage
 
     const url = getUrl(endpointUrl, urlParams)
 
@@ -67,9 +75,9 @@ const initCursorPaginationStubs = ({ stelace, endpointUrl, params, getObject, nb
         startCursor: cursor,
         endCursor: cursor,
         hasPreviousPage: page !== 1,
-        hasNextPage: page !== nbResults,
+        hasNextPage: page !== numsByPage.length,
         nbResultsPerPage,
-        results: [getObject(page)], // returns objects one by one
+        results: nums.map(getObject),
       }
     })
   })
@@ -134,15 +142,59 @@ test('async iterator: autopaginate offset pagination endpoint', async (t) => {
   const baseURL = stelace.assets.getBaseURL()
   const endpointUrl = `${baseURL}/assets`
 
+  const nbResultsPerPage = 1 // get objects one by one
   const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
   const params = {
-    nbResults,
     nbResultsPerPage,
     orderBy: 'createdDate',
     order: 'asc',
   }
 
-  initOffsetPaginationStubs({ stelace, endpointUrl, params, getObject: getAsset, nbResults })
+  initOffsetPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage,
+  })
+
+  const expectedResults = _.range(1, nbResults + 1).map(getAsset)
+
+  const assets = []
+  for await (const asset of stelace.assets.list(params)) {
+    assets.push(asset)
+    // no break to iterate over all results
+  }
+
+  t.deepEqual(assets, expectedResults)
+
+  stelace.stopStub()
+})
+
+test('async iterator: autopaginate offset pagination endpoint without nbResultsPerPage', async (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.assets.getBaseURL()
+  const endpointUrl = `${baseURL}/assets`
+
+  const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
+  const params = {
+    // missing nbResultsPerPage
+    orderBy: 'createdDate',
+    order: 'asc',
+  }
+
+  initOffsetPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage: maxNbResultsPerPage,
+  })
 
   const expectedResults = _.range(1, nbResults + 1).map(getAsset)
 
@@ -165,15 +217,59 @@ test('autoPagingToArray: autopaginate offset pagination endpoint', (t) => {
   const baseURL = stelace.assets.getBaseURL()
   const endpointUrl = `${baseURL}/assets`
 
+  const nbResultsPerPage = 1 // get objects one by one
   const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
   const params = {
-    nbResults,
     nbResultsPerPage,
     orderBy: 'createdDate',
     order: 'asc',
   }
 
-  initOffsetPaginationStubs({ stelace, endpointUrl, params, getObject: getAsset, nbResults })
+  initOffsetPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage,
+  })
+
+  const expectedResults = _.range(1, nbResults + 1).map(getAsset)
+
+  return stelace.assets.list(params).autoPagingToArray({ limit: maxAutopaginationLimit })
+    .then(assets => {
+      t.deepEqual(assets, expectedResults)
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
+
+test('autoPagingToArray: autopaginate offset pagination endpoint without nbResultsPerPage', (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.assets.getBaseURL()
+  const endpointUrl = `${baseURL}/assets`
+
+  const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
+  const params = {
+    // missing nbResultsPerPage
+    orderBy: 'createdDate',
+    order: 'asc',
+  }
+
+  initOffsetPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage: maxNbResultsPerPage,
+  })
 
   const expectedResults = _.range(1, nbResults + 1).map(getAsset)
 
@@ -196,15 +292,59 @@ test('async iterator: autopaginate cursor pagination endpoint', async (t) => {
   const baseURL = stelace.assets.getBaseURL()
   const endpointUrl = `${baseURL}/assets`
 
+  const nbResultsPerPage = 1 // get objects one by one
   const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
   const params = {
-    nbResults,
     nbResultsPerPage,
     orderBy: 'createdDate',
     order: 'asc',
   }
 
-  initCursorPaginationStubs({ stelace, endpointUrl, params, getObject: getAsset, nbResults })
+  initCursorPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage,
+  })
+
+  const expectedResults = _.range(1, nbResults + 1).map(getAsset)
+
+  const assets = []
+  for await (const asset of stelace.assets.list(params)) {
+    assets.push(asset)
+    // no break to iterate over all results
+  }
+
+  t.deepEqual(assets, expectedResults)
+
+  stelace.stopStub()
+})
+
+test('async iterator: autopaginate cursor pagination endpoint without nbResultsPerPage', async (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.assets.getBaseURL()
+  const endpointUrl = `${baseURL}/assets`
+
+  const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
+  const params = {
+    // missing nbResultsPerPage
+    orderBy: 'createdDate',
+    order: 'asc',
+  }
+
+  initCursorPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage: maxNbResultsPerPage,
+  })
 
   const expectedResults = _.range(1, nbResults + 1).map(getAsset)
 
@@ -227,15 +367,59 @@ test('autoPagingToArray: autopaginate cursor pagination endpoint', (t) => {
   const baseURL = stelace.assets.getBaseURL()
   const endpointUrl = `${baseURL}/assets`
 
+  const nbResultsPerPage = 1 // get objects one by one
   const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
   const params = {
-    nbResults,
     nbResultsPerPage,
     orderBy: 'createdDate',
     order: 'asc',
   }
 
-  initCursorPaginationStubs({ stelace, endpointUrl, params, getObject: getAsset, nbResults })
+  initCursorPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage,
+  })
+
+  const expectedResults = _.range(1, nbResults + 1).map(getAsset)
+
+  return stelace.assets.list(params).autoPagingToArray({ limit: maxAutopaginationLimit })
+    .then(assets => {
+      t.deepEqual(assets, expectedResults)
+    })
+    .then(() => stelace.stopStub())
+    .catch(err => {
+      stelace.stopStub()
+      throw err
+    })
+})
+
+test('autoPagingToArray: autopaginate cursor pagination endpoint without nbResultsPerPage', (t) => {
+  const stelace = getStelaceStub()
+
+  stelace.startStub()
+
+  const baseURL = stelace.assets.getBaseURL()
+  const endpointUrl = `${baseURL}/assets`
+
+  const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
+  const params = {
+    // missing nbResultsPerPage
+    orderBy: 'createdDate',
+    order: 'asc',
+  }
+
+  initCursorPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage: maxNbResultsPerPage,
+  })
 
   const expectedResults = _.range(1, nbResults + 1).map(getAsset)
 
@@ -260,13 +444,18 @@ test('async iterator: stops when there is a break', async (t) => {
 
   const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
   const params = {
-    nbResults,
-    nbResultsPerPage,
     orderBy: 'createdDate',
     order: 'asc',
   }
 
-  initCursorPaginationStubs({ stelace, endpointUrl, params, getObject: getAsset, nbResults })
+  initCursorPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage: maxNbResultsPerPage,
+  })
 
   const limit = 10
   let i = limit
@@ -296,13 +485,18 @@ test('autoPagingToArray: stops when the limit is reached', (t) => {
 
   const getAsset = (num) => ({ id: `asset_${num}`, name: `Asset ${num}` })
   const params = {
-    nbResults,
-    nbResultsPerPage,
     orderBy: 'createdDate',
     order: 'asc',
   }
 
-  initCursorPaginationStubs({ stelace, endpointUrl, params, getObject: getAsset, nbResults })
+  initCursorPaginationStubs({
+    stelace,
+    endpointUrl,
+    params,
+    getObject: getAsset,
+    nbResults,
+    nbResultsPerPage: maxNbResultsPerPage,
+  })
 
   const limit = 10
   const expectedResults = _.range(1, limit + 1).map(getAsset)
