@@ -26,7 +26,7 @@ export function getSpyableStelace ({ keyType } = {}) {
 
   stelace.REQUESTS = []
 
-  for (var i in stelace) {
+  for (const i in stelace) {
     makeInstanceSpyable(stelace, stelace[i])
   }
 
