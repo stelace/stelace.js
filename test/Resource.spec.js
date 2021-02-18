@@ -48,6 +48,7 @@ test('Extracts pagination "results" from response', (t) => {
 
   const res = {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -107,6 +108,7 @@ test('Passes plain array response as is', (t) => {
 
   const res = {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
