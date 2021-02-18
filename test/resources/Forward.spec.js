@@ -1,5 +1,4 @@
 import test from 'blue-tape'
-import moxios from 'moxios'
 
 import { getStelaceStub, encodeJwtToken } from '../../testUtils'
 
@@ -7,6 +6,7 @@ function initStubbedRequests (stelace) {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/relative/url`, {
     status: 200,
+    method: 'any',
     response: {
       success: true
     }
@@ -14,6 +14,7 @@ function initStubbedRequests (stelace) {
 
   stelace.stubRequest('https://absolute-url.com/with/path', {
     status: 200,
+    method: 'any',
     response: {
       test: true
     }
@@ -28,6 +29,7 @@ function initStubbedRequests (stelace) {
 
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -36,8 +38,6 @@ function initStubbedRequests (stelace) {
 }
 
 function checkForwardResponse ({ t, stelace, method, data }) {
-  const baseURL = stelace.auth.getBaseURL()
-
   const promiseFn = (url, data) => {
     const mapMethods = {
       delete: 'del'
@@ -50,11 +50,11 @@ function checkForwardResponse ({ t, stelace, method, data }) {
 
   return promiseFn('/relative/url', data)
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
 
       t.is(request.config.method, method)
-      t.is(request.config.url, `${baseURL}/relative/url`)
+      t.is(request.config.url, '/relative/url')
       t.true(headers.authorization.startsWith('Basic'))
 
       if (data) t.is(request.config.data, JSON.stringify(data))
@@ -64,7 +64,7 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       return promiseFn('https://absolute-url.com/with/path', data)
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
 
       t.is(request.config.method, method)
@@ -81,7 +81,7 @@ function checkForwardResponse ({ t, stelace, method, data }) {
       return promiseFn('https://absolute-url.com/with/path', data)
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
 
       t.is(request.config.method, method)

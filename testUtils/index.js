@@ -1,4 +1,6 @@
-import moxios from 'moxios'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
+import { capitalize } from 'lodash'
 import jwt from 'jsonwebtoken'
 
 import { createInstance } from '../lib/stelace'
@@ -58,9 +60,35 @@ export function getStelaceStub ({ keyType, noKey } = {}) {
 
   const stelace = noKey ? createInstance({}) : createInstance({ apiKey: key })
 
-  stelace.startStub = () => moxios.install()
-  stelace.stopStub = () => moxios.uninstall()
-  stelace.stubRequest = (...args) => moxios.stubRequest(...args)
+  stelace._lastRequest = {}
+
+  stelace.getLastRequest = () => stelace._lastRequest
+
+  stelace.startStub = () => {
+    const mock = new MockAdapter(axios)
+    stelace._mock = mock
+  }
+
+  stelace.stopStub = () => {
+    if (!stelace._mock) return
+    stelace._mock.restore()
+  }
+
+  stelace.stubRequest = (url, { method, data, status, headers, response }) => {
+    if (!stelace._mock) return
+
+    const getMockingFnKey = `on${capitalize(method)}`
+    stelace._mock[getMockingFnKey](url, data).reply(status, response, headers)
+  }
+
+  // to be able to get the last sent request config
+  axios.interceptors.request.use(
+    config => {
+      stelace._lastRequest = { config }
+      return config
+    },
+    Promise.reject
+  )
 
   cleanStelace(stelace)
 

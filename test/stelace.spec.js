@@ -1,6 +1,5 @@
 import test from 'blue-tape'
 import sinon from 'sinon'
-import moxios from 'moxios'
 
 import {
   getApiKey,
@@ -81,6 +80,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
 
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: { 'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0' },
     response: {
       tokenType: 'Bearer',
@@ -92,6 +92,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
 
   stelace.stubRequest(`${baseURL}/users/user_1`, {
     status: 200,
+    method: 'get',
     headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
     response: {
       id: 'user_1',
@@ -103,13 +104,14 @@ test('Sets Authorization header with token and apiKey', (t) => {
 
   stelace.stubRequest(`${baseURL}/auth/logout`, {
     status: 200,
+    method: 'post',
     headers: { 'x-request-id': 'e79a0f16-ebd1-468a-b35d-9ea9f6bcff0d' },
     response: { success: true }
   })
 
   return stelace.users.read('user_1')
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const basic = headers.authorization.match(basicAuthorizationRegex)
 
@@ -118,7 +120,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       return stelace.auth.login({ username: 'foo', password: 'secretPassword' })
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const basic = headers.authorization.match(basicAuthorizationRegex)
 
@@ -127,7 +129,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       return stelace.users.read('user_1')
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
 
       const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers.authorization)
@@ -147,7 +149,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       return stelace.auth.logout()
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
 
       const stelaceSchemeParam1 = stelaceSchemeParamRegex.exec(headers.authorization)
@@ -166,7 +168,7 @@ test('Sets Authorization header with token and apiKey', (t) => {
       return stelace.users.read('user_1')
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const basic = headers.authorization.match(basicAuthorizationRegex)
 
@@ -186,6 +188,7 @@ test('Does not set Basic Authorization header when apiKey is missing', (t) => {
 
   stelace.stubRequest(`${baseURL}/search`, {
     status: 200,
+    method: 'post',
     headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
     response: {
       page: 1,
@@ -196,7 +199,7 @@ test('Does not set Basic Authorization header when apiKey is missing', (t) => {
 
   return stelace.search.list({ query: 'test' })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
 
       t.notOk(headers.authorization)
@@ -379,6 +382,7 @@ test('Methods return lastResponse', (t) => {
   const baseURL = stelace.assets.getBaseURL()
   stelace.stubRequest(`${baseURL}/assets/asset_1`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -408,6 +412,7 @@ test('Methods return paginationMeta for list endpoints', (t) => {
   const baseURL = stelace.assets.getBaseURL()
   stelace.stubRequest(`${baseURL}/assets`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -421,6 +426,7 @@ test('Methods return paginationMeta for list endpoints', (t) => {
   })
   stelace.stubRequest(`${baseURL}/users`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'b8eb517d-5f2e-4a49-83f2-321e66a980fb'
     },
@@ -481,6 +487,7 @@ test('Methods return array from list endpoints without pagination', (t) => {
   const baseURL = stelace.workflows.getBaseURL()
   stelace.stubRequest(`${baseURL}/workflows`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -488,6 +495,7 @@ test('Methods return array from list endpoints without pagination', (t) => {
   })
   stelace.stubRequest(`${baseURL}/webhooks`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
     },
@@ -541,6 +549,7 @@ test('Emits an event when the user session has expired', (t) => {
 
   stelace.stubRequest(`${baseURL}/auth/token`, {
     status: 403,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -551,6 +560,7 @@ test('Emits an event when the user session has expired', (t) => {
 
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: { 'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0' },
     response: {
       tokenType: 'Bearer',
@@ -562,6 +572,7 @@ test('Emits an event when the user session has expired', (t) => {
 
   stelace.stubRequest(`${baseURL}/assets`, {
     status: 200,
+    method: 'get',
     headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
     response: {
       nbResults: 0,

@@ -1,6 +1,5 @@
 import test from 'blue-tape'
 import sinon from 'sinon'
-import moxios from 'moxios'
 
 import { getSpyableStelace, getStelaceStub, encodeJwtToken } from '../../testUtils'
 
@@ -47,6 +46,7 @@ test('Stores authentication tokens after login', (t) => {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -85,6 +85,7 @@ test('Removes authentication tokens after logout', (t) => {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -92,6 +93,7 @@ test('Removes authentication tokens after logout', (t) => {
   })
   stelace.stubRequest(`${baseURL}/auth/logout`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'e79a0f16-ebd1-468a-b35d-9ea9f6bcff0d'
     },
@@ -143,6 +145,7 @@ test('Refreshes authentication tokens when access token is expired', (t) => {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -150,6 +153,7 @@ test('Refreshes authentication tokens when access token is expired', (t) => {
   })
   stelace.stubRequest(`${baseURL}/auth/token`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': '9a0419b6-8d67-4584-b9bd-8ccb32a95248'
     },
@@ -157,6 +161,7 @@ test('Refreshes authentication tokens when access token is expired', (t) => {
   })
   stelace.stubRequest(`${baseURL}/assets/asset_1`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
     },
@@ -225,6 +230,7 @@ test('Do not need to refresh authentication token if using secret API key', (t) 
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/assets/asset_1`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
     },
@@ -299,6 +305,7 @@ test('Calls the callback function `beforeRefreshToken` before token expiration',
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -306,6 +313,7 @@ test('Calls the callback function `beforeRefreshToken` before token expiration',
   })
   stelace.stubRequest(`${baseURL}/assets/asset_1`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
     },
@@ -385,6 +393,7 @@ test('Calls the promise `beforeRefreshToken` before token expiration', (t) => {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/login`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -392,6 +401,7 @@ test('Calls the promise `beforeRefreshToken` before token expiration', (t) => {
   })
   stelace.stubRequest(`${baseURL}/assets/asset_1`, {
     status: 200,
+    method: 'get',
     headers: {
       'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae'
     },
@@ -453,6 +463,7 @@ test('Stores authentication tokens after getting token', (t) => {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/token`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -484,6 +495,7 @@ test('check: sends the correct request', (t) => {
   const baseURL = stelace.auth.getBaseURL()
   stelace.stubRequest(`${baseURL}/auth/check`, {
     status: 200,
+    method: 'post',
     headers: {
       'x-request-id': 'f1f25173-32a5-48da-aa2f-0079568abea0'
     },
@@ -500,7 +512,7 @@ test('check: sends the correct request', (t) => {
 
   return stelace.auth.check()
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const data = request.config.data
 
@@ -510,7 +522,7 @@ test('check: sends the correct request', (t) => {
       return stelace.auth.check({ apiKey })
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const data = JSON.parse(request.config.data)
 
@@ -521,7 +533,7 @@ test('check: sends the correct request', (t) => {
       return stelace.auth.check({ authorization })
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const data = JSON.parse(request.config.data)
 
@@ -532,7 +544,7 @@ test('check: sends the correct request', (t) => {
       return stelace.auth.check({ apiKey, authorization })
     })
     .then(() => {
-      const request = moxios.requests.mostRecent()
+      const request = stelace.getLastRequest()
       const headers = request.config.headers
       const data = JSON.parse(request.config.data)
 
