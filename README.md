@@ -43,6 +43,8 @@ Other browsers with similar feature set should also work.
 
 ```js
 npm install stelace
+# Or
+yarn stelace
 ```
 
 This package needs to be used with secret or publishable api keys you can find in Stelace Dashboard.
@@ -328,14 +330,15 @@ The current version of SDK (`0.14.0`) is compatible with Stelace API up to versi
 Run all tests:
 
 ```bash
-npm install
-npm test
+yarn
+yarn prepare # To install husky hooks
+yarn test
 ```
 
 Run tests in browser environments (Chrome and Firefox):
 
 ```bash
-npm test:browser-local
+yarn test:browser-local
 ```
 
 
