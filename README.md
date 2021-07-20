@@ -313,6 +313,31 @@ stelace.categories.create({
 })
 ```
 
+### Auto-pagination
+
+We provide two ways to retrieve and perform actions on endpoints that have a large number of results. These methods can be used with list endpoints or paginated endpoints.
+
+#### Async iterators (`for-await-of`)
+
+If you are in an environment that supports [async iteration](https://github.com/tc39/proposal-async-iteration#the-async-iteration-statement-for-await-of), such as Node 10+ or [Babel](https://babeljs.io/docs/en/babel-plugin-transform-async-generator-functions), you can auto-paginate with the following code:
+
+```js
+for await (const asset of stelace.assets.list()) {
+  doSomething(asset)
+  if (shouldStop()) break
+}
+```
+
+#### `autoPagingToArray`
+
+If the number of results is relative small, you can use the `autoPagingToArray` method to auto-paginate. The parameter `limit` is required and cannot exceed 10,000 to prevent consuming too much memory.
+
+```js
+const users = await stelace.users
+  .list({ createdDate: { gte: lastYear }})
+  .autoPagingToArray({ limit: 10000 })
+```
+
 ### Configuring Timeout
 
 Request timeout in case of network failure is configurable (the default is 30 seconds):

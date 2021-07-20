@@ -5,7 +5,8 @@ import {
   getApiKey,
   getSpyableStelace,
   getStelaceStub,
-  encodeJwtToken
+  encodeJwtToken,
+  maxNbResultsPerPage
 } from '../testUtils'
 
 import {
@@ -214,27 +215,31 @@ test('Does not set Basic Authorization header when apiKey is missing', (t) => {
 test('Set the API version for a specific request', (t) => {
   const stelace = getSpyableStelace()
 
+  const stelaceVersion = '2019-05-20'
+
   return stelace.categories.list()
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'GET',
         path: '/categories',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {}
       })
     })
     .then(() => {
-      return stelace.categories.list({ stelaceVersion: '2018-07-30' })
+      return stelace.categories.list({ stelaceVersion })
     })
     .then(() => {
       t.deepEqual(stelace.LAST_REQUEST, {
         method: 'GET',
         path: '/categories',
         data: {},
-        queryParams: {},
+        queryParams: {}, // no pagination
         headers: {
-          'x-stelace-version': '2018-07-30'
+          'x-stelace-version': stelaceVersion
         }
       })
     })
@@ -249,7 +254,9 @@ test('Set the target user for a specific request', (t) => {
         method: 'GET',
         path: '/categories',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {}
       })
     })
@@ -261,7 +268,9 @@ test('Set the target user for a specific request', (t) => {
         method: 'GET',
         path: '/categories',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {
           'x-stelace-user-id': 'user_1'
         }
@@ -278,7 +287,9 @@ test('Set the target organization for a specific request', (t) => {
         method: 'GET',
         path: '/users',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {}
       })
     })
@@ -290,7 +301,9 @@ test('Set the target organization for a specific request', (t) => {
         method: 'GET',
         path: '/users',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {
           'x-stelace-organization-id': 'organization_1'
         }
@@ -309,7 +322,9 @@ test('Override the global target organization for a specific request', (t) => {
         method: 'GET',
         path: '/users',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {} // global headers don't display here
       })
     })
@@ -321,7 +336,9 @@ test('Override the global target organization for a specific request', (t) => {
         method: 'GET',
         path: '/users',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {
           'x-stelace-organization-id': 'organization_2'
         }
@@ -340,7 +357,9 @@ test('Remove the target organization for a specific request', (t) => {
         method: 'GET',
         path: '/users',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {} // global headers don't display here
       })
     })
@@ -352,7 +371,9 @@ test('Remove the target organization for a specific request', (t) => {
         method: 'GET',
         path: '/users',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {
           'x-stelace-organization-id': null // null value will be removed when sending the requets
         }
@@ -410,7 +431,7 @@ test('Methods return paginationMeta for list endpoints', (t) => {
   stelace.startStub()
 
   const baseURL = stelace.assets.getBaseURL()
-  stelace.stubRequest(`${baseURL}/assets`, {
+  stelace.stubRequest(`${baseURL}/assets?nbResultsPerPage=${maxNbResultsPerPage}`, {
     status: 200,
     method: 'get',
     headers: {
@@ -424,7 +445,7 @@ test('Methods return paginationMeta for list endpoints', (t) => {
       results: [{ id: 'asset_1', name: 'Asset 1' }, { id: 'asset_2', name: 'Asset 2' }]
     }
   })
-  stelace.stubRequest(`${baseURL}/users`, {
+  stelace.stubRequest(`${baseURL}/users?nbResultsPerPage=${maxNbResultsPerPage}`, {
     status: 200,
     method: 'get',
     headers: {
@@ -502,7 +523,7 @@ test('Methods return array from list endpoints without pagination', (t) => {
     response: [{ id: 'webhook_1', name: 'Webhook 1' }, { id: 'webhook_2', name: 'Webhook 2' }]
   })
 
-  return stelace.workflows.list()
+  return stelace.workflows.list({ stelaceVersion: '2019-05-20' })
     .then(workflows => {
       t.true(Array.isArray(workflows))
       t.is(workflows.length, 0)
@@ -511,7 +532,7 @@ test('Methods return array from list endpoints without pagination', (t) => {
         requestId: 'f1f25173-32a5-48da-aa2f-0079568abea0'
       })
 
-      return stelace.webhooks.list()
+      return stelace.webhooks.list({ stelaceVersion: '2019-05-20' })
     })
     .then(webhooks => {
       t.true(Array.isArray(webhooks))
@@ -570,7 +591,7 @@ test('Emits an event when the user session has expired', (t) => {
     }
   })
 
-  stelace.stubRequest(`${baseURL}/assets`, {
+  stelace.stubRequest(`${baseURL}/assets?nbResultsPerPage=${maxNbResultsPerPage}`, {
     status: 200,
     method: 'get',
     headers: { 'x-request-id': 'ca4b0b1f-2c0b-4eed-858e-d76d097615ae' },
