@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 
 import { createInstance } from '../lib/stelace'
 
+export { maxNbResultsPerPage } from '../lib/utils'
+
 export function getApiKey ({ type = 'seck' } = {}) {
   const secretKey = 'seck_test_wakWA41rBTUXs1Y5oNRjeY5o'
   const publishableKey = 'pubk_test_wakWA41rBTUXs1Y5oNRjeY5o'

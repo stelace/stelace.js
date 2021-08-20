@@ -1,6 +1,6 @@
 import test from 'blue-tape'
 
-import { getSpyableStelace } from '../../testUtils'
+import { getSpyableStelace, maxNbResultsPerPage } from '../../testUtils'
 
 const stelace = getSpyableStelace()
 
@@ -11,7 +11,9 @@ test('list: sends the correct request', (t) => {
         method: 'GET',
         path: '/search',
         data: {},
-        queryParams: {},
+        queryParams: {
+          nbResultsPerPage: maxNbResultsPerPage // automatically added
+        },
         headers: {}
       })
     })
